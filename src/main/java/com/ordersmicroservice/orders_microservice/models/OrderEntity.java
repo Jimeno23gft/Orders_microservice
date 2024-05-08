@@ -22,23 +22,23 @@ public class OrderEntity {
     private Long id;
 
     @Column(name = "user_id")
-    private String user_id;
+    private Long user_id;
 
     @Column(name="from_address")
     private String from_address;
 
     @Column(name="to_address")
     private String to_address;
-    public enum Status {UNPAID, PAID, SENT, IN_DELIVERY, DELIVERED, UNKNOWN};
+    public enum Status {UNPAID, PAID, SENT, IN_DELIVERY, DELIVERED,CANCELED, UNKNOWN};
     @Enumerated(EnumType.STRING)
     @Column(name = "status")
     private Status status;
 
     @Column(name = "date_ordered")
-    private LocalDateTime date_ordered;
+    private String date_ordered;
 
     @Column(name = "date_delivered")
-    private LocalDateTime date_delivered;
+    private String date_delivered;
 
     public static OrderEntity fromEntity(OrderEntity entity){
         return OrderEntity.builder()

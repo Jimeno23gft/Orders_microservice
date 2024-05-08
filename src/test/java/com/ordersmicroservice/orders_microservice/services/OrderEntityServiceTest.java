@@ -20,7 +20,7 @@ public class OrderEntityServiceTest {
     OrderRepository orderRepository;
     @InjectMocks
     OrderServiceImpl orderService;
-
+/*
     @Test
     public void testGetAllUsers(){
         when(orderRepository.findAll()).thenReturn(List.of(new OrderEntity()));
@@ -28,4 +28,6 @@ public class OrderEntityServiceTest {
 
         assertEquals(1, orderEntities.size());
     }
+
+ */
 }

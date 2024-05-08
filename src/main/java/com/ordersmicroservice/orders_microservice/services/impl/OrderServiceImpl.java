@@ -1,5 +1,6 @@
 package com.ordersmicroservice.orders_microservice.services.impl;
 
+import com.ordersmicroservice.orders_microservice.dto.Order;
 import com.ordersmicroservice.orders_microservice.models.OrderEntity;
 import com.ordersmicroservice.orders_microservice.repositories.OrderRepository;
 import com.ordersmicroservice.orders_microservice.services.OrderService;
@@ -13,12 +14,12 @@ public class OrderServiceImpl implements OrderService {
     @Autowired
     OrderRepository orderRepository;
     @Override
-    public List<OrderEntity> getAllOrders() {
+    public List<Order> getAllOrders() {
         return orderRepository.findAll();
     }
 
     @Override
-    public OrderEntity getOrderById(Long orderId) {
+    public Order getOrderById(Long orderId) {
         return orderRepository.findById(orderId).orElseThrow();
     }
 
