@@ -1,10 +1,18 @@
 package com.ordersmicroservice.orders_microservice.controllers;
 
+<<<<<<< HEAD:src/test/java/com/ordersmicroservice/orders_microservice/controllers/OrderEntityControllerTest.java
 import com.ordersmicroservice.orders_microservice.models.OrderEntity;
 import com.ordersmicroservice.orders_microservice.repositories.OrderRepository;
 import com.ordersmicroservice.orders_microservice.services.OrderService;
+=======
+import com.ordersmicroservice.orders_microservice.api.controllers.OrderController;
+import com.ordersmicroservice.orders_microservice.api.models.Order;
+import com.ordersmicroservice.orders_microservice.api.repositories.OrderRepository;
+import com.ordersmicroservice.orders_microservice.api.services.OrderService;
+>>>>>>> bdc50305c21ccf85b95837e9dfc3ca981933dfa9:src/test/java/com/ordersmicroservice/orders_microservice/OrderControllerTest.java
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -29,10 +37,18 @@ public class OrderEntityControllerTest {
     OrderService orderService;
     @MockBean
     OrderRepository orderRepository;
+<<<<<<< HEAD:src/test/java/com/ordersmicroservice/orders_microservice/controllers/OrderEntityControllerTest.java
     List<OrderEntity> orderEntities;
 
     @BeforeEach
     void setup() {
+=======
+    List<Order> orders;
+
+    @BeforeEach
+    void setup() {
+        MockitoAnnotations.openMocks(this);
+>>>>>>> bdc50305c21ccf85b95837e9dfc3ca981933dfa9:src/test/java/com/ordersmicroservice/orders_microservice/OrderControllerTest.java
         //create order
         //orders = List.of(new Order(1234, 9876, "", "", "", "", "", ""))
     }
@@ -47,10 +63,15 @@ public class OrderEntityControllerTest {
     @Test
     void testGetOrderById() throws Exception {
         long orderId = 1;
+<<<<<<< HEAD:src/test/java/com/ordersmicroservice/orders_microservice/controllers/OrderEntityControllerTest.java
         OrderEntity expectedOrderEntity = new OrderEntity();
+=======
+        String expectedResponseBody = "{\"order_id\":1,\"user_id\":1,\"product_id\":1,\"from_address_id\":1,\"to_address_id\":1,\"status\":\"UNPAID\",\"date_ordered\":\"08-05-2024\",\"date_delivered\":\"08-05-2024\"}";
+>>>>>>> bdc50305c21ccf85b95837e9dfc3ca981933dfa9:src/test/java/com/ordersmicroservice/orders_microservice/OrderControllerTest.java
 
-        MvcResult result = mockMvc.perform(get("/api/orders/{id}", 1))
+        mockMvc.perform(get("/api/orders/{id}", orderId))
                 .andExpect(status().isOk())
+<<<<<<< HEAD:src/test/java/com/ordersmicroservice/orders_microservice/controllers/OrderEntityControllerTest.java
                 .andExpect(content().json(expectedOrderEntity.toString()))
                 .andReturn();
     }
@@ -61,5 +82,22 @@ public class OrderEntityControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON));
         when(orderRepository.findAll()).thenReturn(orderEntities);
+=======
+                .andExpect(content().json(expectedResponseBody));
+    }
+
+    @Test
+    void testGetOrderByIdWithNonexistentId() throws Exception {
+        long nonExistentId = -1;
+        mockMvc.perform(get("/api/orders/{id}", nonExistentId)).andExpect(status().isNotFound());
+    }
+
+    @Test
+    void testGetOrderByIdWithInvalidId() throws Exception {
+        String invalidId = "abc";
+
+        mockMvc.perform(get("/api/orders/{id}", invalidId))
+                .andExpect(status().isBadRequest());
+>>>>>>> bdc50305c21ccf85b95837e9dfc3ca981933dfa9:src/test/java/com/ordersmicroservice/orders_microservice/OrderControllerTest.java
     }
 }
