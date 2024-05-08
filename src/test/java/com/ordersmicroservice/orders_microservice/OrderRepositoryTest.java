@@ -1,7 +1,7 @@
 package com.ordersmicroservice.orders_microservice;
 
-import com.ordersmicroservice.orders_microservice.api.models.Order;
-import com.ordersmicroservice.orders_microservice.api.repositories.OrderRepository;
+import com.ordersmicroservice.orders_microservice.models.Order;
+import com.ordersmicroservice.orders_microservice.repositories.OrderRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;

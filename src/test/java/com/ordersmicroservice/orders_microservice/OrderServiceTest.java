@@ -1,9 +1,8 @@
 package com.ordersmicroservice.orders_microservice;
 
-import com.ordersmicroservice.orders_microservice.api.models.Order;
-import com.ordersmicroservice.orders_microservice.api.repositories.OrderRepository;
-import com.ordersmicroservice.orders_microservice.api.services.OrderService;
-import com.ordersmicroservice.orders_microservice.api.services.impl.OrderServiceImpl;
+import com.ordersmicroservice.orders_microservice.models.Order;
+import com.ordersmicroservice.orders_microservice.repositories.OrderRepository;
+import com.ordersmicroservice.orders_microservice.services.impl.OrderServiceImpl;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;

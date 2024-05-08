@@ -1,4 +1,4 @@
-package com.ordersmicroservice.orders_microservice.api.models;
+package com.ordersmicroservice.orders_microservice.models;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -6,7 +6,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Data
 @NoArgsConstructor
