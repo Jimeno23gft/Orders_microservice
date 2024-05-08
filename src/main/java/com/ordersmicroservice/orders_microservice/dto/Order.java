@@ -1,5 +1,7 @@
 package com.ordersmicroservice.orders_microservice.dto;
 
+import com.ordersmicroservice.orders_microservice.models.OrderEntity;
+import jakarta.persistence.Column;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import lombok.Data;
@@ -12,11 +14,12 @@ public class Order {
     private Long user_id;
     private String from_address;
     private String to_address;
-    private String status;
+    private enum Status {UNPAID, PAID, SENT, IN_DELIVERY, DELIVERED, UNKNOWN};
+    private OrderEntity.Status status;
     private String date_ordered;
     private String date_delivered;
 
-    public Order(Long id, Long user_id, String from_address, String to_address, String status, String date_ordered, String date_delivered) {
+    public Order(Long id, Long user_id, String from_address, String to_address, OrderEntity.Status status, String date_ordered, String date_delivered) {
         this.id = id;
         this.user_id = user_id;
         this.from_address = from_address;
