@@ -12,6 +12,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
 
 import java.util.List;
 
@@ -45,6 +46,11 @@ public class OrderControllerTest {
 
     @Test
     void testGetOrderById() throws Exception {
-        mockMvc.perform(get("/api/orders/{id}", 1)).andExpect(status().isOk());
-    }
+        long orderId = 1;
+        Order expectedOrder = new Order();
+
+        MvcResult result = mockMvc.perform(get("/api/orders/{id}", 1))
+                .andExpect(status().isOk())
+                .andExpect(content().json(expectedOrder.toString()))
+                .andReturn();
 }
