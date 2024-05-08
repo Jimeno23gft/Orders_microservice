@@ -1,5 +1,7 @@
 package com.ordersmicroservice.orders_microservice.controllers;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.ordersmicroservice.orders_microservice.dto.Order;
 import com.ordersmicroservice.orders_microservice.models.OrderEntity;
 import com.ordersmicroservice.orders_microservice.repositories.OrderRepository;
 import com.ordersmicroservice.orders_microservice.services.OrderService;
@@ -9,19 +11,29 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
+import static com.ordersmicroservice.orders_microservice.Datos.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.is;
 
 @WebMvcTest(OrderController.class)
-@AutoConfigureMockMvc
 public class OrderEntityControllerTest {
     @Autowired
     MockMvc mockMvc;
@@ -31,10 +43,13 @@ public class OrderEntityControllerTest {
     OrderRepository orderRepository;
     List<OrderEntity> orderEntities;
 
+    ObjectMapper objectMapper;
+
     @BeforeEach
     void setup() {
         //create order
         //orders = List.of(new Order(1234, 9876, "", "", "", "", "", ""))
+        objectMapper = new ObjectMapper();
     }
 /*
     @Test
@@ -57,9 +72,20 @@ public class OrderEntityControllerTest {
 */
     @Test
     void probarGetAll() throws Exception {
-        mockMvc.perform(get("/orders"))
+        List<Order> mockOrders = Arrays.asList(crearOrder001().orElseThrow(),
+                                                     crearOrder002().orElseThrow());
+        when(orderService.getAllOrders()).thenReturn(mockOrders);
+
+        mockMvc.perform(get("/orders").contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON));
-        when(orderRepository.findAll()).thenReturn(orderEntities);
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$[0].id").value(1L))
+                .andExpect(jsonPath("$[1].id").value(2L))
+                .andExpect(jsonPath("$[0].status").value("PAID"))
+                .andExpect(jsonPath("$[1].status").value("UNPAID"))
+                .andExpect(jsonPath("$", hasSize(2)))
+                .andExpect(content().json(objectMapper.writeValueAsString(mockOrders)));
+
+        verify(orderService).getAllOrders();
     }
 }

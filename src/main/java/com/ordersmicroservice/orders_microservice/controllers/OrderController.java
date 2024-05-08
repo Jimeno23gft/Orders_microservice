@@ -1,5 +1,6 @@
 package com.ordersmicroservice.orders_microservice.controllers;
 
+import com.ordersmicroservice.orders_microservice.dto.Order;
 import com.ordersmicroservice.orders_microservice.models.OrderEntity;
 import com.ordersmicroservice.orders_microservice.services.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,14 +11,14 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/orders")
+@RequestMapping("/orders")
 public class OrderController {
 
     @Autowired
     OrderService orderService;
 
-    @GetMapping("")
-    public List<OrderEntity> getAllOrders(){
-        return null;
+    @GetMapping
+    public List<Order> getAllOrders(){
+        return orderService.getAllOrders();
     }
 }
