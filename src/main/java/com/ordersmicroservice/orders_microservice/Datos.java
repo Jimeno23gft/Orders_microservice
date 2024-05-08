@@ -7,8 +7,9 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Optional;
 
-import static com.ordersmicroservice.orders_microservice.models.OrderEntity.Status.PAID;
-import static com.ordersmicroservice.orders_microservice.models.OrderEntity.Status.UNPAID;
+import static com.ordersmicroservice.orders_microservice.dto.Order.Status.PAID;
+import static com.ordersmicroservice.orders_microservice.dto.Order.Status.UNPAID;
+
 
 public class Datos {
 

@@ -29,7 +29,7 @@ public class OrderEntity {
 
     @Column(name="to_address")
     private String to_address;
-    public enum Status {UNPAID, PAID, SENT, IN_DELIVERY, DELIVERED, UNKNOWN};
+    public enum Status {UNPAID, PAID, SENT, IN_DELIVERY, DELIVERED,CANCELED, UNKNOWN};
     @Enumerated(EnumType.STRING)
     @Column(name = "status")
     private Status status;
