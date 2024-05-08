@@ -1,3 +1,5 @@
+DROP TABLE IF EXISTS orders;
+DROP TABLE IF EXISTS orderedProducts;
 CREATE TABLE orders (
     id LONG PRIMARY KEY,
     user_id LONG,
