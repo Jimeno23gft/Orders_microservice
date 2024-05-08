@@ -1,6 +1,6 @@
 package com.ordersmicroservice.orders_microservice.controllers;
 
-import com.ordersmicroservice.orders_microservice.models.Order;
+import com.ordersmicroservice.orders_microservice.models.OrderEntity;
 import com.ordersmicroservice.orders_microservice.services.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,7 +17,7 @@ public class OrderController {
     OrderService orderService;
 
     @GetMapping("")
-    public List<Order> getAllOrders(){
+    public List<OrderEntity> getAllOrders(){
         return null;
     }
 }

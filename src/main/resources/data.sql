@@ -1,3 +1,4 @@
+DROP TABLE IF EXISTS orders;
 CREATE TABLE orders (
     id LONG PRIMARY KEY,
     user_id LONG,
@@ -21,6 +22,7 @@ VALUES (5, 1005, '222 Pine St', 'UNKNOWN', '2024-05-11');
 INSERT INTO orders (id, user_id, from_address, status, date_ordered, date_delivered)
 VALUES (6, 1006, '333 Cedar Rd', 'PAID', '2024-05-12', '2024-05-14');
 
+DROP TABLE IF EXISTS orderedProducts;
 CREATE TABLE orderedProducts (
     order_id LONG,
     product_id LONG,

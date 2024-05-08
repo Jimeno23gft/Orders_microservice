@@ -1,6 +1,6 @@
-package com.ordersmicroservice.orders_microservice;
+package com.ordersmicroservice.orders_microservice.services;
 
-import com.ordersmicroservice.orders_microservice.models.Order;
+import com.ordersmicroservice.orders_microservice.models.OrderEntity;
 import com.ordersmicroservice.orders_microservice.repositories.OrderRepository;
 import com.ordersmicroservice.orders_microservice.services.impl.OrderServiceImpl;
 import org.junit.jupiter.api.Test;
@@ -15,7 +15,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-public class OrderServiceTest {
+public class OrderEntityServiceTest {
     @Mock
     OrderRepository orderRepository;
     @InjectMocks
@@ -23,9 +23,9 @@ public class OrderServiceTest {
 
     @Test
     public void testGetAllUsers(){
-        when(orderRepository.findAll()).thenReturn(List.of(new Order()));
-        List<Order> orders = orderService.getAllOrders();
+        when(orderRepository.findAll()).thenReturn(List.of(new OrderEntity()));
+        List<OrderEntity> orderEntities = orderService.getAllOrders();
 
-        assertEquals(1, orders.size());
+        assertEquals(1, orderEntities.size());
     }
 }
