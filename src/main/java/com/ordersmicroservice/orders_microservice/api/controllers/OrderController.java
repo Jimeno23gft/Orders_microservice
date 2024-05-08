@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/orders")
+@RequestMapping("/api/v1/orders")
 public class OrderController {
 
     @Autowired
@@ -20,6 +20,11 @@ public class OrderController {
 
     @GetMapping("")
     public List<Order> getAllOrders(){
-        return null;
+        return orderService.getAllOrders();
+    }
+
+    @GetMapping("/{id}")
+    public Order getOrderById(@PathVariable Long id){
+        return orderService.getOrderById(id);
     }
 }
