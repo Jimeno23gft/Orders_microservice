@@ -71,7 +71,7 @@ public class OrderEntityControllerTest {
     }
 */
     @Test
-    void probarGetAll() throws Exception {
+    void testGetAllOrders() throws Exception {
         List<Order> mockOrders = Arrays.asList(crearOrder001().orElseThrow(),
                                                      crearOrder002().orElseThrow());
         when(orderService.getAllOrders()).thenReturn(mockOrders);
@@ -87,5 +87,22 @@ public class OrderEntityControllerTest {
                 .andExpect(content().json(objectMapper.writeValueAsString(mockOrders)));
 
         verify(orderService).getAllOrders();
+    }
+
+    @Test
+    void testGetOrderById() throws Exception {
+        Long id = 1L;
+        when(orderService.getOrderById(1L)).thenReturn(crearOrder001().orElseThrow());
+
+        //When
+        mockMvc.perform(get("/orders/{id}",id).contentType(MediaType.APPLICATION_JSON))
+
+                //Then
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.id").value(1L))
+                .andExpect(jsonPath("$.status").value("PAID"));
+
+        verify(orderService).getOrderById(1L);
     }
 }
