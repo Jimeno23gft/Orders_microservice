@@ -29,4 +29,7 @@ public class Order {
         this.date_ordered = date_ordered;
         this.date_delivered = date_delivered;
     }
+
+    public Order() {
+    }
 }
