@@ -5,8 +5,8 @@ CREATE TABLE orders (
     from_address VARCHAR(150),
     to_address VARCHAR(150),
     status ENUM('UNPAID','PAID','SENT','IN_DELIVERY','DELIVERED','UNKNOWN'),
-    date_ordered DATE,
-    date_delivered DATE
+    date_ordered VARCHAR(150),
+    date_delivered VARCHAR(150)
 );
 
 INSERT INTO orders (id, user_id, from_address, status, date_ordered, date_delivered)
