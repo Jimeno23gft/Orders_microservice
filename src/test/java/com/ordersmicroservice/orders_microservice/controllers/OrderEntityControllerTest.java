@@ -19,21 +19,17 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
-
 import static com.ordersmicroservice.orders_microservice.Datos.crearOrder001;
 import static com.ordersmicroservice.orders_microservice.Datos.crearOrder002;
 import static com.ordersmicroservice.orders_microservice.dto.Order.Status.DELIVERED;
 import static com.ordersmicroservice.orders_microservice.dto.Order.Status.PAID;
 import static org.hamcrest.Matchers.hasSize;
-<<<<<<< HEAD
 import static org.hamcrest.Matchers.is;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-=======
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
->>>>>>> cdc1736581ea12ce7f0dcae2582e7e35a77d748c
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -112,7 +108,6 @@ public class OrderEntityControllerTest {
     }
 
     @Test
-<<<<<<< HEAD
     void testPostNewOrder() throws Exception {
         Order orderToPost = new Order(null,1L,"Madrid","Zaragoza",DELIVERED, "2001-21-21","2002-21-21");
 
@@ -134,7 +129,7 @@ public class OrderEntityControllerTest {
         verify(orderService).save(any());
 
     }
-=======
+    @Test
     void testDeleteById() throws Exception{
 
         Long id = 3L;
@@ -157,7 +152,4 @@ public class OrderEntityControllerTest {
 
         verify(orderService).deleteById(id);
     }
-
-
->>>>>>> cdc1736581ea12ce7f0dcae2582e7e35a77d748c
 }
