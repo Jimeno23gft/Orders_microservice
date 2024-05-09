@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "orders")
+@Table(name = "ord")
 public class OrderEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -40,6 +40,7 @@ public class OrderEntity {
     @Column(name = "date_delivered")
     private String date_delivered;
 
+    /* no se que es
     public static OrderEntity fromEntity(OrderEntity entity){
         return OrderEntity.builder()
                 .id(entity.getId())
@@ -51,5 +52,5 @@ public class OrderEntity {
                 .date_delivered(entity.getDate_delivered())
                 .build();
     }
-
+*/
 }
