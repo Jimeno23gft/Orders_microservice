@@ -28,6 +28,18 @@ public class OrderServiceImpl implements OrderService {
     public Order save(Order order) {
         return orderRepository.save(order);
     }
+    public Order patchOrder(Long id, Order order) {
+
+        Order existingOrder = orderRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Order not found with id " + id)); // Or use a more specific exception
+
+        if (order.getStatus() != null) {
+            existingOrder.setStatus(order.getStatus());
+        }
+
+        return orderRepository.save(existingOrder);
+    }
+
 
     public void deleteById(Long id) { }
     }

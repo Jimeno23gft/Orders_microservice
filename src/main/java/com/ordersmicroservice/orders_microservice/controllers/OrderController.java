@@ -45,4 +45,8 @@ public class OrderController {
     public ResponseEntity<String> handleNotFound(EntityNotFoundException ex) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
     }
+
+    @PatchMapping("/{id}")
+    public Order patchOrder(@PathVariable Long id,@RequestBody Order patchData){return orderService.patchOrder(id,patchData);}
+
 }

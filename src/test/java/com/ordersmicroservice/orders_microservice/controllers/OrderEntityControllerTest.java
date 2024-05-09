@@ -32,6 +32,7 @@ import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(OrderController.class)
@@ -52,6 +53,7 @@ public class OrderEntityControllerTest {
         OrderController orderController = new OrderController(orderService);
         mockMvc = MockMvcBuilders.standaloneSetup(orderController).build();
     }
+
     /*
         @Test
         void testGetAllOrders() throws Exception {
@@ -74,7 +76,7 @@ public class OrderEntityControllerTest {
     @Test
     void testGetAllOrders() throws Exception {
         List<Order> mockOrders = Arrays.asList(crearOrder001().orElseThrow(),
-                                                     crearOrder002().orElseThrow());
+                crearOrder002().orElseThrow());
         when(orderService.getAllOrders()).thenReturn(mockOrders);
 
         mockMvc.perform(get("/orders").contentType(MediaType.APPLICATION_JSON))
@@ -96,7 +98,7 @@ public class OrderEntityControllerTest {
         when(orderService.getOrderById(1L)).thenReturn(crearOrder001().orElseThrow());
 
         //When
-        mockMvc.perform(get("/orders/{id}",id).contentType(MediaType.APPLICATION_JSON))
+        mockMvc.perform(get("/orders/{id}", id).contentType(MediaType.APPLICATION_JSON))
 
                 //Then
                 .andExpect(status().isOk())
@@ -109,10 +111,10 @@ public class OrderEntityControllerTest {
 
     @Test
     void testPostNewOrder() throws Exception {
-        Order orderToPost = new Order(null,1L,"Madrid","Zaragoza",DELIVERED, "2001-21-21","2002-21-21");
+        Order orderToPost = new Order(null, 1L, "Madrid", "Zaragoza", DELIVERED, "2001-21-21", "2002-21-21");
 
         when(orderService.save(any())).then(invocationOnMock -> {
-           Order order = invocationOnMock.getArgument(0);
+            Order order = invocationOnMock.getArgument(0);
             order.setId(7L);
             return order;
         });
@@ -124,13 +126,14 @@ public class OrderEntityControllerTest {
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.id", is(7)))
                 .andExpect(jsonPath("$.from_address", is("Madrid")))
-                .andExpect(jsonPath("$.date_ordered",is("2001-21-21")));
+                .andExpect(jsonPath("$.date_ordered", is("2001-21-21")));
 
         verify(orderService).save(any());
 
     }
+
     @Test
-    void testDeleteById() throws Exception{
+    void testDeleteById() throws Exception {
 
         Long id = 3L;
 
@@ -151,5 +154,21 @@ public class OrderEntityControllerTest {
                 .andExpect(status().isNotFound());
 
         verify(orderService).deleteById(id);
+    }
+
+    @Test
+    void testPatchOrder () throws Exception {
+        Long id = 1L;
+
+        Order mockOrder = crearOrder001().orElseThrow();
+
+        when(orderService.patchOrder(id, mockOrder)).thenReturn(mockOrder);
+
+        mockMvc.perform(patch("/orders/{id}", id).contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(mockOrder)))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON));
+
+        verify(orderService).patchOrder(id, mockOrder);
+
     }
 }
