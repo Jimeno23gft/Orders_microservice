@@ -1,15 +1,16 @@
 package com.ordersmicroservice.orders_microservice.dto;
 
 import com.ordersmicroservice.orders_microservice.models.OrderEntity;
-import jakarta.persistence.Column;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
+import jakarta.persistence.*;
 import lombok.Data;
 
 import java.time.LocalDateTime;
 
 @Data
+@Entity(name = "orders")
 public class Order {
+
+    @Id
     private Long id;
     private Long user_id;
     private String from_address;
