@@ -5,6 +5,7 @@ import com.ordersmicroservice.orders_microservice.dto.Order;
 import com.ordersmicroservice.orders_microservice.models.OrderEntity;
 import com.ordersmicroservice.orders_microservice.repositories.OrderRepository;
 import com.ordersmicroservice.orders_microservice.services.OrderService;
+import jakarta.persistence.EntityNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,8 +20,8 @@ import java.util.List;
 import static com.ordersmicroservice.orders_microservice.Datos.crearOrder001;
 import static com.ordersmicroservice.orders_microservice.Datos.crearOrder002;
 import static org.hamcrest.Matchers.hasSize;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -96,4 +97,30 @@ public class OrderEntityControllerTest {
 
         verify(orderService).getOrderById(1L);
     }
+
+    @Test
+    void testDeleteById() throws Exception{
+
+        Long id = 3L;
+
+        mockMvc.perform(delete("/orders/{id}", id))
+                .andExpect(status().isNoContent());
+
+
+        verify(orderService).deleteById(id);
+
+    }
+
+    @Test
+    void testDeleteByIdShouldFailWhenIdNotFound() throws Exception {
+        Long id = 3L;
+        doThrow(new EntityNotFoundException("Order not found")).when(orderService).deleteById(id);
+
+        mockMvc.perform(delete("/orders/{id}", id))
+                .andExpect(status().isNotFound());
+
+        verify(orderService).deleteById(id);
+    }
+
+
 }

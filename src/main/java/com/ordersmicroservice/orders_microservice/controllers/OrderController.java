@@ -3,7 +3,10 @@ package com.ordersmicroservice.orders_microservice.controllers;
 import com.ordersmicroservice.orders_microservice.dto.Order;
 import com.ordersmicroservice.orders_microservice.models.OrderEntity;
 import com.ordersmicroservice.orders_microservice.services.OrderService;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -27,10 +30,12 @@ public class OrderController {
     public Order getOrderById(@PathVariable Long id){return orderService.getOrderById(id);}
 
     @DeleteMapping("/{id}")
-    @ResponseStatus(NO_CONTENT)
-    public void deleteById(@PathVariable Long id) {
-        orderService.deleteById(id);
-    }
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteById(@PathVariable Long id) {orderService.deleteById(id);}
 
+    @ExceptionHandler(EntityNotFoundException.class)
+    public ResponseEntity<String> handleNotFound(EntityNotFoundException ex) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
+    }
 
 }
