@@ -6,6 +6,7 @@ import com.ordersmicroservice.orders_microservice.repositories.OrderRepository;
 import com.ordersmicroservice.orders_microservice.services.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -28,5 +29,5 @@ public class OrderServiceImpl implements OrderService {
         return orderRepository.save(order);
     }
 
-
-}
+    public void deleteById(Long id) { }
+    }
