@@ -16,6 +16,7 @@ public class Order {
     private String from_address;
     private String to_address;
     public enum Status {UNPAID, PAID, SENT, IN_DELIVERY, DELIVERED, CANCELLED, UNKNOWN};
+    @Enumerated(EnumType.STRING)
     private Status status;
     private String date_ordered;
     private String date_delivered;
