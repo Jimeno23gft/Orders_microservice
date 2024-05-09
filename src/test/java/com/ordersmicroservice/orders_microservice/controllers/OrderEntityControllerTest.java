@@ -1,6 +1,5 @@
 package com.ordersmicroservice.orders_microservice.controllers;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ordersmicroservice.orders_microservice.dto.Order;
 import com.ordersmicroservice.orders_microservice.models.OrderEntity;
@@ -9,7 +8,6 @@ import com.ordersmicroservice.orders_microservice.services.OrderService;
 import jakarta.persistence.EntityNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
@@ -18,7 +16,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
+
 import static com.ordersmicroservice.orders_microservice.Datos.crearOrder001;
 import static com.ordersmicroservice.orders_microservice.Datos.crearOrder002;
 import static com.ordersmicroservice.orders_microservice.dto.Status.DELIVERED;
@@ -112,7 +110,7 @@ public class OrderEntityControllerTest {
     void testPostNewOrder() throws Exception {
         Order orderToPost = new Order(null, 1L, "Madrid", "Zaragoza", DELIVERED, "2001-21-21", "2002-21-21");
 
-        when(orderService.save(any())).then(invocationOnMock -> {
+        when(orderService.addOrder(any())).then(invocationOnMock -> {
             Order order = invocationOnMock.getArgument(0);
             order.setId(7L);
             return order;
@@ -127,7 +125,7 @@ public class OrderEntityControllerTest {
                 .andExpect(jsonPath("$.from_address", is("Madrid")))
                 .andExpect(jsonPath("$.date_ordered", is("2001-21-21")));
 
-        verify(orderService).save(any());
+        verify(orderService).addOrder(any());
 
     }
 

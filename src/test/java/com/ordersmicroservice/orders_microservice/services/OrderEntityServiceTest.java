@@ -15,10 +15,9 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
-import static com.ordersmicroservice.orders_microservice.dto.Status.DELIVERED;
-import static com.ordersmicroservice.orders_microservice.dto.Status.IN_DELIVERY;
+import static com.ordersmicroservice.orders_microservice.dto.Status.*;
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 public class OrderEntityServiceTest {
@@ -63,10 +62,45 @@ public class OrderEntityServiceTest {
 
     @Test
     public void testGetOrderById() {
-        when(orderRepository.findById(order1.getId())).thenReturn(Optional.of(order1));
+        when(orderRepository.findById(1L)).thenReturn(Optional.of(order1));
 
         Order savedOrder = orderService.getOrderById(order1.getId());
         assertNotNull(savedOrder);
         assertEquals(order1, savedOrder);
+    }
+
+    @Test
+    public void testAddOrder() {
+        when(orderRepository.save(order1)).thenReturn(order1);
+
+        Order savedOrder = orderService.addOrder(order1);
+
+        assertNotNull(savedOrder);
+        assertEquals(order1, savedOrder);
+    }
+
+    @Test
+    public void testPatchOrder(){
+        Order existingOrder = new Order();
+        existingOrder.setId(order1.getId());
+        existingOrder.setStatus(order1.getStatus());
+        existingOrder.setFrom_address(order1.getFrom_address());
+
+        Order updatedOrder = new Order();
+        updatedOrder.setStatus(CANCELLED);
+        updatedOrder.setFrom_address("aaa");
+
+        // Mocking the behavior of orderRepository
+        when(orderRepository.findById(order1.getId())).thenReturn(Optional.of(existingOrder));
+        when(orderRepository.save(existingOrder)).thenReturn(existingOrder);
+
+        // Call the method
+        Order patchedOrder = orderService.patchOrder(order1.getId(), updatedOrder);
+
+        // Assertions
+        assertEquals(CANCELLED, patchedOrder.getStatus()); // Ensure the status is updated
+        assertEquals("aaa", patchedOrder.getFrom_address()); // Ensure the status is updated
+        verify(orderRepository, times(1)).findById(order1.getId()); // Ensure findById is called exactly once with orderId
+        verify(orderRepository, times(1)).save(existingOrder); // Ensure save is called exactly once with existingOrder
     }
 }

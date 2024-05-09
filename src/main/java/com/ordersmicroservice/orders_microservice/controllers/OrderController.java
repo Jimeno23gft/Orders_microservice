@@ -1,18 +1,15 @@
 package com.ordersmicroservice.orders_microservice.controllers;
 
 import com.ordersmicroservice.orders_microservice.dto.Order;
-import com.ordersmicroservice.orders_microservice.models.OrderEntity;
 import com.ordersmicroservice.orders_microservice.services.OrderService;
 import jakarta.persistence.EntityNotFoundException;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
+
 import static org.springframework.http.HttpStatus.*;
-import static org.springframework.http.HttpStatus.NO_CONTENT;
 
 @RestController
 @RequestMapping("/orders")
@@ -35,7 +32,7 @@ public class OrderController {
 
     @PostMapping
     @ResponseStatus(CREATED)
-    public Order postOrder(@RequestBody Order order){ return orderService.save(order);}
+    public Order postOrder(@RequestBody Order order){ return orderService.addOrder(order);}
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)

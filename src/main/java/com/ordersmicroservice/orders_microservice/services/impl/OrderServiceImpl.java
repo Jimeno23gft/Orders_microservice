@@ -25,19 +25,24 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public Order save(Order order) {
+    public Order addOrder(Order order) {
         return orderRepository.save(order);
     }
-    public Order patchOrder(Long id, Order order) {
+    public Order patchOrder(Long id, Order updatedOrder) {
 
         Order existingOrder = orderRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Order not found with id " + id)); // Or use a more specific exception
 
-        if (order.getStatus() != null) {
-            existingOrder.setStatus(order.getStatus());
+        if (updatedOrder.getStatus() != null) {
+            existingOrder.setUser_id(updatedOrder.getUser_id());
+            existingOrder.setFrom_address(updatedOrder.getFrom_address());
+            existingOrder.setTo_address(updatedOrder.getTo_address());
+            existingOrder.setStatus(updatedOrder.getStatus());
+            existingOrder.setDate_ordered(updatedOrder.getDate_ordered());
+            existingOrder.setDate_delivered(updatedOrder.getDate_delivered());
+            return orderRepository.save(existingOrder);
         }
-
-        return orderRepository.save(existingOrder);
+        return null;
     }
 
 
