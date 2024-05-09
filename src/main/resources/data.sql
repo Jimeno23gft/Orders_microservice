@@ -4,7 +4,7 @@ CREATE TABLE orders (
     user_id LONG,
     from_address VARCHAR(150),
     to_address VARCHAR(150),
-    status ENUM('UNPAID','PAID','SENT','IN_DELIVERY','DELIVERED','UNKNOWN'),
+    status ENUM('UNPAID','PAID','SENT','IN_DELIVERY','DELIVERED','UNKNOWN','CANCELLED'),
     date_ordered VARCHAR(150),
     date_delivered VARCHAR(150)
 );

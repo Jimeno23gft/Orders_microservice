@@ -22,6 +22,7 @@ import static org.hamcrest.Matchers.hasSize;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(OrderController.class)
@@ -95,5 +96,20 @@ public class OrderEntityControllerTest {
                 .andExpect(jsonPath("$.status").value("PAID"));
 
         verify(orderService).getOrderById(1L);
+    }
+
+    @Test
+    void testPatchOrder() throws Exception {
+        Long id = 1L;
+
+        Order mockOrder = crearOrder001().orElseThrow();
+
+        when(orderService.patchOrder(id,mockOrder)).thenReturn(mockOrder);
+
+        mockMvc.perform(patch("/orders/{id}",id).contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(mockOrder)))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON));
+
+        verify(orderService).patchOrder(id,mockOrder);
     }
 }
