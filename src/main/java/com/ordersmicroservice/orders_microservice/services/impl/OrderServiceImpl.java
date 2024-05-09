@@ -1,10 +1,10 @@
-package com.ordersmicroservice.orders_microservice.api.services.impl;
+package com.ordersmicroservice.orders_microservice.services.impl;
 
-import com.ordersmicroservice.orders_microservice.api.models.Order;
-import com.ordersmicroservice.orders_microservice.api.repositories.OrderRepository;
-import com.ordersmicroservice.orders_microservice.api.services.OrderService;
+import com.ordersmicroservice.orders_microservice.dto.Order;
+import com.ordersmicroservice.orders_microservice.models.OrderEntity;
+import com.ordersmicroservice.orders_microservice.repositories.OrderRepository;
+import com.ordersmicroservice.orders_microservice.services.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

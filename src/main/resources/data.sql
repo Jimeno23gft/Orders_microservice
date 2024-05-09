@@ -1,13 +1,12 @@
 DROP TABLE IF EXISTS orders;
-DROP TABLE IF EXISTS orderedProducts;
 CREATE TABLE orders (
     id LONG PRIMARY KEY,
     user_id LONG,
     from_address VARCHAR(150),
     to_address VARCHAR(150),
     status ENUM('UNPAID','PAID','SENT','IN_DELIVERY','DELIVERED','UNKNOWN'),
-    date_ordered DATE,
-    date_delivered DATE
+    date_ordered VARCHAR(150),
+    date_delivered VARCHAR(150)
 );
 
 INSERT INTO orders (id, user_id, from_address, status, date_ordered, date_delivered)
@@ -23,6 +22,7 @@ VALUES (5, 1005, '222 Pine St', 'UNKNOWN', '2024-05-11');
 INSERT INTO orders (id, user_id, from_address, status, date_ordered, date_delivered)
 VALUES (6, 1006, '333 Cedar Rd', 'PAID', '2024-05-12', '2024-05-14');
 
+DROP TABLE IF EXISTS orderedProducts;
 CREATE TABLE orderedProducts (
     order_id LONG,
     product_id LONG,
