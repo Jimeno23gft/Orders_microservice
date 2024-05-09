@@ -2,11 +2,13 @@ package com.ordersmicroservice.orders_microservice.dto;
 
 import com.ordersmicroservice.orders_microservice.models.OrderEntity;
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Data;
 
 import java.time.LocalDateTime;
 
 @Data
+@Builder
 @Entity(name = "orders")
 public class Order {
 
@@ -15,7 +17,6 @@ public class Order {
     private Long user_id;
     private String from_address;
     private String to_address;
-    public enum Status {UNPAID, PAID, SENT, IN_DELIVERY, DELIVERED, CANCELLED, UNKNOWN};
     @Enumerated(EnumType.STRING)
     private Status status;
     private String date_ordered;
@@ -32,5 +33,15 @@ public class Order {
     }
 
     public Order() {
+    }
+    public static Order fromEntity(OrderEntity entity){
+        return Order.builder()
+                .id(entity.getId())
+                .user_id(entity.getUser_id())
+                .from_address(entity.getFrom_address())
+                .to_address(entity.getTo_address())
+                .status(entity.getStatus())
+                .date_ordered(entity.getDate_ordered())
+                .date_delivered(entity.getDate_delivered()).build();
     }
 }
