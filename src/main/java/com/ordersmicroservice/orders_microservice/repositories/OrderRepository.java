@@ -9,9 +9,6 @@ import org.springframework.stereotype.Repository;
 import java.util.Optional;
 
 @Repository
-public interface OrderRepository extends JpaRepository<Order,Long> {
-    /*
-    @Query("select c from orders where c.status =?1")
-    Optional<Order> findByStatus(String status);
-     */
+public interface OrderRepository extends JpaRepository<OrderEntity,Long> {
+
 }

@@ -15,10 +15,10 @@ import java.util.stream.Collectors;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "ord")
+@Table(name = "orders")
 public class OrderEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="id")
     private Long id;
 
@@ -41,17 +41,5 @@ public class OrderEntity {
     @Column(name = "date_delivered")
     private String date_delivered;
 
-    /* no se que es
-    public static OrderEntity fromEntity(OrderEntity entity){
-        return OrderEntity.builder()
-                .id(entity.getId())
-                .user_id(entity.getUser_id())
-                .from_address(entity.getFrom_address())
-                .to_address(entity.getTo_address())
-                .status(entity.getStatus())
-                .date_ordered(entity.getDate_ordered())
-                .date_delivered(entity.getDate_delivered())
-                .build();
-    }
-*/
+
 }
