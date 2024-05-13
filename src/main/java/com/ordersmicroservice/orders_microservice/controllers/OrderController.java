@@ -1,6 +1,7 @@
 package com.ordersmicroservice.orders_microservice.controllers;
 
 import com.ordersmicroservice.orders_microservice.dto.Order;
+import com.ordersmicroservice.orders_microservice.models.OrderEntity;
 import com.ordersmicroservice.orders_microservice.services.OrderService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -28,7 +29,7 @@ public class OrderController {
     @GetMapping
     @ResponseStatus(OK)
     @Operation(summary = "List all Orders", description = "This endpoint retrieves example data from the server.")
-    public List<Order> getAllOrders(){
+    public List<OrderEntity> getAllOrders(){
         return orderService.getAllOrders();
     }
 
@@ -38,7 +39,7 @@ public class OrderController {
             @ApiResponse(responseCode = "200", description = "Successful operation", content = @Content(mediaType = "application/json")),
             @ApiResponse(responseCode = "404", description = "Order not found", content = @Content(mediaType = "application/json"))
     })
-    public Order getOrderById(@PathVariable Long id){return orderService.getOrderById(id);}
+    public OrderEntity getOrderById(@PathVariable Long id){return orderService.getOrderById(id);}
 
     @PostMapping
     @ResponseStatus(CREATED)
@@ -47,7 +48,7 @@ public class OrderController {
             @ApiResponse(responseCode = "201", description = "Order Created", content = @Content(mediaType = "application/json")),
             @ApiResponse(responseCode = "500", description = "Internal server error", content = @Content(mediaType = "application/json"))
     })
-    public Order postOrder(@RequestBody Order order){ return orderService.addOrder(order);}
+    public OrderEntity postOrder(@RequestBody OrderEntity order){ return orderService.addOrder(order);}
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
@@ -61,6 +62,6 @@ public class OrderController {
 
     @PatchMapping("/{id}")
     @Operation(summary = "Update an order", description = "This endpoint retrieves example data from the server.")
-    public Order patchOrder(@PathVariable Long id,@RequestBody Order patchData){return orderService.patchOrder(id,patchData);}
+    public OrderEntity patchOrder(@PathVariable Long id,@RequestBody OrderEntity patchData){return orderService.patchOrder(id,patchData);}
 
 }

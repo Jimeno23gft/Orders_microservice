@@ -44,8 +44,6 @@ public class OrderEntityControllerTest {
 
     @BeforeEach
     void setup() {
-        //create order
-        //orders = List.of(new Order(1234, 9876, "", "", "", "", "", ""))
         objectMapper = new ObjectMapper();
         OrderController orderController = new OrderController(orderService);
         mockMvc = MockMvcBuilders.standaloneSetup(orderController).build();
@@ -53,7 +51,7 @@ public class OrderEntityControllerTest {
 
     @Test
     void testGetAllOrders() throws Exception {
-        List<Order> mockOrders = Arrays.asList(crearOrder001().orElseThrow(),
+        List<OrderEntity> mockOrders = Arrays.asList(crearOrder001().orElseThrow(),
                 crearOrder002().orElseThrow());
         when(orderService.getAllOrders()).thenReturn(mockOrders);
 
@@ -138,7 +136,7 @@ public class OrderEntityControllerTest {
     void testPatchOrder () throws Exception {
         Long id = 1L;
 
-        Order mockOrder = crearOrder001().orElseThrow();
+        OrderEntity mockOrder = crearOrder001().orElseThrow();
 
         when(orderService.patchOrder(id, mockOrder)).thenReturn(mockOrder);
 
