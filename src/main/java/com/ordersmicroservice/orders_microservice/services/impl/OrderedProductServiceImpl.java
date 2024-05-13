@@ -10,7 +10,7 @@ import java.util.List;
 @Service
 public class OrderedProductServiceImpl implements OrderedProductService {
     OrderedProductRepository orderedProductRepository;
-    public OrderedProductServiceImpl(OrderedProductRepository orderedProductRepository){
+    public OrderedProductServiceImpl(OrderedProductRepository orderedProductRepository) {
         this.orderedProductRepository = orderedProductRepository;
     }
 
@@ -20,3 +20,4 @@ public class OrderedProductServiceImpl implements OrderedProductService {
         return orderedProductRepository.findAll();
     }
 }
+
