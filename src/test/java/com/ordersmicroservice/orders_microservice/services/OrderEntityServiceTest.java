@@ -107,11 +107,9 @@ public class OrderEntityServiceTest {
         OrderEntity existingOrder = new OrderEntity();
         existingOrder.setId(order1.getId());
         existingOrder.setStatus(order1.getStatus());
-        existingOrder.setFrom_address(order1.getFrom_address());
 
         OrderEntity updatedOrder = new OrderEntity();
         updatedOrder.setStatus(CANCELLED);
-        updatedOrder.setFrom_address("aaa");
 
         when(orderRepository.findById(order1.getId())).thenReturn(Optional.empty());
 
