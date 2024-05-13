@@ -10,8 +10,5 @@ import java.util.Optional;
 
 @Repository
 public interface OrderRepository extends JpaRepository<Order,Long> {
-    /*
-    @Query("select c from orders where c.status =?1")
-    Optional<Order> findByStatus(String status);
-     */
+
 }

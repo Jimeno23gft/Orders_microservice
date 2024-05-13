@@ -51,25 +51,6 @@ public class OrderEntityControllerTest {
         mockMvc = MockMvcBuilders.standaloneSetup(orderController).build();
     }
 
-    /*
-        @Test
-        void testGetAllOrders() throws Exception {
-            mockMvc.perform(get("/api/v1/orders"))
-                    .andExpect(status().isOk());
-            when(orderRepository.findAll()).thenReturn(orderEntities);
-        }
-
-        @Test
-        void testGetOrderById() throws Exception {
-            long orderId = 1;
-            OrderEntity expectedOrderEntity = new OrderEntity();
-
-            MvcResult result = mockMvc.perform(get("/api/orders/{id}", 1))
-                    .andExpect(status().isOk())
-                    .andExpect(content().json(expectedOrderEntity.toString()))
-                    .andReturn();
-        }
-    */
     @Test
     void testGetAllOrders() throws Exception {
         List<Order> mockOrders = Arrays.asList(crearOrder001().orElseThrow(),

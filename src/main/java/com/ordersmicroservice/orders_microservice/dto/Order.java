@@ -35,16 +35,4 @@ public class Order {
     public Order() {
     }
 
-    /*
-    public static Order fromEntity(OrderEntity entity){
-        return Order.builder()
-                .id(entity.getId())
-                .user_id(entity.getUser_id())
-                .from_address(entity.getFrom_address())
-                .to_address(entity.getTo_address())
-                .status(entity.getStatus())
-                .date_ordered(entity.getDate_ordered())
-                .date_delivered(entity.getDate_delivered()).build();
-    }
-     */
 }
