@@ -126,6 +126,10 @@ public class OrderEntityServiceTest {
 
     @Test
     void testDeleteById() {
+        Long orderId = 1L;
 
+        orderService.deleteById(orderId);
+
+        verify(orderRepository).deleteById(orderId);
     }
 }
