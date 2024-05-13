@@ -26,3 +26,4 @@ public class OrderProductEntity {
     @Column(name = "quantity")
     Long quantity;
 }
+
