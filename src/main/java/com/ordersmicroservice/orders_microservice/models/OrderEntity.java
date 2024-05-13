@@ -40,6 +40,4 @@ public class OrderEntity {
 
     @Column(name = "date_delivered")
     private String date_delivered;
-
-
 }

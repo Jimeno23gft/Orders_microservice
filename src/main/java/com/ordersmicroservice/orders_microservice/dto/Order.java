@@ -13,7 +13,10 @@ import java.time.LocalDateTime;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+<<<<<<< HEAD
 //@Entity(name = "orders")
+=======
+>>>>>>> 6d8f867b809555a8edbf4a51befffbc7561fbca6
 public class Order {
 
     @Id
