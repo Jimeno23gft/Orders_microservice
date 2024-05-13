@@ -1,17 +1,0 @@
-
-_
-java:S57867"Remove this 'public' modifier.(ÿèàµûÿÿÿÿJ$4c8ec292-09fc-42ea-85fa-f2db0208f679
-_
-java:S5786A"Remove this 'public' modifier.(£Ñò®ûÿÿÿÿJ$937803a8-d8aa-4cc1-be94-9f0bfff42852
-_
-java:S5786J"Remove this 'public' modifier.(¥Ñ—ÚÿÿÿÿÿJ$f21d6e0f-1dc0-4973-a008-466d2b22a732
-Z
-java:S5786T"Remove this 'public' modifier.(ÑªÁşJ$4151ff01-d423-45b0-83db-9992ac0fd0c2
-a
-java:S5786g"Remove this 'public' modifier.(Î ƒ¹8¢é’÷1J$65b47c34-5da0-4d81-a9c3-470202210f25
-a
-java:S5786"Remove this 'public' modifier.(ÛôÁ8Ë½ğ’÷1J$4267e483-b7df-418e-b06e-b97bdc03c834
-’
-java:S3415<"VSwap these 2 arguments so they are in the correct order: expected value, actual value.(ÊÁ•J$916f8ecc-c2b7-4d22-8981-11267f6afde6
-
-java:S5778r"bRefactor the code of the lambda to have only one invocation possibly throwing a runtime exception.(ÚÊ†iJ$d1929b68-5c7c-49e7-b34d-91df3d15b68e
