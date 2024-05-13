@@ -33,7 +33,7 @@ CREATE TABLE orderedProducts (
     product_id LONG,
     quantity LONG,
     CONSTRAINT PK_orderedProducts PRIMARY KEY (order_id,product_id),
-    FOREIGN KEY (order_id) REFERENCES orders(id)
+    FOREIGN KEY (order_id) REFERENCES orders(id) ON DELETE CASCADE
 );
 
 INSERT INTO orderedProducts (order_id, product_id, quantity)
