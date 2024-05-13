@@ -13,3 +13,5 @@ Wsrc/main/java/com/ordersmicroservice/orders_microservice/models/OrderProductEnt
 Ysrc/main/java/com/ordersmicroservice/orders_microservice/controllers/OrderController.java,c\0\c0af1be1d213f9941f0267eb37ed90c43a7d9876
 ‹
 [src/main/java/com/ordersmicroservice/orders_microservice/OrdersMicroserviceApplication.java,d\7\d78cf3f7cb900ed8af3abd7aef43aa1a98b7e476
+‰
+Ysrc/main/java/com/ordersmicroservice/orders_microservice/models/OrderProductEntityId.java,a\b\ab3f6d542d0172e9c585a78a52d1a84b9bea36dd
