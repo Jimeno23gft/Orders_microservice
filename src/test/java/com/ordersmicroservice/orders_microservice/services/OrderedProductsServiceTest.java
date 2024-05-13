@@ -2,7 +2,7 @@ package com.ordersmicroservice.orders_microservice.services;
 
 import com.ordersmicroservice.orders_microservice.models.OrderedProductEntity;
 import com.ordersmicroservice.orders_microservice.repositories.OrderedProductRepository;
-import com.ordersmicroservice.orders_microservice.services.impl.OrderedProductsServiceImpl;
+import com.ordersmicroservice.orders_microservice.services.impl.OrderedProductServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -21,7 +21,7 @@ public class OrderedProductsServiceTest {
     @Mock
     OrderedProductRepository orderedProductRepository;
     @InjectMocks
-    OrderedProductsServiceImpl orderedProductsService;
+    OrderedProductServiceImpl orderedProductsService;
     private OrderedProductEntity orderedProduct1;
     private OrderedProductEntity orderedProduct2;
     private List<OrderedProductEntity> orderedProducts;
@@ -46,8 +46,9 @@ public class OrderedProductsServiceTest {
         when(orderedProductRepository.findAll()).thenReturn(orderedProducts);
 
         List<OrderedProductEntity> savedProducts = orderedProductsService.getAllProductsFromOrder();
-        assertThat(savedProducts).isNotNull();
-        assertThat(savedProducts).isNotEqualTo(Collections.emptyList());
-        assertThat(savedProducts).isEqualTo(orderedProducts);
+        assertThat(savedProducts)
+                .isNotNull()
+                .isNotEqualTo(Collections.emptyList())
+                .isEqualTo(orderedProducts);
     }
 }

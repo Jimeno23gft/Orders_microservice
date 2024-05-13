@@ -8,9 +8,9 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class OrderedProductsServiceImpl implements OrderedProductService {
+public class OrderedProductServiceImpl implements OrderedProductService {
     OrderedProductRepository orderedProductRepository;
-    public  OrderedProductsServiceImpl(OrderedProductRepository orderedProductRepository){
+    public OrderedProductServiceImpl(OrderedProductRepository orderedProductRepository){
         this.orderedProductRepository = orderedProductRepository;
     }
 
