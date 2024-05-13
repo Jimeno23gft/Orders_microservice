@@ -34,6 +34,8 @@ public class Order {
 
     public Order() {
     }
+
+    /*
     public static Order fromEntity(OrderEntity entity){
         return Order.builder()
                 .id(entity.getId())
@@ -44,4 +46,5 @@ public class Order {
                 .date_ordered(entity.getDate_ordered())
                 .date_delivered(entity.getDate_delivered()).build();
     }
+     */
 }

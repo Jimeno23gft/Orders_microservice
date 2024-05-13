@@ -51,5 +51,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
 
-    public void deleteById(Long id) { }
+    public void deleteById(Long id) {
+    orderRepository.deleteById(id);
+    }
     }

@@ -103,4 +103,9 @@ public class OrderEntityServiceTest {
         verify(orderRepository, times(1)).findById(order1.getId()); // Ensure findById is called exactly once with orderId
         verify(orderRepository, times(1)).save(existingOrder); // Ensure save is called exactly once with existingOrder
     }
+
+    @Test
+    void testDeleteById() {
+
+    }
 }
