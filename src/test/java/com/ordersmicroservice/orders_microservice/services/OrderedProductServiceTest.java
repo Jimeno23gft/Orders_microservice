@@ -17,7 +17,7 @@ import static org.assertj.core.api.Assertions.*;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-public class OrderedProductsServiceTest {
+public class OrderedProductServiceTest {
     @Mock
     OrderedProductRepository orderedProductRepository;
     @InjectMocks
