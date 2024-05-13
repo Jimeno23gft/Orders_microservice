@@ -87,10 +87,10 @@ public class OrderEntityControllerTest {
 
     @Test
     void testPostNewOrder() throws Exception {
-        Order orderToPost = new Order(null, 1L, "Madrid", "Zaragoza", DELIVERED, "2001-21-21", "2002-21-21");
+        OrderEntity orderToPost = new OrderEntity(null, 1L, "Madrid", "Zaragoza", DELIVERED, "2001-21-21", "2002-21-21");
 
         when(orderService.addOrder(any())).then(invocationOnMock -> {
-            Order order = invocationOnMock.getArgument(0);
+            OrderEntity order = invocationOnMock.getArgument(0);
             order.setId(7L);
             return order;
         });
