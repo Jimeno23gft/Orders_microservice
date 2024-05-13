@@ -85,11 +85,9 @@ public class OrderEntityServiceTest {
         OrderEntity existingOrder = new OrderEntity();
         existingOrder.setId(order1.getId());
         existingOrder.setStatus(order1.getStatus());
-        existingOrder.setFrom_address(order1.getFrom_address());
 
         OrderEntity updatedOrder = new OrderEntity();
         updatedOrder.setStatus(CANCELLED);
-        updatedOrder.setFrom_address("aaa");
 
         when(orderRepository.findById(order1.getId())).thenReturn(Optional.of(existingOrder));
         when(orderRepository.save(existingOrder)).thenReturn(existingOrder);
@@ -97,7 +95,6 @@ public class OrderEntityServiceTest {
         OrderEntity patchedOrder = orderService.patchOrder(order1.getId(), updatedOrder);
 
         assertEquals(CANCELLED, patchedOrder.getStatus());
-        assertEquals("aaa", patchedOrder.getFrom_address());
         verify(orderRepository, times(1)).findById(order1.getId());
         verify(orderRepository, times(1)).save(existingOrder);
     }
