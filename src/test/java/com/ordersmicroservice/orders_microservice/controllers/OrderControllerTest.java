@@ -1,7 +1,7 @@
 package com.ordersmicroservice.orders_microservice.controllers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.ordersmicroservice.orders_microservice.models.OrderEntity;
+import com.ordersmicroservice.orders_microservice.models.Order;
 import com.ordersmicroservice.orders_microservice.repositories.OrderRepository;
 import com.ordersmicroservice.orders_microservice.services.OrderService;
 import jakarta.persistence.EntityNotFoundException;
@@ -32,13 +32,13 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(OrderController.class)
-public class OrderEntityControllerTest {
+public class OrderControllerTest {
     MockMvc mockMvc;
     @MockBean
     OrderService orderService;
     @MockBean
     OrderRepository orderRepository;
-    List<OrderEntity> orderEntities;
+    List<Order> orderEntities;
     ObjectMapper objectMapper;
 
     @BeforeEach
@@ -50,7 +50,7 @@ public class OrderEntityControllerTest {
 
     @Test
     void testGetAllOrders() throws Exception {
-        List<OrderEntity> mockOrders = Arrays.asList(crearOrder001().orElseThrow(),
+        List<Order> mockOrders = Arrays.asList(crearOrder001().orElseThrow(),
                 crearOrder002().orElseThrow());
         when(orderService.getAllOrders()).thenReturn(mockOrders);
 
@@ -86,10 +86,10 @@ public class OrderEntityControllerTest {
 
     @Test
     void testPostNewOrder() throws Exception {
-        OrderEntity orderToPost = new OrderEntity(null, 1L, "Madrid", "Zaragoza", DELIVERED, "2001-21-21", "2002-21-21");
+        Order orderToPost = new Order(null, 1L, "Madrid", "Zaragoza", DELIVERED, "2001-21-21", "2002-21-21");
 
         when(orderService.addOrder(any())).then(invocationOnMock -> {
-            OrderEntity order = invocationOnMock.getArgument(0);
+            Order order = invocationOnMock.getArgument(0);
             order.setId(7L);
             return order;
         });
@@ -135,7 +135,7 @@ public class OrderEntityControllerTest {
     void testPatchOrder () throws Exception {
         Long id = 1L;
 
-        OrderEntity mockOrder = crearOrder001().orElseThrow();
+        Order mockOrder = crearOrder001().orElseThrow();
 
         when(orderService.patchOrder(id, mockOrder)).thenReturn(mockOrder);
 
