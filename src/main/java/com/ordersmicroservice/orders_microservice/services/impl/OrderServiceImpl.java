@@ -38,7 +38,7 @@ public class OrderServiceImpl implements OrderService {
         Order existingOrder = orderRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Order not found with id " + id)); // Or use a more specific exception
 
-        if (updatedOrder.getStatus() != null) {
+
             existingOrder.setUser_id(updatedOrder.getUser_id());
             existingOrder.setFrom_address(updatedOrder.getFrom_address());
             existingOrder.setTo_address(updatedOrder.getTo_address());
@@ -46,8 +46,6 @@ public class OrderServiceImpl implements OrderService {
             existingOrder.setDate_ordered(updatedOrder.getDate_ordered());
             existingOrder.setDate_delivered(updatedOrder.getDate_delivered());
             return orderRepository.save(existingOrder);
-        }
-        return null;
     }
 
 

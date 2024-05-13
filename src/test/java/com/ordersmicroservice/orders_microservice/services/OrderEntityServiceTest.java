@@ -80,7 +80,7 @@ public class OrderEntityServiceTest {
     }
 
     @Test
-    public void testPatchOrder(){
+    public void testPatchOrderIfFound(){
         Order existingOrder = new Order();
         existingOrder.setId(order1.getId());
         existingOrder.setStatus(order1.getStatus());
@@ -102,6 +102,32 @@ public class OrderEntityServiceTest {
         assertEquals("aaa", patchedOrder.getFrom_address()); // Ensure the status is updated
         verify(orderRepository, times(1)).findById(order1.getId()); // Ensure findById is called exactly once with orderId
         verify(orderRepository, times(1)).save(existingOrder); // Ensure save is called exactly once with existingOrder
+    }
+
+    @Test
+    public void testPatchOrderIfNotFound(){
+        Order existingOrder = new Order();
+        existingOrder.setId(order1.getId());
+        existingOrder.setStatus(order1.getStatus());
+        existingOrder.setFrom_address(order1.getFrom_address());
+
+        Order updatedOrder = new Order();
+        updatedOrder.setStatus(CANCELLED);
+        updatedOrder.setFrom_address("aaa");
+
+        // Mocking the behavior of orderRepository
+        when(orderRepository.findById(order1.getId())).thenReturn(Optional.empty());
+
+        // Call the method
+        //Order patchedOrder = orderService.patchOrder(order1.getId(), updatedOrder);
+        String message = "Order not found with id " + order1.getId();
+        Exception e = assertThrows(RuntimeException.class, ()-> orderService.patchOrder(order1.getId(), updatedOrder));
+        assertTrue(e.getMessage().contains(message));
+        // Assertions
+        //assertNull(patchedOrder.getStatus()); // Ensure the status is updated
+        verify(orderRepository, times(1)).findById(order1.getId()); // Ensure findById is called exactly once with orderId
+        verify(orderRepository, times(0)).save(existingOrder); // Ensure save is called exactly once with existingOrder
+
     }
 
     @Test
