@@ -43,7 +43,7 @@ public class OrderServiceImpl implements OrderService {
 
             existingOrder.setStatus(updatedOrder.getStatus());
             if(updatedOrder.getStatus() == Status.DELIVERED){
-                existingOrder.setDate_delivered(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")));
+                existingOrder.setDate_delivered(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
             }
 
             return orderRepository.save(existingOrder);

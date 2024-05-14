@@ -86,7 +86,7 @@ public class OrderControllerTest {
 
     @Test
     void testPostNewOrder() throws Exception {
-        Order orderToPost = new Order(null, 1L, "Madrid", "Zaragoza", DELIVERED, "2001-21-21", "2002-21-21");
+        Order orderToPost = new Order(null, 1L, "Madrid", "Zaragoza", DELIVERED, "2001-01-21 00:00:00", "2002-01-01 00:00:00");
 
         when(orderService.addOrder(any())).then(invocationOnMock -> {
             Order order = invocationOnMock.getArgument(0);
@@ -101,7 +101,7 @@ public class OrderControllerTest {
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.id", is(7)))
                 .andExpect(jsonPath("$.from_address", is("Madrid")))
-                .andExpect(jsonPath("$.date_ordered", is("2001-21-21")));
+                .andExpect(jsonPath("$.date_ordered", is("2001-01-21 00:00:00")));
 
         verify(orderService).addOrder(any());
 
