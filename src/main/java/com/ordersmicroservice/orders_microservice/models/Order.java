@@ -25,8 +25,9 @@ public class Order {
     @Column(name="from_address")
     private String from_address;
 
-    @Column(name="to_address")
-    private String to_address;
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "to_address_id", referencedColumnName = "address_id")
+    private Address to_address;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "status")

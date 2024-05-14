@@ -16,8 +16,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import java.util.Arrays;
 import java.util.List;
 
-import static com.ordersmicroservice.orders_microservice.Datos.crearOrder001;
-import static com.ordersmicroservice.orders_microservice.Datos.crearOrder002;
+import static com.ordersmicroservice.orders_microservice.Datos.*;
 import static com.ordersmicroservice.orders_microservice.dto.Status.DELIVERED;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
@@ -86,7 +85,7 @@ public class OrderControllerTest {
 
     @Test
     void testPostNewOrder() throws Exception {
-        Order orderToPost = new Order(null, 1L, "Madrid", "Zaragoza", DELIVERED, "2001-01-21 00:00:00", "2002-01-01 00:00:00");
+        Order orderToPost = new Order(null, 1L, "Valencia", crearAddress002().orElseThrow(), DELIVERED, "2001-01-21 00:00:00", "2002-01-01 00:00:00");
 
         when(orderService.addOrder(any())).then(invocationOnMock -> {
             Order order = invocationOnMock.getArgument(0);
@@ -100,7 +99,7 @@ public class OrderControllerTest {
                 .andExpect(status().isCreated())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.id", is(7)))
-                .andExpect(jsonPath("$.from_address", is("Madrid")))
+                .andExpect(jsonPath("$.from_address", is("Valencia")))
                 .andExpect(jsonPath("$.date_ordered", is("2001-01-21 00:00:00")));
 
         verify(orderService).addOrder(any());

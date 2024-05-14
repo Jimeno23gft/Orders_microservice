@@ -5,6 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 
 @Data
 @Builder
@@ -15,8 +17,11 @@ import lombok.NoArgsConstructor;
 public class Address {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
-    private Long id;
+    @Column(name = "address_id")
+    private Long addressId;
+
+    @Column(name = "order_id")
+    private Long orderId;
 
     @Column(name = "street")
     private String street;

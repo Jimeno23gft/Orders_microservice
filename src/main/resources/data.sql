@@ -1,6 +1,6 @@
 DROP TABLE IF EXISTS orders;
 CREATE TABLE orders (
-    id BIGINT AUTO_INCREMENT PRIMARY KEY ,
+    order_id LONG AUTO_INCREMENT PRIMARY KEY ,
     user_id BIGINT,
     from_address VARCHAR(150),
     to_address LONG,
@@ -33,8 +33,25 @@ CREATE TABLE ordered_products (
     product_id LONG,
     quantity LONG,
     CONSTRAINT PK_orderedProducts PRIMARY KEY (order_id,product_id),
-    FOREIGN KEY (order_id) REFERENCES orders(id) ON DELETE CASCADE
+    FOREIGN KEY (order_id) REFERENCES orders(order_id) ON DELETE CASCADE
 );
+
+DROP TABLE IF EXISTS addresses;
+CREATE TABLE addresses (
+    address_id LONG AUTO_INCREMENT PRIMARY KEY,
+    order_id LONG,
+    street VARCHAR(255),
+    number INT,
+    door VARCHAR(255),
+    city_name VARCHAR(255),
+    zip_code VARCHAR(10),
+    FOREIGN KEY (order_id) REFERENCES orders(order_id)
+);
+
+INSERT INTO addresses (street, number, door, city_name, zip_code) VALUES
+('Main Street', 123, 'A', 'Springfield', '12345'),
+('Elm Street', 456, 'B', 'Shelbyville', '67890'),
+('Oak Street', 789, 'C', 'Capital City', '10112');
 
 INSERT INTO ordered_products (order_id, product_id, quantity)
 VALUES

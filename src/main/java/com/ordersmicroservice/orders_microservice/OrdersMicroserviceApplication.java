@@ -1,8 +1,8 @@
 package com.ordersmicroservice.orders_microservice;
 
-import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.domain.EntityScan;
 
 @SpringBootApplication
 public class OrdersMicroserviceApplication {

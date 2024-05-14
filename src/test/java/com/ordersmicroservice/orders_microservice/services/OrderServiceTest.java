@@ -1,5 +1,6 @@
 package com.ordersmicroservice.orders_microservice.services;
 
+import com.ordersmicroservice.orders_microservice.models.Address;
 import com.ordersmicroservice.orders_microservice.models.Order;
 import com.ordersmicroservice.orders_microservice.repositories.OrderRepository;
 import com.ordersmicroservice.orders_microservice.services.impl.OrderServiceImpl;
@@ -33,16 +34,16 @@ public class OrderServiceTest {
         order1 = Order.builder()
                 .id(1L)
                 .user_id(1L)
-                .from_address("a")
-                .to_address("b")
+                .from_address("Barcelona")
+                .to_address(new Address(2L, 1L, "C/ bbbbb", 2, "2B", "Barcelona", "22222"))
                 .status(DELIVERED)
                 .date_ordered("2024-5-9")
                 .date_delivered("2024-5-10").build();
         order2 = Order.builder()
                 .id(2L)
                 .user_id(2L)
-                .from_address("c")
-                .to_address("d")
+                .from_address("Valencia")
+                .to_address(new Address(4L, 4L, "C/ ddddd", 4, "4D", "Dimmsdale", "44444"))
                 .status(IN_DELIVERY)
                 .date_ordered("2024-5-11")
                 .date_delivered("2024-5-12").build();
@@ -50,7 +51,7 @@ public class OrderServiceTest {
     }
 
     @Test
-    public void testGetAllOrders() {
+    void testGetAllOrders() {
         when(orderRepository.findAll()).thenReturn(orders);
 
         List<Order> savedOrders = orderService.getAllOrders();
@@ -60,7 +61,7 @@ public class OrderServiceTest {
     }
 
     @Test
-    public void testGetOrderById() {
+    void testGetOrderById() {
         when(orderRepository.findById(1L)).thenReturn(Optional.of(order1));
 
         Order savedOrder = orderService.getOrderById(order1.getId());
@@ -69,7 +70,7 @@ public class OrderServiceTest {
     }
 
     @Test
-    public void testAddOrder() {
+    void testAddOrder() {
         when(orderRepository.save(order1)).thenReturn(order1);
 
         Order savedOrder = orderService.addOrder(order1);
@@ -79,7 +80,7 @@ public class OrderServiceTest {
     }
 
     @Test
-    public void testPatchOrderIfFound(){
+    void testPatchOrderIfFound(){
         Order existingOrder = new Order();
         existingOrder.setId(order1.getId());
         existingOrder.setStatus(order1.getStatus());
