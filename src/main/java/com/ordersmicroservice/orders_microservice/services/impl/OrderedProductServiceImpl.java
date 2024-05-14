@@ -14,7 +14,7 @@ public class OrderedProductServiceImpl implements OrderedProductService {
         this.orderedProductRepository = orderedProductRepository;
     }
     @Override
-    public List<OrderedProduct> getAllProductsFromOrder() {
-        return orderedProductRepository.findAll();
+    public List<OrderedProduct> getAllProductsFromOrder(Long orderId) {
+        return orderedProductRepository.findByOrderId(orderId);
     }
 }

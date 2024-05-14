@@ -17,11 +17,11 @@ public class OrderedProduct {
 
     @Id
     @Column(name = "order_id")
-    Long order_id;
+    Long orderId;
 
     @Id
     @Column(name = "product_id")
-    Long product_id;
+    Long productId;
 
     @Column(name = "quantity")
     Integer quantity;

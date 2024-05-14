@@ -27,8 +27,8 @@ VALUES (1005, '222 Pine St', '333 Cedar Rd', 'UNKNOWN', '2024-05-11', null);
 INSERT INTO orders (user_id, from_address, to_address, status, date_ordered, date_delivered)
 VALUES (1006, '333 Cedar Rd', '123 Main St', 'PAID', '2024-05-12', '2024-05-14');
 
-DROP TABLE IF EXISTS orderedProducts;
-CREATE TABLE orderedProducts (
+DROP TABLE IF EXISTS ordered_products;
+CREATE TABLE ordered_products (
     order_id LONG,
     product_id LONG,
     quantity LONG,
@@ -36,7 +36,7 @@ CREATE TABLE orderedProducts (
     FOREIGN KEY (order_id) REFERENCES orders(id) ON DELETE CASCADE
 );
 
-INSERT INTO orderedProducts (order_id, product_id, quantity)
+INSERT INTO ordered_products (order_id, product_id, quantity)
 VALUES
     (1, 1001, 5),
     (1, 1002, 3),

@@ -22,20 +22,22 @@ public class OrderedProductServiceTest {
     OrderedProductRepository orderedProductRepository;
     @InjectMocks
     OrderedProductServiceImpl orderedProductsService;
+    Long orderId;
     private OrderedProduct orderedProduct1;
     private OrderedProduct orderedProduct2;
     private List<OrderedProduct> orderedProducts;
 
     @BeforeEach
     void setup(){
+        orderId = 1L;
         orderedProduct1 = OrderedProduct.builder()
-                .order_id(1L)
-                .product_id(1L)
+                .orderId(orderId)
+                .productId(1L)
                 .quantity(3)
                 .build();
         orderedProduct2 = OrderedProduct.builder()
-                .order_id(1L)
-                .product_id(2L)
+                .orderId(orderId)
+                .productId(2L)
                 .quantity(5)
                 .build();
         orderedProducts = List.of(orderedProduct1, orderedProduct2);
@@ -43,9 +45,9 @@ public class OrderedProductServiceTest {
 
     @Test
     void testGetAllProductsFromOrder(){
-        when(orderedProductRepository.findAll()).thenReturn(orderedProducts);
+        when(orderedProductRepository.findByOrderId(orderId)).thenReturn(orderedProducts);
 
-        List<OrderedProduct> savedProducts = orderedProductsService.getAllProductsFromOrder();
+        List<OrderedProduct> savedProducts = orderedProductsService.getAllProductsFromOrder(orderId);
         assertThat(savedProducts)
                 .isNotNull()
                 .isNotEqualTo(Collections.emptyList())
