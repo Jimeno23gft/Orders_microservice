@@ -40,14 +40,14 @@ public class OrderController {
     })
     public Order getOrderById(@PathVariable Long id){return orderService.getOrderById(id);}
 
-    @PostMapping
+    @PostMapping("/{id}")
     @ResponseStatus(CREATED)
     @Operation(summary = "Create a new order", description = "This endpoint retrieves example data from the server.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "Order Created", content = @Content(mediaType = "application/json")),
             @ApiResponse(responseCode = "500", description = "Internal server error", content = @Content(mediaType = "application/json"))
     })
-    public Order postOrder(@RequestBody Order order){ return orderService.addOrder(order);}
+    public Order postOrder(@PathVariable Long id){ return orderService.addOrder(id);}
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
