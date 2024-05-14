@@ -1,15 +1,20 @@
 package com.ordersmicroservice.orders_microservice.services;
 
+import com.ordersmicroservice.orders_microservice.dto.Status;
 import com.ordersmicroservice.orders_microservice.models.Order;
 import com.ordersmicroservice.orders_microservice.repositories.OrderRepository;
 import com.ordersmicroservice.orders_microservice.services.impl.OrderServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -50,6 +55,7 @@ public class OrderServiceTest {
     }
 
     @Test
+    @DisplayName("Testing get all Orders from Repository Method")
     public void testGetAllOrders() {
         when(orderRepository.findAll()).thenReturn(orders);
 
@@ -60,6 +66,7 @@ public class OrderServiceTest {
     }
 
     @Test
+    @DisplayName("Testing get an order by id from repository")
     public void testGetOrderById() {
         when(orderRepository.findById(1L)).thenReturn(Optional.of(order1));
 
@@ -69,16 +76,23 @@ public class OrderServiceTest {
     }
 
     @Test
+    @DisplayName("Testing Adding a new order with just an id")
     public void testAddOrder() {
-        when(orderRepository.save(order1)).thenReturn(order1);
+        String[] adresses = {"123 Main St","456 Elm St","789 Oak St","101 Maple Ave","222 Pine St","333 Cedar Rd"};
 
-        Order savedOrder = orderService.addOrder(order1);
+        when(orderRepository.save(any(Order.class))).thenAnswer(invocation -> invocation.getArgument(0));
+        Order savedOrder = orderService.addOrder(1L);
 
         assertNotNull(savedOrder);
-        assertEquals(order1, savedOrder);
+        assertEquals(1L, savedOrder.getUser_id());
+        assertTrue(Arrays.asList(adresses).contains( savedOrder.getFrom_address()));
+        assertEquals(Status.UNPAID, savedOrder.getStatus());
+        assertNotNull(savedOrder.getDate_ordered());
+        assertNull(savedOrder.getDate_delivered());
     }
 
     @Test
+    @DisplayName("Testing the update of an order")
     public void testPatchOrderIfFound(){
         Order existingOrder = new Order();
         existingOrder.setId(order1.getId());
@@ -98,6 +112,7 @@ public class OrderServiceTest {
     }
 
     @Test
+    @DisplayName("Testing the update when order is not found")
     public void testPatchOrderIfNotFound(){
         Order existingOrder = new Order();
         existingOrder.setId(order1.getId());
@@ -118,6 +133,7 @@ public class OrderServiceTest {
     }
 
     @Test
+    @DisplayName("Testing the deleting of an order")
     void testDeleteById() {
         Long orderId = 1L;
 

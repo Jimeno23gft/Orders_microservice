@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Random;
 
 @Service
 public class OrderServiceImpl implements OrderService {
@@ -30,12 +31,23 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public Order addOrder(Order order) {
+    public Order addOrder(Long id) {
 
+        Order order = new Order();
+        order.setUser_id(id);
+        order.setFrom_address(RandomAndress());
         order.setStatus(Status.UNPAID);
+        order.setDate_ordered(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")));
 
         return orderRepository.save(order);
     }
+
+    private String RandomAndress() {
+        String[] adresses = {"123 Main St","456 Elm St","789 Oak St","101 Maple Ave","222 Pine St","333 Cedar Rd"};
+        Random random = new Random();
+        return adresses[random.nextInt(adresses.length)];
+    }
+
     public Order patchOrder(Long id, Order updatedOrder) {
 
         Order existingOrder = orderRepository.findById(id)
@@ -54,3 +66,5 @@ public class OrderServiceImpl implements OrderService {
     orderRepository.deleteById(id);
     }
     }
+
+

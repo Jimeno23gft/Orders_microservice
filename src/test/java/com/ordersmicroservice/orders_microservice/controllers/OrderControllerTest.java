@@ -1,6 +1,7 @@
 package com.ordersmicroservice.orders_microservice.controllers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.ordersmicroservice.orders_microservice.dto.Status;
 import com.ordersmicroservice.orders_microservice.models.Order;
 import com.ordersmicroservice.orders_microservice.repositories.OrderRepository;
 import com.ordersmicroservice.orders_microservice.services.OrderService;
@@ -86,24 +87,29 @@ public class OrderControllerTest {
 
     @Test
     void testPostNewOrder() throws Exception {
-        Order orderToPost = new Order(null, 1L, "Madrid", "Zaragoza", DELIVERED, "2001-21-21", "2002-21-21");
 
-        when(orderService.addOrder(any())).then(invocationOnMock -> {
-            Order order = invocationOnMock.getArgument(0);
-            order.setId(7L);
+        Long user_id = 1L;
+
+        when(orderService.addOrder(user_id)).thenAnswer(invocation -> {
+            Long id = invocation.getArgument(0);
+            Order order = new Order();
+            order.setUser_id(1L);
+            order.setFrom_address("Madrid");
+            order.setTo_address("Zaragoza");
+            order.setStatus(Status.DELIVERED);
+            order.setDate_ordered("2001-01-21");
+            order.setDate_delivered("2002-01-21");
             return order;
         });
 
-        mockMvc.perform(post("/orders").contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(orderToPost)))
-
+        mockMvc.perform(post("/orders/{id}", user_id))
                 .andExpect(status().isCreated())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.id", is(7)))
+                .andExpect(jsonPath("$.user_id", is(user_id.intValue())))
                 .andExpect(jsonPath("$.from_address", is("Madrid")))
-                .andExpect(jsonPath("$.date_ordered", is("2001-21-21")));
+                .andExpect(jsonPath("$.date_ordered", is("2001-01-21")));
 
-        verify(orderService).addOrder(any());
+        verify(orderService).addOrder(user_id);
 
     }
 
