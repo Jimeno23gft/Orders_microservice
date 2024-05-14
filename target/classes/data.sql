@@ -3,29 +3,29 @@ CREATE TABLE orders (
     id BIGINT AUTO_INCREMENT PRIMARY KEY ,
     user_id BIGINT,
     from_address VARCHAR(150),
-    to_address VARCHAR(150),
+    to_address LONG,
     status ENUM('UNPAID','PAID','SENT','IN_DELIVERY','CANCELLED','DELIVERED','UNKNOWN'),
     date_ordered VARCHAR(150),
     date_delivered VARCHAR(150)
 );
 
 INSERT INTO orders (user_id, from_address, to_address, status, date_ordered, date_delivered)
-VALUES (1001, '123 Main St', '456 Elm St', 'PAID', '2024-05-07', '2024-05-10');
+VALUES (1001, '123 Main St', 111, 'PAID', '2024/05/07', '2024/05/10');
 
 INSERT INTO orders (user_id, from_address, to_address, status, date_ordered, date_delivered)
-VALUES (1002, '456 Elm St', '789 Oak St', 'UNPAID', '2024-05-08', null);
+VALUES (1002, '456 Elm St', 222, 'UNPAID', '2024/05/08', '2024/05/10');
 
 INSERT INTO orders (user_id, from_address, to_address, status, date_ordered, date_delivered)
-VALUES (1003, '789 Oak St', '101 Maple Ave', 'IN_DELIVERY', '2024-05-09', '2024-05-11');
+VALUES (1003, '789 Oak St', 333, 'IN_DELIVERY', '2024/05/09', '2024/05/11');
 
 INSERT INTO orders (user_id, from_address, to_address, status, date_ordered, date_delivered)
-VALUES (1004, '101 Maple Ave', '222 Pine St', 'DELIVERED', '2024-05-10', '2024-05-12');
+VALUES (1004, '101 Maple Ave', 444, 'DELIVERED', '2024/05/10', '2024/05/12');
 
 INSERT INTO orders (user_id, from_address, to_address, status, date_ordered, date_delivered)
-VALUES (1005, '222 Pine St', '333 Cedar Rd', 'UNKNOWN', '2024-05-11', null);
+VALUES (1005, '222 Pine St', 555, 'UNKNOWN', '2024/05/11', '2024/05/10');
 
 INSERT INTO orders (user_id, from_address, to_address, status, date_ordered, date_delivered)
-VALUES (1006, '333 Cedar Rd', '123 Main St', 'PAID', '2024-05-12', '2024-05-14');
+VALUES (1006, '333 Cedar Rd', 666, 'PAID', '2024/05/12', '2024/05/14');
 
 DROP TABLE IF EXISTS orderedProducts;
 CREATE TABLE orderedProducts (
