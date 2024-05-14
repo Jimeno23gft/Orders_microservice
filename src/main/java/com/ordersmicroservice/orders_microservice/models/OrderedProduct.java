@@ -29,6 +29,18 @@ public class OrderedProduct {
     @Column(name = "product_id")
     Long productId;
 
+    @Column(name = "name")
+    String OrderedProduct_name;
+
+    @Column(name = "category")
+    String OrderedProduct_category;
+
+    @Column(name = "description")
+    String OrderedProduct_description;
+
+    @Column(name = "price")
+    Long price;
+
     @Column(name = "quantity")
     Integer quantity;
 }
