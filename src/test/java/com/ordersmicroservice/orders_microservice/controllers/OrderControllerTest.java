@@ -1,8 +1,10 @@
 package com.ordersmicroservice.orders_microservice.controllers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.ordersmicroservice.orders_microservice.Datos;
 import com.ordersmicroservice.orders_microservice.dto.Status;
 import com.ordersmicroservice.orders_microservice.models.Order;
+import com.ordersmicroservice.orders_microservice.models.OrderedProduct;
 import com.ordersmicroservice.orders_microservice.repositories.OrderRepository;
 import com.ordersmicroservice.orders_microservice.services.OrderService;
 import jakarta.persistence.EntityNotFoundException;
@@ -14,6 +16,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -22,6 +25,7 @@ import static com.ordersmicroservice.orders_microservice.Datos.crearOrder002;
 import static com.ordersmicroservice.orders_microservice.dto.Status.DELIVERED;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.mockito.Mockito.*;
@@ -48,6 +52,8 @@ public class OrderControllerTest {
         OrderController orderController = new OrderController(orderService);
         mockMvc = MockMvcBuilders.standaloneSetup(orderController).build();
     }
+
+
 
     @Test
     void testGetAllOrders() throws Exception {

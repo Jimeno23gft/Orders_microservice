@@ -1,11 +1,14 @@
 package com.ordersmicroservice.orders_microservice.models;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.ordersmicroservice.orders_microservice.dto.Status;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.util.List;
 
 @Data
 @Builder
@@ -37,4 +40,8 @@ public class Order {
 
     @Column(name = "date_delivered")
     private String date_delivered;
+
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
+    @JsonManagedReference
+    private List<OrderedProduct> orderedProductList;
 }
