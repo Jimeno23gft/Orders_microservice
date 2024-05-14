@@ -12,8 +12,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Entity
 @Table(name = "orderedProducts")
-@IdClass(OrderProductId.class)
-public class OrderProduct {
+@IdClass(OrderedProductId.class)
+public class OrderedProduct {
 
     @Id
     @Column(name = "order_id")
