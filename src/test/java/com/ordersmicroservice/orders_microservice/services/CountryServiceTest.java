@@ -1,6 +1,9 @@
 package com.ordersmicroservice.orders_microservice.services;
 
+
+import com.ordersmicroservice.orders_microservice.dto.CountryDto;
 import com.ordersmicroservice.orders_microservice.dto.UserDto;
+import com.ordersmicroservice.orders_microservice.services.impl.CountryServiceImpl;
 import com.ordersmicroservice.orders_microservice.services.impl.UserServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -16,10 +19,10 @@ import okhttp3.mockwebserver.MockResponse;
 
 import java.io.IOException;
 
-public class UserServiceTest {
+public class CountryServiceTest {
+
     private MockWebServer mockWebServer;
-    private UserServiceImpl userServiceImpl;
-    private String userJson;
+    private CountryServiceImpl countryServiceImpl;
 
     @BeforeEach
     void setUp() throws IOException {
@@ -28,63 +31,43 @@ public class UserServiceTest {
         WebClient webClient = WebClient.builder()
                 .baseUrl(mockWebServer.url("/").toString())
                 .build();
-        userServiceImpl = new UserServiceImpl(webClient);
+        countryServiceImpl = new CountryServiceImpl(webClient);
     }
 
     @Test
-    @DisplayName("When fetching a user by ID, " +
-            "then the correct user details are returned")
-    void testGetUserById() {
-        String userJson = """
-                {
-                    "id": 100,
-                    "name": "John",
-                    "lastName": "Doe",
-                    "email": "john.doe@example.com",
-                    "password": "password123",
-                    "fidelityPoints": 1000,
-                    "birthDate": "1990/01/01",
-                    "phone": "1234567890",
-                    "address": {\s
+    void testGetCountryById() {
+        String countryJson = """
+                {           
                         "id": 1,\s
-                        "cityName": "Madrid",\s
-                        "zipCode": "47562",\s
-                        "street": "C/ La Coma",
-                        "number": 32,
-                        "door": "1A"
-                    },\s
-                    "country": {
-                        "id": 1,\s
-                        "name": "España",\s
+                        "name": "Espanya",\s
                         "tax": 21,\s
                         "prefix": "+34",\s
                         "timeZone": "Europe/Madrid"\s
-                    }
                 }
                 """;
         mockWebServer.enqueue(new MockResponse()
-                .setBody(userJson)
+                .setBody(countryJson)
                 .addHeader("Content-Type", "application/json"));
 
-        Mono<UserDto> userMono = userServiceImpl.getUserById(100L);
+        Mono<CountryDto> countryMono = countryServiceImpl.getCountryById(1L);
 
-        StepVerifier.create(userMono)
-                .expectNextMatches(user ->
-                        user.getId().equals(100L) &&
-                                user.getPhone().equals("1234567890"))
+
+        StepVerifier.create(countryMono)
+                .expectNextMatches(country ->
+                                country.getName().equals("Espanya"))
                 .verifyComplete();
 
     }
 
     @Test
-    @DisplayName("When fetching a non-existent user by ID, then a 404 error is returned")
+    @DisplayName("When fetching a non-existent country by ID, then a 404 error is returned")
     void testGetUserByIdNotFound() {
         mockWebServer.enqueue(new MockResponse()
                 .setResponseCode(404)
                 .setBody("User not found")
                 .addHeader("Content-Type", "text/plain"));
-        Mono<UserDto> userMono = userServiceImpl.getUserById(999L);
-        StepVerifier.create(userMono)
+        Mono<CountryDto> countryMono = countryServiceImpl.getCountryById(717L);
+        StepVerifier.create(countryMono)
                 .expectErrorMatches(throwable ->
                         throwable instanceof WebClientResponseException &&
                                 ((WebClientResponseException) throwable).getStatusCode() == HttpStatus.NOT_FOUND)
@@ -92,15 +75,15 @@ public class UserServiceTest {
     }
 
     @Test
-    @DisplayName("When fetching a User by ID and an internal server error occurs, then a 500 error is returned")
-    void testGetProductByIdServerError() {
+    @DisplayName("When fetching a Country by ID and an internal server error occurs, then a 500 error is returned")
+    void testGetCountryByIdServerError() {
         mockWebServer.enqueue(new MockResponse()
                 .setResponseCode(500)
                 .setBody("Internal Server Error")
                 .addHeader("Content-Type", "text/plain"));
-        Mono<UserDto> userMono = userServiceImpl.getUserById(1L);
+        Mono<CountryDto> countryMono = countryServiceImpl.getCountryById(1L);
 
-        StepVerifier.create(userMono)
+        StepVerifier.create(countryMono)
                 .expectErrorMatches(throwable ->
                         throwable instanceof WebClientResponseException &&
                                 ((WebClientResponseException) throwable).getStatusCode() == HttpStatus.INTERNAL_SERVER_ERROR)
