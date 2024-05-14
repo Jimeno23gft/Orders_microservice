@@ -24,6 +24,6 @@ public class OrderedProduct {
     Long product_id;
 
     @Column(name = "quantity")
-    Long quantity;
+    Integer quantity;
 }
 
