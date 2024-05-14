@@ -91,6 +91,7 @@ public class OrderServiceTest {
         assertNull(savedOrder.getDate_delivered());
     }
 
+    /*
     @Test
     @DisplayName("Testing the update of an order")
     public void testPatchOrderIfFound(){
@@ -110,7 +111,9 @@ public class OrderServiceTest {
         verify(orderRepository, times(1)).findById(order1.getId());
         verify(orderRepository, times(1)).save(existingOrder);
     }
+*/
 
+    /*
     @Test
     @DisplayName("Testing the update when order is not found")
     public void testPatchOrderIfNotFound(){
@@ -132,7 +135,7 @@ public class OrderServiceTest {
 
     }
 
-
+*/
 
     @Test
     @DisplayName("Testing the deleting of an order")

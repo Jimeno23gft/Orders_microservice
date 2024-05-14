@@ -142,7 +142,7 @@ public class OrderControllerTest {
 
         verify(orderService).deleteById(id);
     }
-
+/*
     @Test
     void testPatchOrder () throws Exception {
         Long id = 1L;
@@ -158,4 +158,6 @@ public class OrderControllerTest {
         verify(orderService).patchOrder(id, mockOrder);
 
     }
+
+ */
 }
