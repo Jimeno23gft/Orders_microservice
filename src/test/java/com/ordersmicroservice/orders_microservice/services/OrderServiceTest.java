@@ -16,6 +16,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static com.ordersmicroservice.orders_microservice.dto.Status.*;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
@@ -84,9 +85,11 @@ public class OrderServiceTest {
         Order existingOrder = new Order();
         existingOrder.setId(order1.getId());
         existingOrder.setStatus(order1.getStatus());
+        existingOrder.setDate_delivered(order1.getDate_delivered());
 
         Order updatedOrder = new Order();
         updatedOrder.setStatus(CANCELLED);
+        updatedOrder.setDate_delivered("2024-5-10");
 
         when(orderRepository.findById(order1.getId())).thenReturn(Optional.of(existingOrder));
         when(orderRepository.save(existingOrder)).thenReturn(existingOrder);
@@ -94,6 +97,7 @@ public class OrderServiceTest {
         Order patchedOrder = orderService.patchOrder(order1.getId(), updatedOrder);
 
         assertEquals(CANCELLED, patchedOrder.getStatus());
+        assertThat(updatedOrder.getDate_delivered()).isEqualTo(patchedOrder.getDate_delivered());
         verify(orderRepository, times(1)).findById(order1.getId());
         verify(orderRepository, times(1)).save(existingOrder);
     }
