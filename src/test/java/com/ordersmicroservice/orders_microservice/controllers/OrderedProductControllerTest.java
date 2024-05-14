@@ -54,7 +54,7 @@ public class OrderedProductControllerTest {
         List<OrderedProduct> orderedProducts = Arrays.asList(orderedProduct1, orderedProduct2);
         when(orderedProductService.getAllProductsFromOrder(orderId1)).thenReturn(orderedProducts);
 
-        mockMvc.perform(MockMvcRequestBuilders.get("/orders/"+ orderId1 +"/products").contentType(MediaType.APPLICATION_JSON))
+        mockMvc.perform(MockMvcRequestBuilders.get("/orders/products/" + orderId1).contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$[0].orderId").value(1L))
