@@ -18,6 +18,7 @@ import java.util.Random;
 public class OrderServiceImpl implements OrderService {
 
     OrderRepository orderRepository;
+    Random random = new Random();
 
     public OrderServiceImpl(OrderRepository orderRepository) {
         this.orderRepository = orderRepository;
@@ -41,10 +42,10 @@ public class OrderServiceImpl implements OrderService {
         log.info("Creando nuevo pedido para el usuario ID: {}", id);
 
         Order order = new Order();
-        order.setUser_id(id);
-        order.setFrom_address(RandomAndress());
+        order.setUserId(id);
+        order.setFromAddress(randomAddress());
         order.setStatus(Status.UNPAID);
-        order.setDate_ordered(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")));
+        order.setDateOrdered(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")));
 
         Order savedOrder = orderRepository.save(order);
         log.info("Pedido creado exitosamente con ID: {}", savedOrder.getId());
@@ -52,10 +53,10 @@ public class OrderServiceImpl implements OrderService {
         return savedOrder;
     }
 
-    private String RandomAndress() {
+    private String randomAddress() {
         String[] adresses = {"123 Main St","456 Elm St","789 Oak St","101 Maple Ave","222 Pine St","333 Cedar Rd"};
-        Random random = new Random();
-        return adresses[random.nextInt(adresses.length)];
+
+        return adresses[this.random.nextInt(adresses.length)];
     }
 
     public Order patchOrder(Long id, @RequestBody Status updatedStatus) {
@@ -68,7 +69,7 @@ public class OrderServiceImpl implements OrderService {
 
         existingOrder.setStatus(updatedStatus);
             if(updatedStatus == Status.DELIVERED){
-                existingOrder.setDate_delivered(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
+                existingOrder.setDateDelivered(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
             }
 
         log.info("Pedido ID: {} actualizado de {} a {}", id, previousStatus, updatedStatus);
