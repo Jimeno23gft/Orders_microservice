@@ -3,6 +3,7 @@ package com.ordersmicroservice.orders_microservice.controllers;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ordersmicroservice.orders_microservice.Datos;
 import com.ordersmicroservice.orders_microservice.dto.Status;
+import com.ordersmicroservice.orders_microservice.dto.StatusUpdateDto;
 import com.ordersmicroservice.orders_microservice.models.Order;
 import com.ordersmicroservice.orders_microservice.models.OrderedProduct;
 import com.ordersmicroservice.orders_microservice.repositories.OrderRepository;
@@ -145,17 +146,26 @@ public class OrderControllerTest {
 
     @Test
     void testPatchOrder () throws Exception {
+
         Long id = 1L;
+        StatusUpdateDto statusUpdateDto = new StatusUpdateDto();
+        statusUpdateDto.setStatus(Status.PAID);
 
-        Order mockOrder = crearOrder001().orElseThrow();
+        Order mockOrder = new Order();
+        mockOrder.setId(id);
+        mockOrder.setStatus(Status.PAID);
 
-        when(orderService.patchOrder(id, mockOrder)).thenReturn(mockOrder);
+        when(orderService.patchOrder(eq(id), any(Status.class))).thenReturn(mockOrder);
 
-        mockMvc.perform(patch("/orders/{id}", id).contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(mockOrder)))
+        mockMvc.perform(patch("/orders/{id}", id)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(statusUpdateDto)))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON));
 
-        verify(orderService).patchOrder(id, mockOrder);
+        verify(orderService).patchOrder(id, statusUpdateDto.getStatus());
 
     }
+
+
 }

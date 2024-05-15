@@ -1,6 +1,7 @@
 package com.ordersmicroservice.orders_microservice.services;
 
 import com.ordersmicroservice.orders_microservice.dto.Status;
+import com.ordersmicroservice.orders_microservice.dto.StatusUpdateDto;
 import com.ordersmicroservice.orders_microservice.models.Order;
 import com.ordersmicroservice.orders_microservice.repositories.OrderRepository;
 import com.ordersmicroservice.orders_microservice.services.impl.OrderServiceImpl;
@@ -91,6 +92,7 @@ public class OrderServiceTest {
         assertNull(savedOrder.getDate_delivered());
     }
 
+
     @Test
     @DisplayName("Testing the update of an order")
     public void testPatchOrderIfFound(){
@@ -98,40 +100,36 @@ public class OrderServiceTest {
         existingOrder.setId(order1.getId());
         existingOrder.setStatus(order1.getStatus());
 
-        Order updatedOrder = new Order();
-        updatedOrder.setStatus(CANCELLED);
+        StatusUpdateDto statusUpdateDto = new StatusUpdateDto();
+        statusUpdateDto.setStatus(Status.CANCELLED);
 
         when(orderRepository.findById(order1.getId())).thenReturn(Optional.of(existingOrder));
         when(orderRepository.save(existingOrder)).thenReturn(existingOrder);
 
-        Order patchedOrder = orderService.patchOrder(order1.getId(), updatedOrder);
+        Order patchedOrder = orderService.patchOrder(order1.getId(), statusUpdateDto.getStatus());
 
-        assertEquals(CANCELLED, patchedOrder.getStatus());
+        assertEquals(Status.CANCELLED, patchedOrder.getStatus());
         verify(orderRepository, times(1)).findById(order1.getId());
         verify(orderRepository, times(1)).save(existingOrder);
     }
 
-    @Test
-    @DisplayName("Testing the update when order is not found")
-    public void testPatchOrderIfNotFound(){
-        Order existingOrder = new Order();
-        existingOrder.setId(order1.getId());
-        existingOrder.setStatus(order1.getStatus());
 
-        Order updatedOrder = new Order();
-        updatedOrder.setStatus(CANCELLED);
 
-        when(orderRepository.findById(order1.getId())).thenReturn(Optional.empty());
+@Test
+@DisplayName("Testing the update when order is not found")
+public void testPatchOrderIfNotFound(){
+    StatusUpdateDto statusUpdateDto = new StatusUpdateDto();
+    statusUpdateDto.setStatus(Status.CANCELLED);
 
-        String message = "Order not found with id " + order1.getId();
-        Exception e = assertThrows(RuntimeException.class, ()-> orderService.patchOrder(order1.getId(), updatedOrder));
-        assertTrue(e.getMessage().contains(message));
+    when(orderRepository.findById(order1.getId())).thenReturn(Optional.empty());
 
-        verify(orderRepository, times(1)).findById(order1.getId());
-        verify(orderRepository, times(0)).save(existingOrder);
+    String message = "Order not found with id " + order1.getId();
+    Exception e = assertThrows(RuntimeException.class, ()-> orderService.patchOrder(order1.getId(), statusUpdateDto.getStatus()));
+    assertTrue(e.getMessage().contains(message));
 
-    }
-
+    verify(orderRepository, times(1)).findById(order1.getId());
+    verify(orderRepository, times(0)).save(any(Order.class));
+}
 
 
     @Test
