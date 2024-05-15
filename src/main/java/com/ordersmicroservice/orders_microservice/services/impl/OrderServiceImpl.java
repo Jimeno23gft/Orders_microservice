@@ -5,6 +5,7 @@ import com.ordersmicroservice.orders_microservice.models.Order;
 import com.ordersmicroservice.orders_microservice.repositories.OrderRepository;
 import com.ordersmicroservice.orders_microservice.services.OrderService;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -48,13 +49,13 @@ public class OrderServiceImpl implements OrderService {
         return adresses[random.nextInt(adresses.length)];
     }
 
-    public Order patchOrder(Long id, Order updatedOrder) {
+    public Order patchOrder(Long id, @RequestBody Status updatedStatus) {
 
         Order existingOrder = orderRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Order not found with id " + id));
 
-            existingOrder.setStatus(updatedOrder.getStatus());
-            if(updatedOrder.getStatus() == Status.DELIVERED){
+            existingOrder.setStatus(updatedStatus);
+            if(updatedStatus == Status.DELIVERED){
                 existingOrder.setDate_delivered(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
             }
 
