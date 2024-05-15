@@ -30,13 +30,13 @@ public class OrderedProduct {
     Long productId;
 
     @Column(name = "name")
-    String OrderedProduct_name;
+    String name;
 
     @Column(name = "category")
-    String OrderedProduct_category;
+    String category;
 
     @Column(name = "description")
-    String OrderedProduct_description;
+    String description;
 
     @Column(name = "price")
     Long price;

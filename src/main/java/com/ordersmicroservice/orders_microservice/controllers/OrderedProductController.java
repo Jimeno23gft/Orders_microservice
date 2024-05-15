@@ -1,7 +1,6 @@
 package com.ordersmicroservice.orders_microservice.controllers;
 
 import com.ordersmicroservice.orders_microservice.models.OrderedProduct;
-import com.ordersmicroservice.orders_microservice.services.OrderedProductService;
 import com.ordersmicroservice.orders_microservice.services.impl.OrderedProductServiceImpl;
 import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.web.bind.annotation.*;

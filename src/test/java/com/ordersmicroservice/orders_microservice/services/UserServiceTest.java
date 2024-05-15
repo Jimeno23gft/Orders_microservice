@@ -19,7 +19,6 @@ import java.io.IOException;
 public class UserServiceTest {
     private MockWebServer mockWebServer;
     private UserServiceImpl userServiceImpl;
-    private String userJson;
 
     @BeforeEach
     void setUp() throws IOException {

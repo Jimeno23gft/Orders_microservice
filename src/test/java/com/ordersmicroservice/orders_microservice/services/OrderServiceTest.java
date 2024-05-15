@@ -1,6 +1,5 @@
 package com.ordersmicroservice.orders_microservice.services;
 
-import com.ordersmicroservice.orders_microservice.models.Address;
 import com.ordersmicroservice.orders_microservice.dto.Status;
 import com.ordersmicroservice.orders_microservice.dto.StatusUpdateDto;
 import com.ordersmicroservice.orders_microservice.models.Order;
@@ -14,15 +13,13 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
-import static com.ordersmicroservice.orders_microservice.dto.Status.*;
-import static org.assertj.core.api.Assertions.assertThat;
+import static com.ordersmicroservice.orders_microservice.dto.Status.DELIVERED;
+import static com.ordersmicroservice.orders_microservice.dto.Status.IN_DELIVERY;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
@@ -40,18 +37,18 @@ public class OrderServiceTest {
     public void setup() {
         order1 = Order.builder()
                 .id(1L)
-                .user_id(1L)
-                .from_address("Barcelona")
+                .userId(1L)
+                .fromAddress("Barcelona")
                 .status(DELIVERED)
-                .date_ordered("2024-5-9")
-                .date_delivered("2024-5-10").build();
+                .dateOrdered("2024-5-9")
+                .dateDelivered("2024-5-10").build();
         order2 = Order.builder()
                 .id(2L)
-                .user_id(2L)
-                .from_address("Valencia")
+                .userId(2L)
+                .fromAddress("Valencia")
                 .status(IN_DELIVERY)
-                .date_ordered("2024-5-11")
-                .date_delivered("2024-5-12").build();
+                .dateOrdered("2024-5-11")
+                .dateDelivered("2024-5-12").build();
         orders = List.of(order1, order2);
     }
 
@@ -63,7 +60,7 @@ public class OrderServiceTest {
 
         List<Order> savedOrders = orderService.getAllOrders();
         assertNotNull(savedOrders);
-        assertNotEquals(savedOrders, Collections.emptyList());
+        assertNotEquals(Collections.emptyList(), savedOrders);
         assertEquals(orders, savedOrders);
     }
 
@@ -86,11 +83,11 @@ public class OrderServiceTest {
         Order savedOrder = orderService.addOrder(1L);
 
         assertNotNull(savedOrder);
-        assertEquals(1L, savedOrder.getUser_id());
-        assertTrue(Arrays.asList(adresses).contains( savedOrder.getFrom_address()));
+        assertEquals(1L, savedOrder.getUserId());
+        assertTrue(Arrays.asList(adresses).contains( savedOrder.getFromAddress()));
         assertEquals(Status.UNPAID, savedOrder.getStatus());
-        assertNotNull(savedOrder.getDate_ordered());
-        assertNull(savedOrder.getDate_delivered());
+        assertNotNull(savedOrder.getDateOrdered());
+        assertNull(savedOrder.getDateDelivered());
     }
 
 
@@ -100,7 +97,7 @@ public class OrderServiceTest {
         Order existingOrder = new Order();
         existingOrder.setId(order1.getId());
         existingOrder.setStatus(order1.getStatus());
-        existingOrder.setDate_delivered(order1.getDate_delivered());
+        existingOrder.setDateDelivered(order1.getDateDelivered());
 
         StatusUpdateDto statusUpdateDto = new StatusUpdateDto();
         statusUpdateDto.setStatus(Status.CANCELLED);
@@ -119,14 +116,18 @@ public class OrderServiceTest {
 
 @Test
 @DisplayName("Testing the update when order is not found")
-public void testPatchOrderIfNotFound(){
+void testPatchOrderIfNotFound(){
     StatusUpdateDto statusUpdateDto = new StatusUpdateDto();
     statusUpdateDto.setStatus(Status.CANCELLED);
 
     when(orderRepository.findById(order1.getId())).thenReturn(Optional.empty());
 
     String message = "Order not found with id " + order1.getId();
-    Exception e = assertThrows(RuntimeException.class, ()-> orderService.patchOrder(order1.getId(), statusUpdateDto.getStatus()));
+
+    Status status =  statusUpdateDto.getStatus();
+    Long order1Id = order1.getId();
+
+    Exception e = assertThrows(RuntimeException.class, ()-> orderService.patchOrder(order1Id, status));
     assertTrue(e.getMessage().contains(message));
 
     verify(orderRepository, times(1)).findById(order1.getId());

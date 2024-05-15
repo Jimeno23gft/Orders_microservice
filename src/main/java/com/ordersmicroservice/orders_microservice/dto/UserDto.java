@@ -12,8 +12,4 @@ public class UserDto {
     private Integer fidelityPoints;
     private String birthDate;
     private String phone;
-
-   // private AddressDto address;
-
-  //  private CountryDto country;
 }

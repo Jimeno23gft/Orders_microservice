@@ -1,7 +1,6 @@
 package com.ordersmicroservice.orders_microservice.models;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.ordersmicroservice.orders_microservice.dto.Status;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -24,20 +23,20 @@ public class Order {
     private Long id;
 
     @Column(name = "user_id")
-    private Long user_id;
+    private Long userId;
 
     @Column(name="from_address")
-    private String from_address;
+    private String fromAddress;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "status")
     private Status status;
 
     @Column(name = "date_ordered")
-    private String date_ordered;
+    private String dateOrdered;
 
     @Column(name = "date_delivered")
-    private String date_delivered;
+    private String dateDelivered;
 
     @OneToOne(mappedBy = "order", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JsonManagedReference
@@ -45,7 +44,7 @@ public class Order {
 
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
     @JsonManagedReference
-    private List<OrderedProduct> orderedProductList;
+    private List<OrderedProduct> orderedProducts;
 
 
 }

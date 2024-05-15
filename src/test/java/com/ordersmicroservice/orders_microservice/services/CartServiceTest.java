@@ -76,7 +76,7 @@ public class CartServiceTest {
                                 cartDto.getCartProducts().size() == 1 &&
                                 cartDto.getCartProducts().get(0).getProductName().equals("Apple MacBook Pro") &&
                                 cartDto.getCartProducts().get(0).getQuantity().equals(1) &&
-                                cartDto.getCartProducts().get(0).getPrice().equals(2399.99)
+                                cartDto.getCartProducts().get(0).getPrice().equals(new BigDecimal("2399.99"))
                 )
                 .verifyComplete();
     }
