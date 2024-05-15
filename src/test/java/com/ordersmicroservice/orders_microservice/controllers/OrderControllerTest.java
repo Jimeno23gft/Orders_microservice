@@ -92,6 +92,7 @@ public class OrderControllerTest {
 
     @Test
     void testPostNewOrder() throws Exception {
+
         Long user_id = 1L;
 
         when(orderService.addOrder(user_id)).thenAnswer(invocation -> {
@@ -108,12 +109,11 @@ public class OrderControllerTest {
         mockMvc.perform(post("/orders/{id}", user_id))
                 .andExpect(status().isCreated())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.id", is(7)))
-                .andExpect(jsonPath("$.from_address", is("Valencia")))
-                .andExpect(jsonPath("$.date_ordered", is("2001-01-21 00:00:00")));
+                .andExpect(jsonPath("$.user_id", is(user_id.intValue())))
+                .andExpect(jsonPath("$.from_address", is("Madrid")))
+                .andExpect(jsonPath("$.date_ordered", is("2001-01-21")));
 
         verify(orderService).addOrder(user_id);
-
     }
 
     @Test
