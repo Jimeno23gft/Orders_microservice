@@ -113,6 +113,23 @@ public class OrderServiceTest {
         verify(orderRepository, times(1)).save(existingOrder);
     }
 
+    @Test
+    @DisplayName("Testing patching an order with DELIVERED status")
+    void testPatchOrderDelivered() {
+        Order initialOrder = new Order();
+        initialOrder.setId(1L);
+        initialOrder.setStatus(IN_DELIVERY); // Assuming initial status is PENDING
+
+        when(orderRepository.findById(1L)).thenReturn(Optional.of(initialOrder));
+        when(orderRepository.save(initialOrder)).thenReturn(initialOrder);
+
+        Order patchedOrder = orderService.patchOrder(1L, Status.DELIVERED);
+
+        assertNotNull(patchedOrder);
+        assertEquals(Status.DELIVERED, patchedOrder.getStatus());
+        assertNotNull(patchedOrder.getDateDelivered());
+        // Add assertions for the date format if needed
+    }
 
 @Test
 @DisplayName("Testing the update when order is not found")
