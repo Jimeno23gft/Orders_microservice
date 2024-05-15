@@ -1,6 +1,7 @@
 package com.ordersmicroservice.orders_microservice.controllers;
 
 import com.ordersmicroservice.orders_microservice.dto.Status;
+import com.ordersmicroservice.orders_microservice.dto.StatusUpdateDto;
 import com.ordersmicroservice.orders_microservice.models.Order;
 import com.ordersmicroservice.orders_microservice.services.OrderService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -60,15 +61,17 @@ public class OrderController {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
     }
 
-   /* @PatchMapping("/{id}")
-    @Operation(summary = "Update an order", description = "This endpoint retrieves example data from the server.")
-    public Order patchOrder(@PathVariable Long id, @RequestBody Order patchData){return orderService.patchOrder(id,patchData);}
-    */
+
+    /*@PatchMapping("/{id}")
+    @Operation(summary = "Update an order", description = "This endpoint updates the status of an order based on the provided ID.")
+    public Order patchOrder(@PathVariable Long id, @RequestBody StatusUpdateDto patchData) {
+        return orderService.patchOrder(id, patchData.getStatus());*/
 
     @PatchMapping("/{id}")
     @Operation(summary = "Update an order", description = "This endpoint updates the status of an order based on the provided ID.")
-    public Order patchOrder(@PathVariable Long id, @RequestBody Status patchData) {
-        return orderService.patchOrder(id, patchData);
+    public ResponseEntity<Order> patchOrder(@PathVariable Long id, @RequestBody StatusUpdateDto patchData) {
+        Order updatedOrder = orderService.patchOrder(id, patchData.getStatus());
+        return ResponseEntity.ok(updatedOrder);
     }
 
 
