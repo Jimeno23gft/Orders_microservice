@@ -5,7 +5,5 @@ import lombok.NoArgsConstructor;
 
 @Data
 public class StatusUpdateDto {
-
     private Status status;
-
 }

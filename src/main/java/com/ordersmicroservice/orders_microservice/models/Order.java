@@ -23,25 +23,28 @@ public class Order {
     private Long id;
 
     @Column(name = "user_id")
-    private Long user_id;
+    private Long userId;
 
     @Column(name="from_address")
-    private String from_address;
-
-    @Column(name="to_address")
-    private String to_address;
+    private String fromAddress;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "status")
     private Status status;
 
     @Column(name = "date_ordered")
-    private String date_ordered;
+    private String dateOrdered;
 
     @Column(name = "date_delivered")
-    private String date_delivered;
+    private String dateDelivered;
+
+    @OneToOne(mappedBy = "order", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonManagedReference
+    private Address address;
 
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
     @JsonManagedReference
-    private List<OrderedProduct> orderedProductList;
+    private List<OrderedProduct> orderedProducts;
+
+
 }

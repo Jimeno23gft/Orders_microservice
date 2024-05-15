@@ -1,12 +1,32 @@
+
 CREATE TABLE IF NOT EXISTS orders (
     id BIGINT AUTO_INCREMENT PRIMARY KEY ,
     user_id BIGINT,
     from_address VARCHAR(150),
-    to_address LONG,
     status ENUM('UNPAID','PAID','SENT','IN_DELIVERY','CANCELLED','DELIVERED','UNKNOWN'),
     date_ordered DATETIME,
     date_delivered DATETIME
 );
+
+INSERT INTO orders (user_id, from_address, status, date_ordered, date_delivered)
+VALUES (1001, '123 Main St', 'PAID', '2024-05-07 08:00:00', '2024-05-10 15:00:00');
+
+INSERT INTO orders (user_id, from_address, status, date_ordered, date_delivered)
+VALUES (1002, '456 Elm St', 'UNPAID', '2024-05-08 09:00:00', '2024-05-10 16:00:00');
+
+INSERT INTO orders (user_id, from_address, status, date_ordered, date_delivered)
+VALUES (1003, '789 Oak St', 'IN_DELIVERY', '2024-05-09 10:00:00', '2024-05-11 17:00:00');
+
+INSERT INTO orders (user_id, from_address, status, date_ordered, date_delivered)
+VALUES (1004, '101 Maple Ave', 'DELIVERED', '2024-05-10 11:00:00', '2024-05-12 18:00:00');
+
+INSERT INTO orders (user_id, from_address, status, date_ordered, date_delivered)
+VALUES (1005, '222 Pine St', 'UNKNOWN', '2024-05-11 12:00:00', '2024-05-10 14:00:00');
+
+INSERT INTO orders (user_id, from_address, status, date_ordered, date_delivered)
+VALUES (1006, '333 Cedar Rd', 'PAID', '2024-05-12 13:00:00', '2024-05-14 19:00:00');
+
+
 CREATE TABLE IF NOT EXISTS ordered_products (
     order_id LONG,
     product_id LONG,
@@ -19,24 +39,20 @@ CREATE TABLE IF NOT EXISTS ordered_products (
     FOREIGN KEY (order_id) REFERENCES orders(id) ON DELETE CASCADE
 );
 
+CREATE TABLE IF NOT EXISTS addresses (
+    order_id LONG AUTO_INCREMENT PRIMARY KEY,
+    street VARCHAR(255),
+    number INT,
+    door VARCHAR(255),
+    city_name VARCHAR(255),
+    zip_code VARCHAR(10),
+    FOREIGN KEY (order_id) REFERENCES orders(id)
+);
 
-INSERT INTO orders (user_id, from_address, to_address, status, date_ordered, date_delivered)
-VALUES (1001, '123 Main St', 111, 'PAID', '2024-05-07 08:00:00', null);
-
-INSERT INTO orders (user_id, from_address, to_address, status, date_ordered, date_delivered)
-VALUES (1002, '456 Elm St', 222, 'UNPAID', '2024-05-08 09:00:00', null);
-
-INSERT INTO orders (user_id, from_address, to_address, status, date_ordered, date_delivered)
-VALUES (1003, '789 Oak St', 333, 'IN_DELIVERY', '2024-05-09 10:00:00', null);
-
-INSERT INTO orders (user_id, from_address, to_address, status, date_ordered, date_delivered)
-VALUES (1004, '101 Maple Ave', 444, 'DELIVERED', '2024-05-10 11:00:00', '2024-05-12 18:00:00');
-
-INSERT INTO orders (user_id, from_address, to_address, status, date_ordered, date_delivered)
-VALUES (1005, '222 Pine St', 555, 'UNKNOWN', '2024-05-11 12:00:00', null);
-
-INSERT INTO orders (user_id, from_address, to_address, status, date_ordered, date_delivered)
-VALUES (1006, '333 Cedar Rd', 666, 'PAID', '2024-05-12 13:00:00', null);
+INSERT INTO addresses (order_id, street, number, door, city_name, zip_code) VALUES
+(1, 'Main Street', 123, 'A', 'Springfield', '12345'),
+(2, 'Elm Street', 456, 'B', 'Shelbyville', '67890'),
+(3, 'Oak Street', 789, 'C', 'Capital City', '10112');
 
 
 INSERT INTO ordered_products (order_id, product_id, name, category, description, price, quantity)
