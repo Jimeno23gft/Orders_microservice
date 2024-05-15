@@ -17,4 +17,5 @@ public class CartProductDto {
     private String productName;
     private Integer quantity;
     private BigDecimal price;
+
 }
