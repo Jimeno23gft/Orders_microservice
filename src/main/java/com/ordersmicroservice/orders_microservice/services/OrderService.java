@@ -7,7 +7,7 @@ import java.util.List;
 public interface OrderService {
     List<Order> getAllOrders();
     Order getOrderById(Long orderId);
-    Order addOrder(Order order);
+    Order addOrder(Long id);
     void deleteById(Long id);
     Order patchOrder(Long id, Order mockOrder);
 

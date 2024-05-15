@@ -1,5 +1,6 @@
 package com.ordersmicroservice.orders_microservice.models;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -19,9 +20,26 @@ public class OrderedProduct {
     @Column(name = "order_id")
     Long orderId;
 
+    @ManyToOne
+    @JoinColumn(name = "order_id")
+    @JsonBackReference
+    private Order order;
+
     @Id
     @Column(name = "product_id")
     Long productId;
+
+    @Column(name = "name")
+    String OrderedProduct_name;
+
+    @Column(name = "category")
+    String OrderedProduct_category;
+
+    @Column(name = "description")
+    String OrderedProduct_description;
+
+    @Column(name = "price")
+    Long price;
 
     @Column(name = "quantity")
     Integer quantity;

@@ -1,7 +1,10 @@
 package com.ordersmicroservice.orders_microservice.controllers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.ordersmicroservice.orders_microservice.Datos;
+import com.ordersmicroservice.orders_microservice.dto.Status;
 import com.ordersmicroservice.orders_microservice.models.Order;
+import com.ordersmicroservice.orders_microservice.models.OrderedProduct;
 import com.ordersmicroservice.orders_microservice.repositories.OrderRepository;
 import com.ordersmicroservice.orders_microservice.services.OrderService;
 import jakarta.persistence.EntityNotFoundException;
@@ -13,6 +16,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -20,6 +24,7 @@ import static com.ordersmicroservice.orders_microservice.Datos.*;
 import static com.ordersmicroservice.orders_microservice.dto.Status.DELIVERED;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.mockito.Mockito.*;
@@ -46,6 +51,8 @@ public class OrderControllerTest {
         OrderController orderController = new OrderController(orderService);
         mockMvc = MockMvcBuilders.standaloneSetup(orderController).build();
     }
+
+
 
     @Test
     void testGetAllOrders() throws Exception {
@@ -85,24 +92,27 @@ public class OrderControllerTest {
 
     @Test
     void testPostNewOrder() throws Exception {
-        Order orderToPost = new Order(null, 1L, "Valencia", crearAddress002().orElseThrow(), DELIVERED, "2001-01-21 00:00:00", "2002-01-01 00:00:00");
+        Long user_id = 1L;
 
-        when(orderService.addOrder(any())).then(invocationOnMock -> {
-            Order order = invocationOnMock.getArgument(0);
-            order.setId(7L);
+        when(orderService.addOrder(user_id)).thenAnswer(invocation -> {
+            Long id = invocation.getArgument(0);
+            Order order = new Order();
+            order.setUser_id(1L);
+            order.setFrom_address("Madrid");
+            order.setStatus(Status.DELIVERED);
+            order.setDate_ordered("2001-01-21");
+            order.setDate_delivered("2002-01-21");
             return order;
         });
 
-        mockMvc.perform(post("/orders").contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(orderToPost)))
-
+        mockMvc.perform(post("/orders/{id}", user_id))
                 .andExpect(status().isCreated())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.id", is(7)))
                 .andExpect(jsonPath("$.from_address", is("Valencia")))
                 .andExpect(jsonPath("$.date_ordered", is("2001-01-21 00:00:00")));
 
-        verify(orderService).addOrder(any());
+        verify(orderService).addOrder(user_id);
 
     }
 

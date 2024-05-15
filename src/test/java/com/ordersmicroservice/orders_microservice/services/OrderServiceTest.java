@@ -1,16 +1,21 @@
 package com.ordersmicroservice.orders_microservice.services;
 
 import com.ordersmicroservice.orders_microservice.models.Address;
+import com.ordersmicroservice.orders_microservice.dto.Status;
 import com.ordersmicroservice.orders_microservice.models.Order;
 import com.ordersmicroservice.orders_microservice.repositories.OrderRepository;
 import com.ordersmicroservice.orders_microservice.services.impl.OrderServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -36,7 +41,6 @@ public class OrderServiceTest {
                 .id(1L)
                 .user_id(1L)
                 .from_address("Barcelona")
-                .to_address(new Address(2L, 1L, "C/ bbbbb", 2, "2B", "Barcelona", "22222"))
                 .status(DELIVERED)
                 .date_ordered("2024-5-9")
                 .date_delivered("2024-5-10").build();
@@ -44,7 +48,6 @@ public class OrderServiceTest {
                 .id(2L)
                 .user_id(2L)
                 .from_address("Valencia")
-                .to_address(new Address(4L, 4L, "C/ ddddd", 4, "4D", "Dimmsdale", "44444"))
                 .status(IN_DELIVERY)
                 .date_ordered("2024-5-11")
                 .date_delivered("2024-5-12").build();
@@ -52,7 +55,9 @@ public class OrderServiceTest {
     }
 
     @Test
-    void testGetAllOrders() {
+
+    @DisplayName("Testing get all Orders from Repository Method")
+     void testGetAllOrders() {
         when(orderRepository.findAll()).thenReturn(orders);
 
         List<Order> savedOrders = orderService.getAllOrders();
@@ -62,7 +67,9 @@ public class OrderServiceTest {
     }
 
     @Test
-    void testGetOrderById() {
+    @DisplayName("Testing get an order by id from repository")
+     void testGetOrderById() {
+
         when(orderRepository.findById(1L)).thenReturn(Optional.of(order1));
 
         Order savedOrder = orderService.getOrderById(order1.getId());
@@ -71,16 +78,22 @@ public class OrderServiceTest {
     }
 
     @Test
+    @DisplayName("Testing Adding a new order with just an id")
     void testAddOrder() {
-        when(orderRepository.save(order1)).thenReturn(order1);
-
-        Order savedOrder = orderService.addOrder(order1);
+        String[] adresses = {"123 Main St","456 Elm St","789 Oak St","101 Maple Ave","222 Pine St","333 Cedar Rd"};
+        when(orderRepository.save(any(Order.class))).thenAnswer(invocation -> invocation.getArgument(0));
+        Order savedOrder = orderService.addOrder(1L);
 
         assertNotNull(savedOrder);
-        assertEquals(order1, savedOrder);
+        assertEquals(1L, savedOrder.getUser_id());
+        assertTrue(Arrays.asList(adresses).contains( savedOrder.getFrom_address()));
+        assertEquals(Status.UNPAID, savedOrder.getStatus());
+        assertNotNull(savedOrder.getDate_ordered());
+        assertNull(savedOrder.getDate_delivered());
     }
 
     @Test
+    @DisplayName("Testing the update of an order")
     void testPatchOrderIfFound(){
         Order existingOrder = new Order();
         existingOrder.setId(order1.getId());
@@ -103,7 +116,8 @@ public class OrderServiceTest {
     }
 
     @Test
-    public void testPatchOrderIfNotFound(){
+    @DisplayName("Testing the update when order is not found")
+    void testPatchOrderIfNotFound(){
         Order existingOrder = new Order();
         existingOrder.setId(order1.getId());
         existingOrder.setStatus(order1.getStatus());
@@ -121,8 +135,8 @@ public class OrderServiceTest {
         verify(orderRepository, times(0)).save(existingOrder);
 
     }
-
     @Test
+    @DisplayName("Testing the deleting of an order")
     void testDeleteById() {
         Long orderId = 1L;
 

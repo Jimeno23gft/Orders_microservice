@@ -1,11 +1,14 @@
 package com.ordersmicroservice.orders_microservice.models;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.ordersmicroservice.orders_microservice.dto.Status;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.util.List;
 
 @Data
 @Builder
@@ -25,10 +28,6 @@ public class Order {
     @Column(name="from_address")
     private String from_address;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "to_address_id", referencedColumnName = "address_id")
-    private Address to_address;
-
     @Enumerated(EnumType.STRING)
     @Column(name = "status")
     private Status status;
@@ -38,4 +37,8 @@ public class Order {
 
     @Column(name = "date_delivered")
     private String date_delivered;
+
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
+    @JsonManagedReference
+    private List<OrderedProduct> orderedProductList;
 }
