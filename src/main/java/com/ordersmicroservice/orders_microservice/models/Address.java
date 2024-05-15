@@ -39,4 +39,7 @@ public class Address {
 
     @Column(name = "zip_code")
     private String zipCode;
+
+    @Column(name = "country_id")
+    private Long countryId;
 }

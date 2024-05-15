@@ -28,10 +28,10 @@ public class Datos {
     }
 
     public static Optional<Address> crearAddress001() {
-        return Optional.of(new Address(1L, order, "C/ Colon", 10, "5A", "Valencia", "46001"));
+        return Optional.of(new Address(1L, order, "C/ Colon", 10, "5A", "Valencia", "46001", 1L));
     }
     public static Optional<Address> crearAddress002() {
-        return Optional.of(new Address(2L, order, "C/ de Navarra", 8, "1B", "Barcelona", "10000"));
+        return Optional.of(new Address(2L, order, "C/ de Navarra", 8, "1B", "Barcelona", "10000", 2L));
     }
     public static void main(String[] args) {
         productList.add(new OrderedProduct());

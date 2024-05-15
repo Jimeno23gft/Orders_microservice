@@ -47,13 +47,14 @@ CREATE TABLE IF NOT EXISTS addresses (
     door VARCHAR(255),
     city_name VARCHAR(255),
     zip_code VARCHAR(10),
+    country_id LONG,
     FOREIGN KEY (order_id) REFERENCES orders(id)
 );
 
-INSERT INTO addresses (order_id, street, number, door, city_name, zip_code) VALUES
-(1, 'Main Street', 123, 'A', 'Springfield', '12345'),
-(2, 'Elm Street', 456, 'B', 'Shelbyville', '67890'),
-(3, 'Oak Street', 789, 'C', 'Capital City', '10112');
+INSERT INTO addresses (order_id, street, number, door, city_name, zip_code, country_id) VALUES
+(1, 'Main Street', 123, 'A', 'Springfield', '12345', 1),
+(2, 'Elm Street', 456, 'B', 'Shelbyville', '67890', 2),
+(3, 'Oak Street', 789, 'C', 'Capital City', '10112', 3);
 
 
 INSERT INTO ordered_products (order_id, product_id, name, category, description, price, quantity)
