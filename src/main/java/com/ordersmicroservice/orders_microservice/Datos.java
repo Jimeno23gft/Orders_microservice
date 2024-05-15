@@ -16,21 +16,23 @@ import static com.ordersmicroservice.orders_microservice.dto.Status.UNPAID;
 public class Datos {
 
     static List<OrderedProduct> productList = new ArrayList<>();
+    static Address address = new Address();
+    static Order order = new Order();
 
 
     public static Optional<Order> crearOrder001(){
 
-        return Optional.of(new Order(1L,1L,"Valencia",PAID, "2001-21-21","2002-21-21", productList));
+        return Optional.of(new Order(1L,1L,"Valencia",PAID, "2001-21-21","2002-21-21", address, productList));
     }
     public static Optional<Order> crearOrder002() {
-        return Optional.of(new Order(2L, 2L, "Barcelona", UNPAID, "2001-21-21","2002-21-21", productList));
+        return Optional.of(new Order(2L, 2L, "Barcelona", UNPAID, "2001-21-21","2002-21-21", address, productList));
     }
 
     public static Optional<Address> crearAddress001() {
-        return Optional.of(new Address(1L, 1L, "C/ Colon", 10, "5A", "Valencia", "46001"));
+        return Optional.of(new Address(1L, order, "C/ Colon", 10, "5A", "Valencia", "46001"));
     }
     public static Optional<Address> crearAddress002() {
-        return Optional.of(new Address(2L, 2L, "C/ de Navarra", 8, "1B", "Barcelona", "10000"));
+        return Optional.of(new Address(2L, order, "C/ de Navarra", 8, "1B", "Barcelona", "10000"));
     }
     public static void main(String[] args) {
         productList.add(new OrderedProduct());

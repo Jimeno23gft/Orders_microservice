@@ -1,5 +1,7 @@
 package com.ordersmicroservice.orders_microservice.models;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -20,8 +22,11 @@ public class Address {
     @Column(name = "address_id")
     private Long addressId;
 
-    @Column(name = "order_id")
-    private Long orderId;
+    @JsonBackReference
+    @OneToOne
+    @MapsId
+    @JoinColumn(name = "order_id")
+    private Order order;
 
     @Column(name = "street")
     private String street;
@@ -35,6 +40,6 @@ public class Address {
     @Column(name = "city_name")
     private String cityName;
 
-    @Column(name = "zip_name")
+    @Column(name = "zip_code")
     private String zipCode;
 }
