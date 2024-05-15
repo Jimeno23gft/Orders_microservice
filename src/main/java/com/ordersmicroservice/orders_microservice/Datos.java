@@ -5,6 +5,7 @@ import com.ordersmicroservice.orders_microservice.models.Order;
 import com.ordersmicroservice.orders_microservice.models.OrderedProduct;
 import lombok.Generated;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -19,13 +20,11 @@ public class Datos {
     static Address address = new Address();
     static Order order = new Order();
 
-
     public static Optional<Order> crearOrder001(){
-
-        return Optional.of(new Order(1L,1L,"Valencia",PAID, "2001-21-21","2002-21-21", address, productList));
+        return Optional.of(new Order(1L,1L,"Valencia",PAID, "2001-21-21","2002-21-21", address ,new BigDecimal("15"),productList));
     }
     public static Optional<Order> crearOrder002() {
-        return Optional.of(new Order(2L, 2L, "Barcelona", UNPAID, "2001-21-21","2002-21-21", address, productList));
+        return Optional.of(new Order(2L, 2L, "Valencia", UNPAID, "2001-21-21","2002-21-21", address ,new BigDecimal("15"),productList));
     }
 
     public static Optional<Address> crearAddress001() {
