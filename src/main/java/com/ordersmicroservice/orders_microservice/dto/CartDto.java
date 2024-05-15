@@ -7,6 +7,8 @@ import lombok.NoArgsConstructor;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 
+import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -21,6 +23,7 @@ public class CartDto {
 
         @JsonProperty("user_id")
         private Long userId;
-        private List<CartProductDto> cartProducts;
+        private List<CartProductDto> cartProducts = new ArrayList<>();;
+        private BigDecimal totalPrice;
 
 }

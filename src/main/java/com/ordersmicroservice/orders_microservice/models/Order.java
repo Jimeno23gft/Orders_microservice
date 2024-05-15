@@ -8,6 +8,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @Data
@@ -40,6 +41,9 @@ public class Order {
 
     @Column(name = "date_delivered")
     private String date_delivered;
+
+    @Column(name = "total_price")
+    private BigDecimal total_price;
 
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
     @JsonManagedReference
