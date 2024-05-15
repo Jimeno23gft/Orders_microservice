@@ -48,7 +48,8 @@ public class OrderServiceImpl implements OrderService {
         order.setDateOrdered(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")));
 
         Order savedOrder = orderRepository.save(order);
-        log.info("Pedido creado exitosamente con ID: {}", savedOrder.getId());
+        log.debug("Pedido creado exitosamente con ID: {}", savedOrder.getId());
+        log.debug("Detallaes del pedido: {}", order);
 
         return savedOrder;
     }
