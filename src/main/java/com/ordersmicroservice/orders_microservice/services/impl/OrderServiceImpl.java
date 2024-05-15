@@ -4,6 +4,7 @@ import com.ordersmicroservice.orders_microservice.dto.Status;
 import com.ordersmicroservice.orders_microservice.models.Order;
 import com.ordersmicroservice.orders_microservice.repositories.OrderRepository;
 import com.ordersmicroservice.orders_microservice.services.OrderService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
 
@@ -12,6 +13,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Random;
 
+@Slf4j
 @Service
 public class OrderServiceImpl implements OrderService {
 
@@ -23,16 +25,20 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public List<Order> getAllOrders() {
+        log.info("Recuperando todos los pedidos");
         return orderRepository.findAll();
     }
 
     @Override
     public Order getOrderById(Long orderId) {
+        log.info("Buscando pedido con ID: {}", orderId);
         return orderRepository.findById(orderId).orElseThrow();
     }
 
     @Override
     public Order addOrder(Long id) {
+
+        log.info("Creando nuevo pedido para el usuario ID: {}", id);
 
         Order order = new Order();
         order.setUser_id(id);
@@ -40,7 +46,10 @@ public class OrderServiceImpl implements OrderService {
         order.setStatus(Status.UNPAID);
         order.setDate_ordered(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")));
 
-        return orderRepository.save(order);
+        Order savedOrder = orderRepository.save(order);
+        log.info("Pedido creado exitosamente con ID: {}", savedOrder.getId());
+
+        return savedOrder;
     }
 
     private String RandomAndress() {
@@ -51,21 +60,28 @@ public class OrderServiceImpl implements OrderService {
 
     public Order patchOrder(Long id, @RequestBody Status updatedStatus) {
 
+        log.info("Actualizando pedido ID: {} con nuevo estado: {}", id, updatedStatus);
+
         Order existingOrder = orderRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Order not found with id " + id));
+        Status previousStatus = existingOrder.getStatus();
 
-            existingOrder.setStatus(updatedStatus);
+        existingOrder.setStatus(updatedStatus);
             if(updatedStatus == Status.DELIVERED){
                 existingOrder.setDate_delivered(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
             }
 
-            return orderRepository.save(existingOrder);
+        log.info("Pedido ID: {} actualizado de {} a {}", id, previousStatus, updatedStatus);
+
+        return orderRepository.save(existingOrder);
     }
 
 
     public void deleteById(Long id) {
-    orderRepository.deleteById(id);
+        log.info("Eliminando pedido con ID: {}", id);
+        orderRepository.deleteById(id);
     }
+
     }
 
 
