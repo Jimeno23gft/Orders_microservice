@@ -12,8 +12,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -56,7 +54,7 @@ public class OrderServiceTest {
 
     @Test
     @DisplayName("Testing get all Orders from Repository Method")
-    public void testGetAllOrders() {
+    public void testGetAllOrders() throws InternalServerErrorException {
         when(orderRepository.findAll()).thenReturn(orders);
 
         List<Order> savedOrders = orderService.getAllOrders();
@@ -67,7 +65,7 @@ public class OrderServiceTest {
 
     @Test
     @DisplayName("Testing get an order by id from repository")
-    public void testGetOrderById() {
+    public void testGetOrderById() throws NotFoundException {
         when(orderRepository.findById(1L)).thenReturn(Optional.of(order1));
 
         Order savedOrder = orderService.getOrderById(order1.getId());

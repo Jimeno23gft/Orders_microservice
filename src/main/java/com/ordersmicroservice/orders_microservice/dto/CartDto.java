@@ -16,11 +16,11 @@ import java.util.List;
 @AllArgsConstructor
 public class CartDto {
 
-
         private Long id;
 
         @JsonProperty("user_id")
         private Long userId;
+
         private List<CartProductDto> cartProducts;
 
 }
