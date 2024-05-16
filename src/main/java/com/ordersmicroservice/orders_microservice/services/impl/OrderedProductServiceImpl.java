@@ -1,6 +1,7 @@
 package com.ordersmicroservice.orders_microservice.services.impl;
 
 import com.ordersmicroservice.orders_microservice.exception.GlobalExceptionHandler;
+import com.ordersmicroservice.orders_microservice.exception.NotFoundException;
 import com.ordersmicroservice.orders_microservice.models.OrderedProduct;
 import com.ordersmicroservice.orders_microservice.repositories.OrderedProductRepository;
 import com.ordersmicroservice.orders_microservice.services.OrderedProductService;
@@ -18,6 +19,6 @@ public class OrderedProductServiceImpl implements OrderedProductService {
     @Override
     public List<OrderedProduct> getAllProductsFromOrder(Long orderId) {
         return Optional.of(orderedProductRepository.findAll()).filter(orderedProducts -> !orderedProducts.isEmpty())
-                .orElseThrow(() -> new GlobalExceptionHandler.NotFoundException("No orders were found"));
+                .orElseThrow(() -> new NotFoundException("No orders were found"));
     }
 }

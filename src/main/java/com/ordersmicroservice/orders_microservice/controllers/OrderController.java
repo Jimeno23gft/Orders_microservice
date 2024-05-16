@@ -66,12 +66,6 @@ public class OrderController {
         orderService.deleteById(id);
     }
 
-
-    @ExceptionHandler(EntityNotFoundException.class)
-    public ResponseEntity<String> handleNotFound(EntityNotFoundException ex) {
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
-    }
-
     @PatchMapping("/{id}")
     @Operation(summary = "Update an order", description = "This endpoint updates the status of an order based on the provided ID.")
     public ResponseEntity<Order> patchOrder(@PathVariable Long id, @RequestBody StatusUpdateDto patchData) {
