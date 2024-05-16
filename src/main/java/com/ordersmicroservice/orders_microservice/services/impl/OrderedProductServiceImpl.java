@@ -16,11 +16,7 @@ public class OrderedProductServiceImpl implements OrderedProductService {
         this.orderedProductRepository = orderedProductRepository;
     }
 
-  /*  @Override
-    public List<OrderedProduct> getAllProductsFromOrder(Long orderId) {
-        return Optional.of(orderedProductRepository.findAll()).filter(orderedProducts -> !orderedProducts.isEmpty())
-                .orElseThrow(() -> new GlobalExceptionHandler.NotFoundException("No orders were found"));
-    } */
+
 
     @Override
     public List<OrderedProduct> getAllProductsFromOrder(Long orderId) {
