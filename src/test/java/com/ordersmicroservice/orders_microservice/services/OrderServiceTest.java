@@ -131,8 +131,10 @@ public class OrderServiceTest {
     void testDeleteById() {
         Long orderId = 1L;
 
+        when(orderRepository.findById(orderId)).thenReturn(Optional.of(order1));
         orderService.deleteById(orderId);
 
+        verify(orderRepository).findById(orderId);
         verify(orderRepository).deleteById(orderId);
     }
 }

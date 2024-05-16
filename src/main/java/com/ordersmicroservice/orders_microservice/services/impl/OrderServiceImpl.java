@@ -31,10 +31,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public Order getOrderById(Long orderId){
-        if (orderId == null || orderId <= 0) {
-            throw new GlobalExceptionHandler.BadRequest("Invalid id type. Expected type: Long");
-        }
+    public Order getOrderById(Long orderId) {
         return orderRepository.findById(orderId).orElseThrow(() -> new GlobalExceptionHandler.NotFoundException("Order not found with ID: " + orderId));
     }
 
@@ -49,7 +46,7 @@ public class OrderServiceImpl implements OrderService {
             order.setDate_ordered(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")));
 
             return orderRepository.save(order);
-        }catch (GlobalExceptionHandler.BadRequest ex){
+        } catch (GlobalExceptionHandler.BadRequest ex) {
             throw new GlobalExceptionHandler.BadRequest("");
         }
     }
@@ -61,22 +58,23 @@ public class OrderServiceImpl implements OrderService {
     }
 
     public Order patchOrder(Long id, Order updatedOrder) {
-    try {
-        Order existingOrder = orderRepository.findById(id)
-                .orElseThrow(() -> new GlobalExceptionHandler.NotFoundException("Order not found with id: " + id));
+        try {
+            Order existingOrder = orderRepository.findById(id)
+                    .orElseThrow(() -> new GlobalExceptionHandler.NotFoundException("Order not found with id: " + id));
 
-        existingOrder.setStatus(updatedOrder.getStatus());
-        if (updatedOrder.getStatus() == Status.DELIVERED) {
-            existingOrder.setDate_delivered(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
+            existingOrder.setStatus(updatedOrder.getStatus());
+            if (updatedOrder.getStatus() == Status.DELIVERED) {
+                existingOrder.setDate_delivered(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
+            }
+            return orderRepository.save(existingOrder);
+        } catch (GlobalExceptionHandler.BadRequest ex) {
+            throw new GlobalExceptionHandler.BadRequest("");
         }
-        return orderRepository.save(existingOrder);
-    }catch(GlobalExceptionHandler.BadRequest ex){
-        throw new GlobalExceptionHandler.BadRequest("QWEQWE");
-    }
     }
 
 
     public void deleteById(Long id) {
+        orderRepository.findById(id).orElseThrow(() -> new GlobalExceptionHandler.NotFoundException("Order not found with id: " + id));
         orderRepository.deleteById(id);
     }
 }

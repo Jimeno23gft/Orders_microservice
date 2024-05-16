@@ -72,7 +72,9 @@ public class OrderController {
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @Operation(summary = "Cancel an order", description = "This endpoint retrieves example data from the server.")
-    public void deleteById(@PathVariable Long id) {orderService.deleteById(id);}
+    public void deleteById(@PathVariable Long id) {
+        orderService.deleteById(id);
+    }
 
 
     @ExceptionHandler(EntityNotFoundException.class)
