@@ -3379,3 +3379,429 @@ Content-Type: <filtered>
 2024-05-16 16:10:50 [HikariPool-1 connection closer] DEBUG com.zaxxer.hikari.pool.PoolBase - HikariPool-1 - Closing connection conn9: url=jdbc:h2:mem:testdb user=SA: (connection evicted)
 2024-05-16 16:10:50 [SpringApplicationShutdownHook] DEBUG com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - After shutdown stats (total=0, active=0, idle=0, waiting=0)
 2024-05-16 16:10:50 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.
+2024-05-16 16:12:28 [main] DEBUG reactor.util.Loggers - Using Slf4j logging framework
+2024-05-16 16:12:28 [main] DEBUG i.n.u.i.l.InternalLoggerFactory - Using SLF4J as the default logging framework
+2024-05-16 16:12:28 [main] DEBUG i.n.util.internal.PlatformDependent0 - -Dio.netty.noUnsafe: false
+2024-05-16 16:12:28 [main] DEBUG i.n.util.internal.PlatformDependent0 - Java version: 17
+2024-05-16 16:12:28 [main] DEBUG i.n.util.internal.PlatformDependent0 - sun.misc.Unsafe.theUnsafe: available
+2024-05-16 16:12:28 [main] DEBUG i.n.util.internal.PlatformDependent0 - sun.misc.Unsafe.copyMemory: available
+2024-05-16 16:12:28 [main] DEBUG i.n.util.internal.PlatformDependent0 - sun.misc.Unsafe.storeFence: available
+2024-05-16 16:12:28 [main] DEBUG i.n.util.internal.PlatformDependent0 - java.nio.Buffer.address: available
+2024-05-16 16:12:28 [main] DEBUG i.n.util.internal.PlatformDependent0 - direct buffer constructor: unavailable: Reflective setAccessible(true) disabled
+2024-05-16 16:12:28 [main] DEBUG i.n.util.internal.PlatformDependent0 - java.nio.Bits.unaligned: available, true
+2024-05-16 16:12:28 [main] DEBUG i.n.util.internal.PlatformDependent0 - jdk.internal.misc.Unsafe.allocateUninitializedArray(int): unavailable: class io.netty.util.internal.PlatformDependent0$7 cannot access class jdk.internal.misc.Unsafe (in module java.base) because module java.base does not export jdk.internal.misc to unnamed module @2bc12da
+2024-05-16 16:12:29 [main] DEBUG i.n.util.internal.PlatformDependent0 - java.nio.DirectByteBuffer.<init>(long, {int,long}): unavailable
+2024-05-16 16:12:29 [main] DEBUG i.n.util.internal.PlatformDependent - sun.misc.Unsafe: available
+2024-05-16 16:12:29 [main] DEBUG i.n.util.internal.PlatformDependent - -Dio.netty.tmpdir: C:\Users\csjn\AppData\Local\Temp (java.io.tmpdir)
+2024-05-16 16:12:29 [main] DEBUG i.n.util.internal.PlatformDependent - -Dio.netty.bitMode: 64 (sun.arch.data.model)
+2024-05-16 16:12:29 [main] DEBUG i.n.util.internal.PlatformDependent - Platform: Windows
+2024-05-16 16:12:29 [main] DEBUG i.n.util.internal.PlatformDependent - -Dio.netty.maxDirectMemory: -1 bytes
+2024-05-16 16:12:29 [main] DEBUG i.n.util.internal.PlatformDependent - -Dio.netty.uninitializedArrayAllocationThreshold: -1
+2024-05-16 16:12:29 [main] DEBUG io.netty.util.internal.CleanerJava9 - java.nio.ByteBuffer.cleaner(): available
+2024-05-16 16:12:29 [main] DEBUG i.n.util.internal.PlatformDependent - -Dio.netty.noPreferDirect: false
+2024-05-16 16:12:29 [main] DEBUG i.n.u.i.InternalThreadLocalMap - -Dio.netty.threadLocalMap.stringBuilder.initialSize: 1024
+2024-05-16 16:12:29 [main] DEBUG i.n.u.i.InternalThreadLocalMap - -Dio.netty.threadLocalMap.stringBuilder.maxSize: 4096
+2024-05-16 16:12:29 [main] DEBUG io.netty.util.ResourceLeakDetector - -Dio.netty.leakDetection.level: simple
+2024-05-16 16:12:29 [main] DEBUG io.netty.util.ResourceLeakDetector - -Dio.netty.leakDetection.targetRecords: 4
+2024-05-16 16:12:32 [main] DEBUG io.netty.util.NetUtil - -Djava.net.preferIPv4Stack: false
+2024-05-16 16:12:32 [main] DEBUG io.netty.util.NetUtil - -Djava.net.preferIPv6Addresses: false
+2024-05-16 16:12:32 [main] DEBUG i.netty.util.NetUtilInitializations - Loopback interface: lo (Software Loopback Interface 1, 127.0.0.1)
+2024-05-16 16:12:32 [main] DEBUG io.netty.util.NetUtil - Failed to get SOMAXCONN from sysctl and file \proc\sys\net\core\somaxconn. Default: 200
+2024-05-16 16:12:32 [main] DEBUG reactor.netty.tcp.TcpResources - [http] resources will use the default LoopResources: DefaultLoopResources {prefix=reactor-http, daemon=true, selectCount=4, workerCount=4}
+2024-05-16 16:12:32 [main] DEBUG reactor.netty.tcp.TcpResources - [http] resources will use the default ConnectionProvider: reactor.netty.resources.DefaultPooledConnectionProvider@8212866
+2024-05-16 16:12:32 [main] DEBUG r.netty.resources.DefaultLoopIOUring - Default io_uring support : false
+2024-05-16 16:12:32 [main] DEBUG r.netty.resources.DefaultLoopEpoll - Default Epoll support : false
+2024-05-16 16:12:32 [main] DEBUG r.netty.resources.DefaultLoopKQueue - Default KQueue support : false
+2024-05-16 16:12:32 [main] DEBUG i.n.c.MultithreadEventLoopGroup - -Dio.netty.eventLoopThreads: 8
+2024-05-16 16:12:32 [main] DEBUG i.n.u.concurrent.GlobalEventExecutor - -Dio.netty.globalEventExecutor.quietPeriodSeconds: 1
+2024-05-16 16:12:32 [main] DEBUG io.netty.channel.nio.NioEventLoop - -Dio.netty.noKeySetOptimization: false
+2024-05-16 16:12:32 [main] DEBUG io.netty.channel.nio.NioEventLoop - -Dio.netty.selectorAutoRebuildThreshold: 512
+2024-05-16 16:12:32 [main] DEBUG i.n.util.internal.PlatformDependent - org.jctools-core.MpscChunkedArrayQueue: available
+2024-05-16 16:12:32 [main] DEBUG i.netty.resolver.dns.DnsNameResolver - Default ResolvedAddressTypes: IPV4_ONLY
+2024-05-16 16:12:32 [main] DEBUG i.netty.resolver.dns.DnsNameResolver - Localhost address: localhost/127.0.0.1
+2024-05-16 16:12:32 [main] DEBUG i.netty.resolver.dns.DnsNameResolver - Windows hostname: GFT-V5Bx8MVXisi
+2024-05-16 16:12:32 [main] DEBUG i.netty.resolver.dns.DnsNameResolver - Default search domains: []
+2024-05-16 16:12:32 [main] DEBUG i.netty.resolver.dns.DnsNameResolver - Default UnixResolverOptions{ndots=1, timeout=5, attempts=16}
+2024-05-16 16:12:32 [main] DEBUG i.n.r.DefaultHostsFileEntriesResolver - -Dio.netty.hostsFileRefreshInterval: 0
+2024-05-16 16:12:32 [main] DEBUG i.n.r.d.DefaultDnsServerAddressStreamProvider - Default DNS servers: [/8.8.8.8:53, /9.9.9.9:53] (sun.net.dns.ResolverConfiguration)
+2024-05-16 16:12:32 [main] DEBUG r.n.r.PooledConnectionProvider - Creating a new [http] client pool [PoolFactory{evictionInterval=PT0S, leasingStrategy=fifo, maxConnections=500, maxIdleTime=-1, maxLifeTime=-1, metricsEnabled=false, pendingAcquireMaxCount=1000, pendingAcquireTimeout=45000}] for [/127.0.0.1:56287]
+2024-05-16 16:12:33 [main] DEBUG io.netty.channel.DefaultChannelId - -Dio.netty.processId: 10760 (auto-detected)
+2024-05-16 16:12:33 [main] DEBUG io.netty.channel.DefaultChannelId - -Dio.netty.machineId: d4:25:8b:ff:fe:93:8c:03 (auto-detected)
+2024-05-16 16:12:33 [main] DEBUG i.n.buffer.PooledByteBufAllocator - -Dio.netty.allocator.numHeapArenas: 8
+2024-05-16 16:12:33 [main] DEBUG i.n.buffer.PooledByteBufAllocator - -Dio.netty.allocator.numDirectArenas: 8
+2024-05-16 16:12:33 [main] DEBUG i.n.buffer.PooledByteBufAllocator - -Dio.netty.allocator.pageSize: 8192
+2024-05-16 16:12:33 [main] DEBUG i.n.buffer.PooledByteBufAllocator - -Dio.netty.allocator.maxOrder: 9
+2024-05-16 16:12:33 [main] DEBUG i.n.buffer.PooledByteBufAllocator - -Dio.netty.allocator.chunkSize: 4194304
+2024-05-16 16:12:33 [main] DEBUG i.n.buffer.PooledByteBufAllocator - -Dio.netty.allocator.smallCacheSize: 256
+2024-05-16 16:12:33 [main] DEBUG i.n.buffer.PooledByteBufAllocator - -Dio.netty.allocator.normalCacheSize: 64
+2024-05-16 16:12:33 [main] DEBUG i.n.buffer.PooledByteBufAllocator - -Dio.netty.allocator.maxCachedBufferCapacity: 32768
+2024-05-16 16:12:33 [main] DEBUG i.n.buffer.PooledByteBufAllocator - -Dio.netty.allocator.cacheTrimInterval: 8192
+2024-05-16 16:12:33 [main] DEBUG i.n.buffer.PooledByteBufAllocator - -Dio.netty.allocator.cacheTrimIntervalMillis: 0
+2024-05-16 16:12:33 [main] DEBUG i.n.buffer.PooledByteBufAllocator - -Dio.netty.allocator.useCacheForAllThreads: false
+2024-05-16 16:12:33 [main] DEBUG i.n.buffer.PooledByteBufAllocator - -Dio.netty.allocator.maxCachedByteBuffersPerChunk: 1023
+2024-05-16 16:12:33 [main] DEBUG io.netty.buffer.ByteBufUtil - -Dio.netty.allocator.type: pooled
+2024-05-16 16:12:33 [main] DEBUG io.netty.buffer.ByteBufUtil - -Dio.netty.threadLocalDirectBufferSize: 0
+2024-05-16 16:12:33 [main] DEBUG io.netty.buffer.ByteBufUtil - -Dio.netty.maxThreadLocalCharBufferSize: 16384
+2024-05-16 16:12:33 [reactor-http-nio-2] DEBUG r.n.r.PooledConnectionProvider - [0629b727] Created a new pooled channel, now: 0 active connections, 0 inactive connections and 0 pending acquire requests.
+2024-05-16 16:12:33 [reactor-http-nio-2] DEBUG io.netty.buffer.AbstractByteBuf - -Dio.netty.buffer.checkAccessible: true
+2024-05-16 16:12:33 [reactor-http-nio-2] DEBUG io.netty.buffer.AbstractByteBuf - -Dio.netty.buffer.checkBounds: true
+2024-05-16 16:12:33 [reactor-http-nio-2] DEBUG i.n.util.ResourceLeakDetectorFactory - Loaded default ResourceLeakDetector: io.netty.util.ResourceLeakDetector@32ec67a7
+2024-05-16 16:12:33 [reactor-http-nio-2] DEBUG r.netty.transport.TransportConfig - [0629b727] Initialized pipeline DefaultChannelPipeline{(reactor.left.httpCodec = io.netty.handler.codec.http.HttpClientCodec), (reactor.left.httpDecompressor = io.netty.handler.codec.http.HttpContentDecompressor), (reactor.right.reactiveBridge = reactor.netty.channel.ChannelOperationsHandler)}
+2024-05-16 16:12:33 [reactor-http-nio-2] DEBUG i.n.b.ChannelInitializerExtensions - -Dio.netty.bootstrap.extensions: null
+2024-05-16 16:12:33 [reactor-http-nio-2] DEBUG r.netty.transport.TransportConnector - [0629b727] Connecting to [/127.0.0.1:56287].
+2024-05-16 16:12:33 [reactor-http-nio-2] DEBUG r.n.r.DefaultPooledConnectionProvider - [0629b727, L:/127.0.0.1:56289 - R:/127.0.0.1:56287] Registering pool release on close event for channel
+2024-05-16 16:12:33 [reactor-http-nio-2] DEBUG r.n.r.PooledConnectionProvider - [0629b727, L:/127.0.0.1:56289 - R:/127.0.0.1:56287] Channel connected, now: 1 active connections, 0 inactive connections and 0 pending acquire requests.
+2024-05-16 16:12:33 [reactor-http-nio-2] DEBUG r.n.r.DefaultPooledConnectionProvider - [0629b727, L:/127.0.0.1:56289 - R:/127.0.0.1:56287] onStateChange(PooledConnection{channel=[id: 0x0629b727, L:/127.0.0.1:56289 - R:/127.0.0.1:56287]}, [connected])
+2024-05-16 16:12:33 [reactor-http-nio-2] DEBUG r.n.r.DefaultPooledConnectionProvider - [0629b727-1, L:/127.0.0.1:56289 - R:/127.0.0.1:56287] onStateChange(GET{uri=null, connection=PooledConnection{channel=[id: 0x0629b727, L:/127.0.0.1:56289 - R:/127.0.0.1:56287]}}, [configured])
+2024-05-16 16:12:33 [reactor-http-nio-2] DEBUG r.n.http.client.HttpClientConnect - [0629b727-1, L:/127.0.0.1:56289 - R:/127.0.0.1:56287] Handler is being applied: {uri=http://127.0.0.1:56287/users/1, method=GET}
+2024-05-16 16:12:33 [reactor-http-nio-2] DEBUG r.n.r.DefaultPooledConnectionProvider - [0629b727-1, L:/127.0.0.1:56289 - R:/127.0.0.1:56287] onStateChange(GET{uri=/users/1, connection=PooledConnection{channel=[id: 0x0629b727, L:/127.0.0.1:56289 - R:/127.0.0.1:56287]}}, [request_prepared])
+2024-05-16 16:12:33 [reactor-http-nio-2] DEBUG io.netty.util.Recycler - -Dio.netty.recycler.maxCapacityPerThread: 4096
+2024-05-16 16:12:33 [reactor-http-nio-2] DEBUG io.netty.util.Recycler - -Dio.netty.recycler.ratio: 8
+2024-05-16 16:12:33 [reactor-http-nio-2] DEBUG io.netty.util.Recycler - -Dio.netty.recycler.chunkSize: 32
+2024-05-16 16:12:33 [reactor-http-nio-2] DEBUG io.netty.util.Recycler - -Dio.netty.recycler.blocking: false
+2024-05-16 16:12:33 [reactor-http-nio-2] DEBUG io.netty.util.Recycler - -Dio.netty.recycler.batchFastThreadLocalOnly: true
+2024-05-16 16:12:33 [reactor-http-nio-2] DEBUG r.n.r.DefaultPooledConnectionProvider - [0629b727-1, L:/127.0.0.1:56289 - R:/127.0.0.1:56287] onStateChange(GET{uri=/users/1, connection=PooledConnection{channel=[id: 0x0629b727, L:/127.0.0.1:56289 - R:/127.0.0.1:56287]}}, [request_sent])
+2024-05-16 16:12:33 [reactor-http-nio-2] DEBUG i.n.handler.codec.compression.Brotli - brotli4j not in the classpath; Brotli support will be unavailable.
+2024-05-16 16:12:33 [reactor-http-nio-2] DEBUG i.n.handler.codec.compression.Zstd - zstd-jni not in the classpath; Zstd support will be unavailable.
+2024-05-16 16:12:33 [reactor-http-nio-2] DEBUG r.n.http.client.HttpClientOperations - [0629b727-1, L:/127.0.0.1:56289 - R:/127.0.0.1:56287] Received response (auto-read:false) : RESPONSE(decodeResult: success, version: HTTP/1.1)
+HTTP/1.1 500 Server Error
+Content-Length: <filtered>
+Content-Type: <filtered>
+2024-05-16 16:12:33 [reactor-http-nio-2] DEBUG r.n.r.DefaultPooledConnectionProvider - [0629b727-1, L:/127.0.0.1:56289 - R:/127.0.0.1:56287] onStateChange(GET{uri=/users/1, connection=PooledConnection{channel=[id: 0x0629b727, L:/127.0.0.1:56289 - R:/127.0.0.1:56287]}}, [response_received])
+2024-05-16 16:12:34 [reactor-http-nio-2] DEBUG reactor.netty.channel.FluxReceive - [0629b727-1, L:/127.0.0.1:56289 - R:/127.0.0.1:56287] [terminated=false, cancelled=false, pending=0, error=null]: subscribing inbound receiver
+2024-05-16 16:12:34 [reactor-http-nio-2] DEBUG r.n.http.client.HttpClientOperations - [0629b727-1, L:/127.0.0.1:56289 - R:/127.0.0.1:56287] Received last HTTP packet
+2024-05-16 16:12:34 [reactor-http-nio-2] DEBUG r.n.r.DefaultPooledConnectionProvider - [0629b727, L:/127.0.0.1:56289 - R:/127.0.0.1:56287] onStateChange(GET{uri=/users/1, connection=PooledConnection{channel=[id: 0x0629b727, L:/127.0.0.1:56289 - R:/127.0.0.1:56287]}}, [response_completed])
+2024-05-16 16:12:34 [reactor-http-nio-2] DEBUG r.n.r.DefaultPooledConnectionProvider - [0629b727, L:/127.0.0.1:56289 - R:/127.0.0.1:56287] onStateChange(GET{uri=/users/1, connection=PooledConnection{channel=[id: 0x0629b727, L:/127.0.0.1:56289 - R:/127.0.0.1:56287]}}, [disconnecting])
+2024-05-16 16:12:34 [reactor-http-nio-2] DEBUG r.n.r.DefaultPooledConnectionProvider - [0629b727, L:/127.0.0.1:56289 - R:/127.0.0.1:56287] Releasing channel
+2024-05-16 16:12:34 [reactor-http-nio-2] DEBUG r.n.r.PooledConnectionProvider - [0629b727, L:/127.0.0.1:56289 - R:/127.0.0.1:56287] Channel cleaned, now: 0 active connections, 1 inactive connections and 0 pending acquire requests.
+2024-05-16 16:12:34 [reactor-http-nio-2] DEBUG r.n.r.DefaultPooledConnectionProvider - [0629b727, L:/127.0.0.1:56289 ! R:/127.0.0.1:56287] onStateChange(PooledConnection{channel=[id: 0x0629b727, L:/127.0.0.1:56289 ! R:/127.0.0.1:56287]}, [disconnecting])
+2024-05-16 16:12:34 [main] DEBUG r.n.r.PooledConnectionProvider - Creating a new [http] client pool [PoolFactory{evictionInterval=PT0S, leasingStrategy=fifo, maxConnections=500, maxIdleTime=-1, maxLifeTime=-1, metricsEnabled=false, pendingAcquireMaxCount=1000, pendingAcquireTimeout=45000}] for [/127.0.0.1:56290]
+2024-05-16 16:12:34 [reactor-http-nio-3] DEBUG r.n.r.PooledConnectionProvider - [d47f8935] Created a new pooled channel, now: 0 active connections, 0 inactive connections and 0 pending acquire requests.
+2024-05-16 16:12:34 [reactor-http-nio-3] DEBUG r.netty.transport.TransportConfig - [d47f8935] Initialized pipeline DefaultChannelPipeline{(reactor.left.httpCodec = io.netty.handler.codec.http.HttpClientCodec), (reactor.left.httpDecompressor = io.netty.handler.codec.http.HttpContentDecompressor), (reactor.right.reactiveBridge = reactor.netty.channel.ChannelOperationsHandler)}
+2024-05-16 16:12:34 [reactor-http-nio-3] DEBUG r.netty.transport.TransportConnector - [d47f8935] Connecting to [/127.0.0.1:56290].
+2024-05-16 16:12:34 [reactor-http-nio-3] DEBUG r.n.r.DefaultPooledConnectionProvider - [d47f8935, L:/127.0.0.1:56291 - R:/127.0.0.1:56290] Registering pool release on close event for channel
+2024-05-16 16:12:34 [reactor-http-nio-3] DEBUG r.n.r.PooledConnectionProvider - [d47f8935, L:/127.0.0.1:56291 - R:/127.0.0.1:56290] Channel connected, now: 1 active connections, 0 inactive connections and 0 pending acquire requests.
+2024-05-16 16:12:34 [reactor-http-nio-3] DEBUG r.n.r.DefaultPooledConnectionProvider - [d47f8935, L:/127.0.0.1:56291 - R:/127.0.0.1:56290] onStateChange(PooledConnection{channel=[id: 0xd47f8935, L:/127.0.0.1:56291 - R:/127.0.0.1:56290]}, [connected])
+2024-05-16 16:12:34 [reactor-http-nio-3] DEBUG r.n.r.DefaultPooledConnectionProvider - [d47f8935-1, L:/127.0.0.1:56291 - R:/127.0.0.1:56290] onStateChange(GET{uri=null, connection=PooledConnection{channel=[id: 0xd47f8935, L:/127.0.0.1:56291 - R:/127.0.0.1:56290]}}, [configured])
+2024-05-16 16:12:34 [reactor-http-nio-3] DEBUG r.n.http.client.HttpClientConnect - [d47f8935-1, L:/127.0.0.1:56291 - R:/127.0.0.1:56290] Handler is being applied: {uri=http://127.0.0.1:56290/users/100, method=GET}
+2024-05-16 16:12:34 [reactor-http-nio-3] DEBUG r.n.r.DefaultPooledConnectionProvider - [d47f8935-1, L:/127.0.0.1:56291 - R:/127.0.0.1:56290] onStateChange(GET{uri=/users/100, connection=PooledConnection{channel=[id: 0xd47f8935, L:/127.0.0.1:56291 - R:/127.0.0.1:56290]}}, [request_prepared])
+2024-05-16 16:12:34 [reactor-http-nio-3] DEBUG r.n.r.DefaultPooledConnectionProvider - [d47f8935-1, L:/127.0.0.1:56291 - R:/127.0.0.1:56290] onStateChange(GET{uri=/users/100, connection=PooledConnection{channel=[id: 0xd47f8935, L:/127.0.0.1:56291 - R:/127.0.0.1:56290]}}, [request_sent])
+2024-05-16 16:12:34 [reactor-http-nio-3] DEBUG r.n.http.client.HttpClientOperations - [d47f8935-1, L:/127.0.0.1:56291 - R:/127.0.0.1:56290] Received response (auto-read:false) : RESPONSE(decodeResult: success, version: HTTP/1.1)
+HTTP/1.1 200 OK
+Content-Length: <filtered>
+Content-Type: <filtered>
+2024-05-16 16:12:34 [reactor-http-nio-3] DEBUG r.n.r.DefaultPooledConnectionProvider - [d47f8935-1, L:/127.0.0.1:56291 - R:/127.0.0.1:56290] onStateChange(GET{uri=/users/100, connection=PooledConnection{channel=[id: 0xd47f8935, L:/127.0.0.1:56291 - R:/127.0.0.1:56290]}}, [response_received])
+2024-05-16 16:12:34 [reactor-http-nio-3] DEBUG reactor.netty.channel.FluxReceive - [d47f8935-1, L:/127.0.0.1:56291 - R:/127.0.0.1:56290] [terminated=false, cancelled=false, pending=0, error=null]: subscribing inbound receiver
+2024-05-16 16:12:34 [reactor-http-nio-3] DEBUG r.n.http.client.HttpClientOperations - [d47f8935-1, L:/127.0.0.1:56291 - R:/127.0.0.1:56290] Received last HTTP packet
+2024-05-16 16:12:34 [reactor-http-nio-3] INFO  c.o.o.services.impl.UserServiceImpl - Recuperado usuario con ID: 100, Nombre: John, Apellido: Doe
+2024-05-16 16:12:34 [reactor-http-nio-3] DEBUG r.n.r.DefaultPooledConnectionProvider - [d47f8935, L:/127.0.0.1:56291 - R:/127.0.0.1:56290] onStateChange(GET{uri=/users/100, connection=PooledConnection{channel=[id: 0xd47f8935, L:/127.0.0.1:56291 - R:/127.0.0.1:56290]}}, [response_completed])
+2024-05-16 16:12:34 [reactor-http-nio-3] DEBUG r.n.r.DefaultPooledConnectionProvider - [d47f8935, L:/127.0.0.1:56291 - R:/127.0.0.1:56290] onStateChange(GET{uri=/users/100, connection=PooledConnection{channel=[id: 0xd47f8935, L:/127.0.0.1:56291 - R:/127.0.0.1:56290]}}, [disconnecting])
+2024-05-16 16:12:34 [reactor-http-nio-3] DEBUG r.n.r.DefaultPooledConnectionProvider - [d47f8935, L:/127.0.0.1:56291 - R:/127.0.0.1:56290] Releasing channel
+2024-05-16 16:12:34 [reactor-http-nio-3] DEBUG r.n.r.PooledConnectionProvider - [d47f8935, L:/127.0.0.1:56291 - R:/127.0.0.1:56290] Channel cleaned, now: 0 active connections, 1 inactive connections and 0 pending acquire requests.
+2024-05-16 16:12:34 [reactor-http-nio-3] DEBUG r.n.r.DefaultPooledConnectionProvider - [d47f8935, L:/127.0.0.1:56291 ! R:/127.0.0.1:56290] onStateChange(PooledConnection{channel=[id: 0xd47f8935, L:/127.0.0.1:56291 ! R:/127.0.0.1:56290]}, [disconnecting])
+2024-05-16 16:12:34 [main] DEBUG r.n.r.PooledConnectionProvider - Creating a new [http] client pool [PoolFactory{evictionInterval=PT0S, leasingStrategy=fifo, maxConnections=500, maxIdleTime=-1, maxLifeTime=-1, metricsEnabled=false, pendingAcquireMaxCount=1000, pendingAcquireTimeout=45000}] for [/127.0.0.1:56292]
+2024-05-16 16:12:34 [reactor-http-nio-4] DEBUG r.n.r.PooledConnectionProvider - [c5aab73e] Created a new pooled channel, now: 0 active connections, 0 inactive connections and 0 pending acquire requests.
+2024-05-16 16:12:34 [reactor-http-nio-4] DEBUG r.netty.transport.TransportConfig - [c5aab73e] Initialized pipeline DefaultChannelPipeline{(reactor.left.httpCodec = io.netty.handler.codec.http.HttpClientCodec), (reactor.left.httpDecompressor = io.netty.handler.codec.http.HttpContentDecompressor), (reactor.right.reactiveBridge = reactor.netty.channel.ChannelOperationsHandler)}
+2024-05-16 16:12:34 [reactor-http-nio-4] DEBUG r.netty.transport.TransportConnector - [c5aab73e] Connecting to [/127.0.0.1:56292].
+2024-05-16 16:12:34 [reactor-http-nio-4] DEBUG r.n.r.DefaultPooledConnectionProvider - [c5aab73e, L:/127.0.0.1:56293 - R:/127.0.0.1:56292] Registering pool release on close event for channel
+2024-05-16 16:12:34 [reactor-http-nio-4] DEBUG r.n.r.PooledConnectionProvider - [c5aab73e, L:/127.0.0.1:56293 - R:/127.0.0.1:56292] Channel connected, now: 1 active connections, 0 inactive connections and 0 pending acquire requests.
+2024-05-16 16:12:34 [reactor-http-nio-4] DEBUG r.n.r.DefaultPooledConnectionProvider - [c5aab73e, L:/127.0.0.1:56293 - R:/127.0.0.1:56292] onStateChange(PooledConnection{channel=[id: 0xc5aab73e, L:/127.0.0.1:56293 - R:/127.0.0.1:56292]}, [connected])
+2024-05-16 16:12:34 [reactor-http-nio-4] DEBUG r.n.r.DefaultPooledConnectionProvider - [c5aab73e-1, L:/127.0.0.1:56293 - R:/127.0.0.1:56292] onStateChange(GET{uri=null, connection=PooledConnection{channel=[id: 0xc5aab73e, L:/127.0.0.1:56293 - R:/127.0.0.1:56292]}}, [configured])
+2024-05-16 16:12:34 [reactor-http-nio-4] DEBUG r.n.http.client.HttpClientConnect - [c5aab73e-1, L:/127.0.0.1:56293 - R:/127.0.0.1:56292] Handler is being applied: {uri=http://127.0.0.1:56292/users/999, method=GET}
+2024-05-16 16:12:34 [reactor-http-nio-4] DEBUG r.n.r.DefaultPooledConnectionProvider - [c5aab73e-1, L:/127.0.0.1:56293 - R:/127.0.0.1:56292] onStateChange(GET{uri=/users/999, connection=PooledConnection{channel=[id: 0xc5aab73e, L:/127.0.0.1:56293 - R:/127.0.0.1:56292]}}, [request_prepared])
+2024-05-16 16:12:34 [reactor-http-nio-4] DEBUG r.n.r.DefaultPooledConnectionProvider - [c5aab73e-1, L:/127.0.0.1:56293 - R:/127.0.0.1:56292] onStateChange(GET{uri=/users/999, connection=PooledConnection{channel=[id: 0xc5aab73e, L:/127.0.0.1:56293 - R:/127.0.0.1:56292]}}, [request_sent])
+2024-05-16 16:12:34 [reactor-http-nio-4] DEBUG r.n.http.client.HttpClientOperations - [c5aab73e-1, L:/127.0.0.1:56293 - R:/127.0.0.1:56292] Received response (auto-read:false) : RESPONSE(decodeResult: success, version: HTTP/1.1)
+HTTP/1.1 404 Client Error
+Content-Length: <filtered>
+Content-Type: <filtered>
+2024-05-16 16:12:34 [reactor-http-nio-4] DEBUG r.n.r.DefaultPooledConnectionProvider - [c5aab73e-1, L:/127.0.0.1:56293 - R:/127.0.0.1:56292] onStateChange(GET{uri=/users/999, connection=PooledConnection{channel=[id: 0xc5aab73e, L:/127.0.0.1:56293 - R:/127.0.0.1:56292]}}, [response_received])
+2024-05-16 16:12:34 [reactor-http-nio-4] DEBUG reactor.netty.channel.FluxReceive - [c5aab73e-1, L:/127.0.0.1:56293 - R:/127.0.0.1:56292] [terminated=false, cancelled=false, pending=0, error=null]: subscribing inbound receiver
+2024-05-16 16:12:34 [reactor-http-nio-4] DEBUG r.n.http.client.HttpClientOperations - [c5aab73e-1, L:/127.0.0.1:56293 - R:/127.0.0.1:56292] Received last HTTP packet
+2024-05-16 16:12:34 [reactor-http-nio-4] DEBUG r.n.r.DefaultPooledConnectionProvider - [c5aab73e, L:/127.0.0.1:56293 - R:/127.0.0.1:56292] onStateChange(GET{uri=/users/999, connection=PooledConnection{channel=[id: 0xc5aab73e, L:/127.0.0.1:56293 - R:/127.0.0.1:56292]}}, [response_completed])
+2024-05-16 16:12:34 [reactor-http-nio-4] DEBUG r.n.r.DefaultPooledConnectionProvider - [c5aab73e, L:/127.0.0.1:56293 - R:/127.0.0.1:56292] onStateChange(GET{uri=/users/999, connection=PooledConnection{channel=[id: 0xc5aab73e, L:/127.0.0.1:56293 - R:/127.0.0.1:56292]}}, [disconnecting])
+2024-05-16 16:12:34 [reactor-http-nio-4] DEBUG r.n.r.DefaultPooledConnectionProvider - [c5aab73e, L:/127.0.0.1:56293 - R:/127.0.0.1:56292] Releasing channel
+2024-05-16 16:12:34 [reactor-http-nio-4] DEBUG r.n.r.PooledConnectionProvider - [c5aab73e, L:/127.0.0.1:56293 - R:/127.0.0.1:56292] Channel cleaned, now: 0 active connections, 1 inactive connections and 0 pending acquire requests.
+2024-05-16 16:12:34 [reactor-http-nio-4] DEBUG r.n.r.DefaultPooledConnectionProvider - [c5aab73e, L:/127.0.0.1:56293 ! R:/127.0.0.1:56292] onStateChange(PooledConnection{channel=[id: 0xc5aab73e, L:/127.0.0.1:56293 ! R:/127.0.0.1:56292]}, [disconnecting])
+2024-05-16 16:12:34 [main] DEBUG r.n.r.PooledConnectionProvider - Creating a new [http] client pool [PoolFactory{evictionInterval=PT0S, leasingStrategy=fifo, maxConnections=500, maxIdleTime=-1, maxLifeTime=-1, metricsEnabled=false, pendingAcquireMaxCount=1000, pendingAcquireTimeout=45000}] for [/127.0.0.1:56294]
+2024-05-16 16:12:34 [reactor-http-nio-1] DEBUG r.n.r.PooledConnectionProvider - [15e6c47c] Created a new pooled channel, now: 0 active connections, 0 inactive connections and 0 pending acquire requests.
+2024-05-16 16:12:34 [reactor-http-nio-1] DEBUG r.netty.transport.TransportConfig - [15e6c47c] Initialized pipeline DefaultChannelPipeline{(reactor.left.httpCodec = io.netty.handler.codec.http.HttpClientCodec), (reactor.left.httpDecompressor = io.netty.handler.codec.http.HttpContentDecompressor), (reactor.right.reactiveBridge = reactor.netty.channel.ChannelOperationsHandler)}
+2024-05-16 16:12:34 [reactor-http-nio-1] DEBUG r.netty.transport.TransportConnector - [15e6c47c] Connecting to [/127.0.0.1:56294].
+2024-05-16 16:12:34 [reactor-http-nio-1] DEBUG r.n.r.DefaultPooledConnectionProvider - [15e6c47c, L:/127.0.0.1:56295 - R:/127.0.0.1:56294] Registering pool release on close event for channel
+2024-05-16 16:12:34 [reactor-http-nio-1] DEBUG r.n.r.PooledConnectionProvider - [15e6c47c, L:/127.0.0.1:56295 - R:/127.0.0.1:56294] Channel connected, now: 1 active connections, 0 inactive connections and 0 pending acquire requests.
+2024-05-16 16:12:34 [reactor-http-nio-1] DEBUG r.n.r.DefaultPooledConnectionProvider - [15e6c47c, L:/127.0.0.1:56295 - R:/127.0.0.1:56294] onStateChange(PooledConnection{channel=[id: 0x15e6c47c, L:/127.0.0.1:56295 - R:/127.0.0.1:56294]}, [connected])
+2024-05-16 16:12:34 [reactor-http-nio-1] DEBUG r.n.r.DefaultPooledConnectionProvider - [15e6c47c-1, L:/127.0.0.1:56295 - R:/127.0.0.1:56294] onStateChange(GET{uri=null, connection=PooledConnection{channel=[id: 0x15e6c47c, L:/127.0.0.1:56295 - R:/127.0.0.1:56294]}}, [configured])
+2024-05-16 16:12:34 [reactor-http-nio-1] DEBUG r.n.http.client.HttpClientConnect - [15e6c47c-1, L:/127.0.0.1:56295 - R:/127.0.0.1:56294] Handler is being applied: {uri=http://127.0.0.1:56294/country/1, method=GET}
+2024-05-16 16:12:34 [reactor-http-nio-1] DEBUG r.n.r.DefaultPooledConnectionProvider - [15e6c47c-1, L:/127.0.0.1:56295 - R:/127.0.0.1:56294] onStateChange(GET{uri=/country/1, connection=PooledConnection{channel=[id: 0x15e6c47c, L:/127.0.0.1:56295 - R:/127.0.0.1:56294]}}, [request_prepared])
+2024-05-16 16:12:34 [reactor-http-nio-1] DEBUG r.n.r.DefaultPooledConnectionProvider - [15e6c47c-1, L:/127.0.0.1:56295 - R:/127.0.0.1:56294] onStateChange(GET{uri=/country/1, connection=PooledConnection{channel=[id: 0x15e6c47c, L:/127.0.0.1:56295 - R:/127.0.0.1:56294]}}, [request_sent])
+2024-05-16 16:12:34 [reactor-http-nio-1] DEBUG r.n.http.client.HttpClientOperations - [15e6c47c-1, L:/127.0.0.1:56295 - R:/127.0.0.1:56294] Received response (auto-read:false) : RESPONSE(decodeResult: success, version: HTTP/1.1)
+HTTP/1.1 500 Server Error
+Content-Length: <filtered>
+Content-Type: <filtered>
+2024-05-16 16:12:34 [reactor-http-nio-1] DEBUG r.n.r.DefaultPooledConnectionProvider - [15e6c47c-1, L:/127.0.0.1:56295 - R:/127.0.0.1:56294] onStateChange(GET{uri=/country/1, connection=PooledConnection{channel=[id: 0x15e6c47c, L:/127.0.0.1:56295 - R:/127.0.0.1:56294]}}, [response_received])
+2024-05-16 16:12:34 [reactor-http-nio-1] DEBUG reactor.netty.channel.FluxReceive - [15e6c47c-1, L:/127.0.0.1:56295 - R:/127.0.0.1:56294] [terminated=false, cancelled=false, pending=0, error=null]: subscribing inbound receiver
+2024-05-16 16:12:34 [reactor-http-nio-1] DEBUG r.n.http.client.HttpClientOperations - [15e6c47c-1, L:/127.0.0.1:56295 - R:/127.0.0.1:56294] Received last HTTP packet
+2024-05-16 16:12:34 [reactor-http-nio-1] DEBUG r.n.r.DefaultPooledConnectionProvider - [15e6c47c, L:/127.0.0.1:56295 - R:/127.0.0.1:56294] onStateChange(GET{uri=/country/1, connection=PooledConnection{channel=[id: 0x15e6c47c, L:/127.0.0.1:56295 - R:/127.0.0.1:56294]}}, [response_completed])
+2024-05-16 16:12:34 [reactor-http-nio-1] DEBUG r.n.r.DefaultPooledConnectionProvider - [15e6c47c, L:/127.0.0.1:56295 - R:/127.0.0.1:56294] onStateChange(GET{uri=/country/1, connection=PooledConnection{channel=[id: 0x15e6c47c, L:/127.0.0.1:56295 - R:/127.0.0.1:56294]}}, [disconnecting])
+2024-05-16 16:12:34 [reactor-http-nio-1] DEBUG r.n.r.DefaultPooledConnectionProvider - [15e6c47c, L:/127.0.0.1:56295 - R:/127.0.0.1:56294] Releasing channel
+2024-05-16 16:12:34 [reactor-http-nio-1] DEBUG r.n.r.PooledConnectionProvider - [15e6c47c, L:/127.0.0.1:56295 - R:/127.0.0.1:56294] Channel cleaned, now: 0 active connections, 1 inactive connections and 0 pending acquire requests.
+2024-05-16 16:12:34 [reactor-http-nio-1] DEBUG r.n.r.DefaultPooledConnectionProvider - [15e6c47c, L:/127.0.0.1:56295 ! R:/127.0.0.1:56294] onStateChange(PooledConnection{channel=[id: 0x15e6c47c, L:/127.0.0.1:56295 ! R:/127.0.0.1:56294]}, [disconnecting])
+2024-05-16 16:12:34 [main] DEBUG r.n.r.PooledConnectionProvider - Creating a new [http] client pool [PoolFactory{evictionInterval=PT0S, leasingStrategy=fifo, maxConnections=500, maxIdleTime=-1, maxLifeTime=-1, metricsEnabled=false, pendingAcquireMaxCount=1000, pendingAcquireTimeout=45000}] for [/127.0.0.1:56296]
+2024-05-16 16:12:34 [reactor-http-nio-2] DEBUG r.n.r.PooledConnectionProvider - [d9889dbb] Created a new pooled channel, now: 0 active connections, 0 inactive connections and 0 pending acquire requests.
+2024-05-16 16:12:34 [reactor-http-nio-2] DEBUG r.netty.transport.TransportConfig - [d9889dbb] Initialized pipeline DefaultChannelPipeline{(reactor.left.httpCodec = io.netty.handler.codec.http.HttpClientCodec), (reactor.left.httpDecompressor = io.netty.handler.codec.http.HttpContentDecompressor), (reactor.right.reactiveBridge = reactor.netty.channel.ChannelOperationsHandler)}
+2024-05-16 16:12:34 [reactor-http-nio-2] DEBUG r.netty.transport.TransportConnector - [d9889dbb] Connecting to [/127.0.0.1:56296].
+2024-05-16 16:12:34 [reactor-http-nio-2] DEBUG r.n.r.DefaultPooledConnectionProvider - [d9889dbb, L:/127.0.0.1:56297 - R:/127.0.0.1:56296] Registering pool release on close event for channel
+2024-05-16 16:12:34 [reactor-http-nio-2] DEBUG r.n.r.PooledConnectionProvider - [d9889dbb, L:/127.0.0.1:56297 - R:/127.0.0.1:56296] Channel connected, now: 1 active connections, 0 inactive connections and 0 pending acquire requests.
+2024-05-16 16:12:34 [reactor-http-nio-2] DEBUG r.n.r.DefaultPooledConnectionProvider - [d9889dbb, L:/127.0.0.1:56297 - R:/127.0.0.1:56296] onStateChange(PooledConnection{channel=[id: 0xd9889dbb, L:/127.0.0.1:56297 - R:/127.0.0.1:56296]}, [connected])
+2024-05-16 16:12:34 [reactor-http-nio-2] DEBUG r.n.r.DefaultPooledConnectionProvider - [d9889dbb-1, L:/127.0.0.1:56297 - R:/127.0.0.1:56296] onStateChange(GET{uri=null, connection=PooledConnection{channel=[id: 0xd9889dbb, L:/127.0.0.1:56297 - R:/127.0.0.1:56296]}}, [configured])
+2024-05-16 16:12:34 [reactor-http-nio-2] DEBUG r.n.http.client.HttpClientConnect - [d9889dbb-1, L:/127.0.0.1:56297 - R:/127.0.0.1:56296] Handler is being applied: {uri=http://127.0.0.1:56296/country/1, method=GET}
+2024-05-16 16:12:34 [reactor-http-nio-2] DEBUG r.n.r.DefaultPooledConnectionProvider - [d9889dbb-1, L:/127.0.0.1:56297 - R:/127.0.0.1:56296] onStateChange(GET{uri=/country/1, connection=PooledConnection{channel=[id: 0xd9889dbb, L:/127.0.0.1:56297 - R:/127.0.0.1:56296]}}, [request_prepared])
+2024-05-16 16:12:34 [reactor-http-nio-2] DEBUG r.n.r.DefaultPooledConnectionProvider - [d9889dbb-1, L:/127.0.0.1:56297 - R:/127.0.0.1:56296] onStateChange(GET{uri=/country/1, connection=PooledConnection{channel=[id: 0xd9889dbb, L:/127.0.0.1:56297 - R:/127.0.0.1:56296]}}, [request_sent])
+2024-05-16 16:12:34 [reactor-http-nio-2] DEBUG r.n.http.client.HttpClientOperations - [d9889dbb-1, L:/127.0.0.1:56297 - R:/127.0.0.1:56296] Received response (auto-read:false) : RESPONSE(decodeResult: success, version: HTTP/1.1)
+HTTP/1.1 200 OK
+Content-Length: <filtered>
+Content-Type: <filtered>
+2024-05-16 16:12:34 [reactor-http-nio-2] DEBUG r.n.r.DefaultPooledConnectionProvider - [d9889dbb-1, L:/127.0.0.1:56297 - R:/127.0.0.1:56296] onStateChange(GET{uri=/country/1, connection=PooledConnection{channel=[id: 0xd9889dbb, L:/127.0.0.1:56297 - R:/127.0.0.1:56296]}}, [response_received])
+2024-05-16 16:12:34 [reactor-http-nio-2] DEBUG reactor.netty.channel.FluxReceive - [d9889dbb-1, L:/127.0.0.1:56297 - R:/127.0.0.1:56296] [terminated=false, cancelled=false, pending=0, error=null]: subscribing inbound receiver
+2024-05-16 16:12:34 [reactor-http-nio-2] DEBUG r.n.http.client.HttpClientOperations - [d9889dbb-1, L:/127.0.0.1:56297 - R:/127.0.0.1:56296] Received last HTTP packet
+2024-05-16 16:12:34 [reactor-http-nio-2] INFO  c.o.o.s.impl.CountryServiceImpl - Recuperado pais con ID: 1, Nombre: Espanya
+2024-05-16 16:12:34 [reactor-http-nio-2] DEBUG r.n.r.DefaultPooledConnectionProvider - [d9889dbb, L:/127.0.0.1:56297 - R:/127.0.0.1:56296] onStateChange(GET{uri=/country/1, connection=PooledConnection{channel=[id: 0xd9889dbb, L:/127.0.0.1:56297 - R:/127.0.0.1:56296]}}, [response_completed])
+2024-05-16 16:12:34 [reactor-http-nio-2] DEBUG r.n.r.DefaultPooledConnectionProvider - [d9889dbb, L:/127.0.0.1:56297 - R:/127.0.0.1:56296] onStateChange(GET{uri=/country/1, connection=PooledConnection{channel=[id: 0xd9889dbb, L:/127.0.0.1:56297 - R:/127.0.0.1:56296]}}, [disconnecting])
+2024-05-16 16:12:34 [reactor-http-nio-2] DEBUG r.n.r.DefaultPooledConnectionProvider - [d9889dbb, L:/127.0.0.1:56297 - R:/127.0.0.1:56296] Releasing channel
+2024-05-16 16:12:34 [reactor-http-nio-2] DEBUG r.n.r.PooledConnectionProvider - [d9889dbb, L:/127.0.0.1:56297 - R:/127.0.0.1:56296] Channel cleaned, now: 0 active connections, 1 inactive connections and 0 pending acquire requests.
+2024-05-16 16:12:34 [reactor-http-nio-2] DEBUG r.n.r.DefaultPooledConnectionProvider - [d9889dbb, L:/127.0.0.1:56297 ! R:/127.0.0.1:56296] onStateChange(PooledConnection{channel=[id: 0xd9889dbb, L:/127.0.0.1:56297 ! R:/127.0.0.1:56296]}, [disconnecting])
+2024-05-16 16:12:34 [main] DEBUG r.n.r.PooledConnectionProvider - Creating a new [http] client pool [PoolFactory{evictionInterval=PT0S, leasingStrategy=fifo, maxConnections=500, maxIdleTime=-1, maxLifeTime=-1, metricsEnabled=false, pendingAcquireMaxCount=1000, pendingAcquireTimeout=45000}] for [/127.0.0.1:56298]
+2024-05-16 16:12:34 [reactor-http-nio-3] DEBUG r.n.r.PooledConnectionProvider - [54f36fec] Created a new pooled channel, now: 0 active connections, 0 inactive connections and 0 pending acquire requests.
+2024-05-16 16:12:34 [reactor-http-nio-3] DEBUG r.netty.transport.TransportConfig - [54f36fec] Initialized pipeline DefaultChannelPipeline{(reactor.left.httpCodec = io.netty.handler.codec.http.HttpClientCodec), (reactor.left.httpDecompressor = io.netty.handler.codec.http.HttpContentDecompressor), (reactor.right.reactiveBridge = reactor.netty.channel.ChannelOperationsHandler)}
+2024-05-16 16:12:34 [reactor-http-nio-3] DEBUG r.netty.transport.TransportConnector - [54f36fec] Connecting to [/127.0.0.1:56298].
+2024-05-16 16:12:34 [reactor-http-nio-3] DEBUG r.n.r.DefaultPooledConnectionProvider - [54f36fec, L:/127.0.0.1:56299 - R:/127.0.0.1:56298] Registering pool release on close event for channel
+2024-05-16 16:12:34 [reactor-http-nio-3] DEBUG r.n.r.PooledConnectionProvider - [54f36fec, L:/127.0.0.1:56299 - R:/127.0.0.1:56298] Channel connected, now: 1 active connections, 0 inactive connections and 0 pending acquire requests.
+2024-05-16 16:12:34 [reactor-http-nio-3] DEBUG r.n.r.DefaultPooledConnectionProvider - [54f36fec, L:/127.0.0.1:56299 - R:/127.0.0.1:56298] onStateChange(PooledConnection{channel=[id: 0x54f36fec, L:/127.0.0.1:56299 - R:/127.0.0.1:56298]}, [connected])
+2024-05-16 16:12:34 [reactor-http-nio-3] DEBUG r.n.r.DefaultPooledConnectionProvider - [54f36fec-1, L:/127.0.0.1:56299 - R:/127.0.0.1:56298] onStateChange(GET{uri=null, connection=PooledConnection{channel=[id: 0x54f36fec, L:/127.0.0.1:56299 - R:/127.0.0.1:56298]}}, [configured])
+2024-05-16 16:12:34 [reactor-http-nio-3] DEBUG r.n.http.client.HttpClientConnect - [54f36fec-1, L:/127.0.0.1:56299 - R:/127.0.0.1:56298] Handler is being applied: {uri=http://127.0.0.1:56298/country/717, method=GET}
+2024-05-16 16:12:34 [reactor-http-nio-3] DEBUG r.n.r.DefaultPooledConnectionProvider - [54f36fec-1, L:/127.0.0.1:56299 - R:/127.0.0.1:56298] onStateChange(GET{uri=/country/717, connection=PooledConnection{channel=[id: 0x54f36fec, L:/127.0.0.1:56299 - R:/127.0.0.1:56298]}}, [request_prepared])
+2024-05-16 16:12:34 [reactor-http-nio-3] DEBUG r.n.r.DefaultPooledConnectionProvider - [54f36fec-1, L:/127.0.0.1:56299 - R:/127.0.0.1:56298] onStateChange(GET{uri=/country/717, connection=PooledConnection{channel=[id: 0x54f36fec, L:/127.0.0.1:56299 - R:/127.0.0.1:56298]}}, [request_sent])
+2024-05-16 16:12:34 [reactor-http-nio-3] DEBUG r.n.http.client.HttpClientOperations - [54f36fec-1, L:/127.0.0.1:56299 - R:/127.0.0.1:56298] Received response (auto-read:false) : RESPONSE(decodeResult: success, version: HTTP/1.1)
+HTTP/1.1 404 Client Error
+Content-Length: <filtered>
+Content-Type: <filtered>
+2024-05-16 16:12:34 [reactor-http-nio-3] DEBUG r.n.r.DefaultPooledConnectionProvider - [54f36fec-1, L:/127.0.0.1:56299 - R:/127.0.0.1:56298] onStateChange(GET{uri=/country/717, connection=PooledConnection{channel=[id: 0x54f36fec, L:/127.0.0.1:56299 - R:/127.0.0.1:56298]}}, [response_received])
+2024-05-16 16:12:34 [reactor-http-nio-3] DEBUG reactor.netty.channel.FluxReceive - [54f36fec-1, L:/127.0.0.1:56299 - R:/127.0.0.1:56298] [terminated=false, cancelled=false, pending=0, error=null]: subscribing inbound receiver
+2024-05-16 16:12:34 [reactor-http-nio-3] DEBUG r.n.http.client.HttpClientOperations - [54f36fec-1, L:/127.0.0.1:56299 - R:/127.0.0.1:56298] Received last HTTP packet
+2024-05-16 16:12:34 [reactor-http-nio-3] DEBUG r.n.r.DefaultPooledConnectionProvider - [54f36fec, L:/127.0.0.1:56299 - R:/127.0.0.1:56298] onStateChange(GET{uri=/country/717, connection=PooledConnection{channel=[id: 0x54f36fec, L:/127.0.0.1:56299 - R:/127.0.0.1:56298]}}, [response_completed])
+2024-05-16 16:12:34 [reactor-http-nio-3] DEBUG r.n.r.DefaultPooledConnectionProvider - [54f36fec, L:/127.0.0.1:56299 - R:/127.0.0.1:56298] onStateChange(GET{uri=/country/717, connection=PooledConnection{channel=[id: 0x54f36fec, L:/127.0.0.1:56299 - R:/127.0.0.1:56298]}}, [disconnecting])
+2024-05-16 16:12:34 [reactor-http-nio-3] DEBUG r.n.r.DefaultPooledConnectionProvider - [54f36fec, L:/127.0.0.1:56299 - R:/127.0.0.1:56298] Releasing channel
+2024-05-16 16:12:34 [reactor-http-nio-3] DEBUG r.n.r.PooledConnectionProvider - [54f36fec, L:/127.0.0.1:56299 - R:/127.0.0.1:56298] Channel cleaned, now: 0 active connections, 1 inactive connections and 0 pending acquire requests.
+2024-05-16 16:12:34 [reactor-http-nio-3] DEBUG r.n.r.DefaultPooledConnectionProvider - [54f36fec, L:/127.0.0.1:56299 ! R:/127.0.0.1:56298] onStateChange(PooledConnection{channel=[id: 0x54f36fec, L:/127.0.0.1:56299 ! R:/127.0.0.1:56298]}, [disconnecting])
+2024-05-16 16:12:34 [main] DEBUG r.n.r.PooledConnectionProvider - Creating a new [http] client pool [PoolFactory{evictionInterval=PT0S, leasingStrategy=fifo, maxConnections=500, maxIdleTime=-1, maxLifeTime=-1, metricsEnabled=false, pendingAcquireMaxCount=1000, pendingAcquireTimeout=45000}] for [/127.0.0.1:56300]
+2024-05-16 16:12:34 [reactor-http-nio-4] DEBUG r.n.r.PooledConnectionProvider - [a87dae6a] Created a new pooled channel, now: 0 active connections, 0 inactive connections and 0 pending acquire requests.
+2024-05-16 16:12:34 [reactor-http-nio-4] DEBUG r.netty.transport.TransportConfig - [a87dae6a] Initialized pipeline DefaultChannelPipeline{(reactor.left.httpCodec = io.netty.handler.codec.http.HttpClientCodec), (reactor.left.httpDecompressor = io.netty.handler.codec.http.HttpContentDecompressor), (reactor.right.reactiveBridge = reactor.netty.channel.ChannelOperationsHandler)}
+2024-05-16 16:12:34 [reactor-http-nio-4] DEBUG r.netty.transport.TransportConnector - [a87dae6a] Connecting to [/127.0.0.1:56300].
+2024-05-16 16:12:34 [reactor-http-nio-4] DEBUG r.n.r.DefaultPooledConnectionProvider - [a87dae6a, L:/127.0.0.1:56301 - R:/127.0.0.1:56300] Registering pool release on close event for channel
+2024-05-16 16:12:34 [reactor-http-nio-4] DEBUG r.n.r.PooledConnectionProvider - [a87dae6a, L:/127.0.0.1:56301 - R:/127.0.0.1:56300] Channel connected, now: 1 active connections, 0 inactive connections and 0 pending acquire requests.
+2024-05-16 16:12:34 [reactor-http-nio-4] DEBUG r.n.r.DefaultPooledConnectionProvider - [a87dae6a, L:/127.0.0.1:56301 - R:/127.0.0.1:56300] onStateChange(PooledConnection{channel=[id: 0xa87dae6a, L:/127.0.0.1:56301 - R:/127.0.0.1:56300]}, [connected])
+2024-05-16 16:12:34 [reactor-http-nio-4] DEBUG r.n.r.DefaultPooledConnectionProvider - [a87dae6a-1, L:/127.0.0.1:56301 - R:/127.0.0.1:56300] onStateChange(GET{uri=null, connection=PooledConnection{channel=[id: 0xa87dae6a, L:/127.0.0.1:56301 - R:/127.0.0.1:56300]}}, [configured])
+2024-05-16 16:12:34 [reactor-http-nio-4] DEBUG r.n.http.client.HttpClientConnect - [a87dae6a-1, L:/127.0.0.1:56301 - R:/127.0.0.1:56300] Handler is being applied: {uri=http://127.0.0.1:56300/carts/999, method=GET}
+2024-05-16 16:12:34 [reactor-http-nio-4] DEBUG r.n.r.DefaultPooledConnectionProvider - [a87dae6a-1, L:/127.0.0.1:56301 - R:/127.0.0.1:56300] onStateChange(GET{uri=/carts/999, connection=PooledConnection{channel=[id: 0xa87dae6a, L:/127.0.0.1:56301 - R:/127.0.0.1:56300]}}, [request_prepared])
+2024-05-16 16:12:34 [reactor-http-nio-4] DEBUG r.n.r.DefaultPooledConnectionProvider - [a87dae6a-1, L:/127.0.0.1:56301 - R:/127.0.0.1:56300] onStateChange(GET{uri=/carts/999, connection=PooledConnection{channel=[id: 0xa87dae6a, L:/127.0.0.1:56301 - R:/127.0.0.1:56300]}}, [request_sent])
+2024-05-16 16:12:34 [reactor-http-nio-4] DEBUG r.n.http.client.HttpClientOperations - [a87dae6a-1, L:/127.0.0.1:56301 - R:/127.0.0.1:56300] Received response (auto-read:false) : RESPONSE(decodeResult: success, version: HTTP/1.1)
+HTTP/1.1 404 Client Error
+Content-Length: <filtered>
+Content-Type: <filtered>
+2024-05-16 16:12:34 [reactor-http-nio-4] DEBUG r.n.r.DefaultPooledConnectionProvider - [a87dae6a-1, L:/127.0.0.1:56301 - R:/127.0.0.1:56300] onStateChange(GET{uri=/carts/999, connection=PooledConnection{channel=[id: 0xa87dae6a, L:/127.0.0.1:56301 - R:/127.0.0.1:56300]}}, [response_received])
+2024-05-16 16:12:34 [reactor-http-nio-4] DEBUG reactor.netty.channel.FluxReceive - [a87dae6a-1, L:/127.0.0.1:56301 - R:/127.0.0.1:56300] [terminated=false, cancelled=false, pending=0, error=null]: subscribing inbound receiver
+2024-05-16 16:12:34 [reactor-http-nio-4] DEBUG r.n.http.client.HttpClientOperations - [a87dae6a-1, L:/127.0.0.1:56301 - R:/127.0.0.1:56300] Received last HTTP packet
+2024-05-16 16:12:34 [reactor-http-nio-4] DEBUG r.n.r.DefaultPooledConnectionProvider - [a87dae6a, L:/127.0.0.1:56301 - R:/127.0.0.1:56300] onStateChange(GET{uri=/carts/999, connection=PooledConnection{channel=[id: 0xa87dae6a, L:/127.0.0.1:56301 - R:/127.0.0.1:56300]}}, [response_completed])
+2024-05-16 16:12:34 [reactor-http-nio-4] DEBUG r.n.r.DefaultPooledConnectionProvider - [a87dae6a, L:/127.0.0.1:56301 - R:/127.0.0.1:56300] onStateChange(GET{uri=/carts/999, connection=PooledConnection{channel=[id: 0xa87dae6a, L:/127.0.0.1:56301 - R:/127.0.0.1:56300]}}, [disconnecting])
+2024-05-16 16:12:34 [reactor-http-nio-4] DEBUG r.n.r.DefaultPooledConnectionProvider - [a87dae6a, L:/127.0.0.1:56301 - R:/127.0.0.1:56300] Releasing channel
+2024-05-16 16:12:34 [reactor-http-nio-4] DEBUG r.n.r.PooledConnectionProvider - [a87dae6a, L:/127.0.0.1:56301 - R:/127.0.0.1:56300] Channel cleaned, now: 0 active connections, 1 inactive connections and 0 pending acquire requests.
+2024-05-16 16:12:34 [reactor-http-nio-4] DEBUG r.n.r.DefaultPooledConnectionProvider - [a87dae6a, L:/127.0.0.1:56301 ! R:/127.0.0.1:56300] onStateChange(PooledConnection{channel=[id: 0xa87dae6a, L:/127.0.0.1:56301 ! R:/127.0.0.1:56300]}, [disconnecting])
+2024-05-16 16:12:34 [main] DEBUG r.n.r.PooledConnectionProvider - Creating a new [http] client pool [PoolFactory{evictionInterval=PT0S, leasingStrategy=fifo, maxConnections=500, maxIdleTime=-1, maxLifeTime=-1, metricsEnabled=false, pendingAcquireMaxCount=1000, pendingAcquireTimeout=45000}] for [/127.0.0.1:56302]
+2024-05-16 16:12:34 [reactor-http-nio-1] DEBUG r.n.r.PooledConnectionProvider - [c6bc16c7] Created a new pooled channel, now: 0 active connections, 0 inactive connections and 0 pending acquire requests.
+2024-05-16 16:12:34 [reactor-http-nio-1] DEBUG r.netty.transport.TransportConfig - [c6bc16c7] Initialized pipeline DefaultChannelPipeline{(reactor.left.httpCodec = io.netty.handler.codec.http.HttpClientCodec), (reactor.left.httpDecompressor = io.netty.handler.codec.http.HttpContentDecompressor), (reactor.right.reactiveBridge = reactor.netty.channel.ChannelOperationsHandler)}
+2024-05-16 16:12:34 [reactor-http-nio-1] DEBUG r.netty.transport.TransportConnector - [c6bc16c7] Connecting to [/127.0.0.1:56302].
+2024-05-16 16:12:34 [reactor-http-nio-1] DEBUG r.n.r.DefaultPooledConnectionProvider - [c6bc16c7, L:/127.0.0.1:56303 - R:/127.0.0.1:56302] Registering pool release on close event for channel
+2024-05-16 16:12:34 [reactor-http-nio-1] DEBUG r.n.r.PooledConnectionProvider - [c6bc16c7, L:/127.0.0.1:56303 - R:/127.0.0.1:56302] Channel connected, now: 1 active connections, 0 inactive connections and 0 pending acquire requests.
+2024-05-16 16:12:34 [reactor-http-nio-1] DEBUG r.n.r.DefaultPooledConnectionProvider - [c6bc16c7, L:/127.0.0.1:56303 - R:/127.0.0.1:56302] onStateChange(PooledConnection{channel=[id: 0xc6bc16c7, L:/127.0.0.1:56303 - R:/127.0.0.1:56302]}, [connected])
+2024-05-16 16:12:34 [reactor-http-nio-1] DEBUG r.n.r.DefaultPooledConnectionProvider - [c6bc16c7-1, L:/127.0.0.1:56303 - R:/127.0.0.1:56302] onStateChange(GET{uri=null, connection=PooledConnection{channel=[id: 0xc6bc16c7, L:/127.0.0.1:56303 - R:/127.0.0.1:56302]}}, [configured])
+2024-05-16 16:12:34 [reactor-http-nio-1] DEBUG r.n.http.client.HttpClientConnect - [c6bc16c7-1, L:/127.0.0.1:56303 - R:/127.0.0.1:56302] Handler is being applied: {uri=http://127.0.0.1:56302/carts/1, method=GET}
+2024-05-16 16:12:34 [reactor-http-nio-1] DEBUG r.n.r.DefaultPooledConnectionProvider - [c6bc16c7-1, L:/127.0.0.1:56303 - R:/127.0.0.1:56302] onStateChange(GET{uri=/carts/1, connection=PooledConnection{channel=[id: 0xc6bc16c7, L:/127.0.0.1:56303 - R:/127.0.0.1:56302]}}, [request_prepared])
+2024-05-16 16:12:34 [reactor-http-nio-1] DEBUG r.n.r.DefaultPooledConnectionProvider - [c6bc16c7-1, L:/127.0.0.1:56303 - R:/127.0.0.1:56302] onStateChange(GET{uri=/carts/1, connection=PooledConnection{channel=[id: 0xc6bc16c7, L:/127.0.0.1:56303 - R:/127.0.0.1:56302]}}, [request_sent])
+2024-05-16 16:12:34 [reactor-http-nio-1] DEBUG r.n.http.client.HttpClientOperations - [c6bc16c7-1, L:/127.0.0.1:56303 - R:/127.0.0.1:56302] Received response (auto-read:false) : RESPONSE(decodeResult: success, version: HTTP/1.1)
+HTTP/1.1 500 Server Error
+Content-Length: <filtered>
+Content-Type: <filtered>
+2024-05-16 16:12:34 [reactor-http-nio-1] DEBUG r.n.r.DefaultPooledConnectionProvider - [c6bc16c7-1, L:/127.0.0.1:56303 - R:/127.0.0.1:56302] onStateChange(GET{uri=/carts/1, connection=PooledConnection{channel=[id: 0xc6bc16c7, L:/127.0.0.1:56303 - R:/127.0.0.1:56302]}}, [response_received])
+2024-05-16 16:12:34 [reactor-http-nio-1] DEBUG reactor.netty.channel.FluxReceive - [c6bc16c7-1, L:/127.0.0.1:56303 - R:/127.0.0.1:56302] [terminated=false, cancelled=false, pending=0, error=null]: subscribing inbound receiver
+2024-05-16 16:12:34 [reactor-http-nio-1] DEBUG r.n.http.client.HttpClientOperations - [c6bc16c7-1, L:/127.0.0.1:56303 - R:/127.0.0.1:56302] Received last HTTP packet
+2024-05-16 16:12:34 [reactor-http-nio-1] DEBUG r.n.r.DefaultPooledConnectionProvider - [c6bc16c7, L:/127.0.0.1:56303 - R:/127.0.0.1:56302] onStateChange(GET{uri=/carts/1, connection=PooledConnection{channel=[id: 0xc6bc16c7, L:/127.0.0.1:56303 - R:/127.0.0.1:56302]}}, [response_completed])
+2024-05-16 16:12:34 [reactor-http-nio-1] DEBUG r.n.r.DefaultPooledConnectionProvider - [c6bc16c7, L:/127.0.0.1:56303 - R:/127.0.0.1:56302] onStateChange(GET{uri=/carts/1, connection=PooledConnection{channel=[id: 0xc6bc16c7, L:/127.0.0.1:56303 - R:/127.0.0.1:56302]}}, [disconnecting])
+2024-05-16 16:12:34 [reactor-http-nio-1] DEBUG r.n.r.DefaultPooledConnectionProvider - [c6bc16c7, L:/127.0.0.1:56303 - R:/127.0.0.1:56302] Releasing channel
+2024-05-16 16:12:34 [reactor-http-nio-1] DEBUG r.n.r.PooledConnectionProvider - [c6bc16c7, L:/127.0.0.1:56303 - R:/127.0.0.1:56302] Channel cleaned, now: 0 active connections, 1 inactive connections and 0 pending acquire requests.
+2024-05-16 16:12:35 [reactor-http-nio-1] DEBUG r.n.r.DefaultPooledConnectionProvider - [c6bc16c7, L:/127.0.0.1:56303 ! R:/127.0.0.1:56302] onStateChange(PooledConnection{channel=[id: 0xc6bc16c7, L:/127.0.0.1:56303 ! R:/127.0.0.1:56302]}, [disconnecting])
+2024-05-16 16:12:35 [main] DEBUG r.n.r.PooledConnectionProvider - Creating a new [http] client pool [PoolFactory{evictionInterval=PT0S, leasingStrategy=fifo, maxConnections=500, maxIdleTime=-1, maxLifeTime=-1, metricsEnabled=false, pendingAcquireMaxCount=1000, pendingAcquireTimeout=45000}] for [/127.0.0.1:56304]
+2024-05-16 16:12:35 [reactor-http-nio-2] DEBUG r.n.r.PooledConnectionProvider - [bb4c101b] Created a new pooled channel, now: 0 active connections, 0 inactive connections and 0 pending acquire requests.
+2024-05-16 16:12:35 [reactor-http-nio-2] DEBUG r.netty.transport.TransportConfig - [bb4c101b] Initialized pipeline DefaultChannelPipeline{(reactor.left.httpCodec = io.netty.handler.codec.http.HttpClientCodec), (reactor.left.httpDecompressor = io.netty.handler.codec.http.HttpContentDecompressor), (reactor.right.reactiveBridge = reactor.netty.channel.ChannelOperationsHandler)}
+2024-05-16 16:12:35 [reactor-http-nio-2] DEBUG r.netty.transport.TransportConnector - [bb4c101b] Connecting to [/127.0.0.1:56304].
+2024-05-16 16:12:35 [reactor-http-nio-2] DEBUG r.n.r.DefaultPooledConnectionProvider - [bb4c101b, L:/127.0.0.1:56305 - R:/127.0.0.1:56304] Registering pool release on close event for channel
+2024-05-16 16:12:35 [reactor-http-nio-2] DEBUG r.n.r.PooledConnectionProvider - [bb4c101b, L:/127.0.0.1:56305 - R:/127.0.0.1:56304] Channel connected, now: 1 active connections, 0 inactive connections and 0 pending acquire requests.
+2024-05-16 16:12:35 [reactor-http-nio-2] DEBUG r.n.r.DefaultPooledConnectionProvider - [bb4c101b, L:/127.0.0.1:56305 - R:/127.0.0.1:56304] onStateChange(PooledConnection{channel=[id: 0xbb4c101b, L:/127.0.0.1:56305 - R:/127.0.0.1:56304]}, [connected])
+2024-05-16 16:12:35 [reactor-http-nio-2] DEBUG r.n.r.DefaultPooledConnectionProvider - [bb4c101b-1, L:/127.0.0.1:56305 - R:/127.0.0.1:56304] onStateChange(GET{uri=null, connection=PooledConnection{channel=[id: 0xbb4c101b, L:/127.0.0.1:56305 - R:/127.0.0.1:56304]}}, [configured])
+2024-05-16 16:12:35 [reactor-http-nio-2] DEBUG r.n.http.client.HttpClientConnect - [bb4c101b-1, L:/127.0.0.1:56305 - R:/127.0.0.1:56304] Handler is being applied: {uri=http://127.0.0.1:56304/carts/1, method=GET}
+2024-05-16 16:12:35 [reactor-http-nio-2] DEBUG r.n.r.DefaultPooledConnectionProvider - [bb4c101b-1, L:/127.0.0.1:56305 - R:/127.0.0.1:56304] onStateChange(GET{uri=/carts/1, connection=PooledConnection{channel=[id: 0xbb4c101b, L:/127.0.0.1:56305 - R:/127.0.0.1:56304]}}, [request_prepared])
+2024-05-16 16:12:35 [reactor-http-nio-2] DEBUG r.n.r.DefaultPooledConnectionProvider - [bb4c101b-1, L:/127.0.0.1:56305 - R:/127.0.0.1:56304] onStateChange(GET{uri=/carts/1, connection=PooledConnection{channel=[id: 0xbb4c101b, L:/127.0.0.1:56305 - R:/127.0.0.1:56304]}}, [request_sent])
+2024-05-16 16:12:35 [reactor-http-nio-2] DEBUG r.n.http.client.HttpClientOperations - [bb4c101b-1, L:/127.0.0.1:56305 - R:/127.0.0.1:56304] Received response (auto-read:false) : RESPONSE(decodeResult: success, version: HTTP/1.1)
+HTTP/1.1 200 OK
+Content-Length: <filtered>
+Content-Type: <filtered>
+2024-05-16 16:12:35 [reactor-http-nio-2] DEBUG r.n.r.DefaultPooledConnectionProvider - [bb4c101b-1, L:/127.0.0.1:56305 - R:/127.0.0.1:56304] onStateChange(GET{uri=/carts/1, connection=PooledConnection{channel=[id: 0xbb4c101b, L:/127.0.0.1:56305 - R:/127.0.0.1:56304]}}, [response_received])
+2024-05-16 16:12:35 [reactor-http-nio-2] DEBUG reactor.netty.channel.FluxReceive - [bb4c101b-1, L:/127.0.0.1:56305 - R:/127.0.0.1:56304] [terminated=false, cancelled=false, pending=0, error=null]: subscribing inbound receiver
+2024-05-16 16:12:35 [reactor-http-nio-2] DEBUG r.n.http.client.HttpClientOperations - [bb4c101b-1, L:/127.0.0.1:56305 - R:/127.0.0.1:56304] Received last HTTP packet
+2024-05-16 16:12:35 [reactor-http-nio-2] INFO  c.o.o.services.impl.CartServiceImpl - Recuperando carrito con Id: 1 del usuario con Id: 101
+2024-05-16 16:12:35 [reactor-http-nio-2] DEBUG r.n.r.DefaultPooledConnectionProvider - [bb4c101b, L:/127.0.0.1:56305 - R:/127.0.0.1:56304] onStateChange(GET{uri=/carts/1, connection=PooledConnection{channel=[id: 0xbb4c101b, L:/127.0.0.1:56305 - R:/127.0.0.1:56304]}}, [response_completed])
+2024-05-16 16:12:35 [reactor-http-nio-2] DEBUG r.n.r.DefaultPooledConnectionProvider - [bb4c101b, L:/127.0.0.1:56305 - R:/127.0.0.1:56304] onStateChange(GET{uri=/carts/1, connection=PooledConnection{channel=[id: 0xbb4c101b, L:/127.0.0.1:56305 - R:/127.0.0.1:56304]}}, [disconnecting])
+2024-05-16 16:12:35 [reactor-http-nio-2] DEBUG r.n.r.DefaultPooledConnectionProvider - [bb4c101b, L:/127.0.0.1:56305 - R:/127.0.0.1:56304] Releasing channel
+2024-05-16 16:12:35 [reactor-http-nio-2] DEBUG r.n.r.PooledConnectionProvider - [bb4c101b, L:/127.0.0.1:56305 - R:/127.0.0.1:56304] Channel cleaned, now: 0 active connections, 1 inactive connections and 0 pending acquire requests.
+2024-05-16 16:12:35 [reactor-http-nio-2] DEBUG r.n.r.DefaultPooledConnectionProvider - [bb4c101b, L:/127.0.0.1:56305 ! R:/127.0.0.1:56304] onStateChange(PooledConnection{channel=[id: 0xbb4c101b, L:/127.0.0.1:56305 ! R:/127.0.0.1:56304]}, [disconnecting])
+2024-05-16 16:12:35 [main] INFO  o.s.t.c.s.AnnotationConfigContextLoaderUtils - Could not detect default configuration classes for test class [com.ordersmicroservice.orders_microservice.controllers.OrderControllerTest]: OrderControllerTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+2024-05-16 16:12:36 [main] INFO  o.s.b.t.c.SpringBootTestContextBootstrapper - Found @SpringBootConfiguration com.ordersmicroservice.orders_microservice.OrdersMicroserviceApplication for test class com.ordersmicroservice.orders_microservice.controllers.OrderControllerTest
+2024-05-16 16:12:36 [main] INFO  o.s.b.d.r.RestartApplicationListener - Restart disabled due to context in which it is running
+2024-05-16 16:12:37 [main] INFO  c.o.o.c.OrderControllerTest - Starting OrderControllerTest using Java 17.0.2 with PID 10760 (started by csjn in C:\Workshop\Orders_microservice)
+2024-05-16 16:12:37 [main] DEBUG c.o.o.c.OrderControllerTest - Running with Spring Boot v3.2.5, Spring v6.1.6
+2024-05-16 16:12:37 [main] INFO  c.o.o.c.OrderControllerTest - No active profile set, falling back to 1 default profile: "default"
+2024-05-16 16:12:42 [main] DEBUG _.s.w.s.HandlerMapping.Mappings - 
+	c.o.o.c.OrderController:
+	{GET [/orders]}: getAllOrders()
+	{GET [/orders/{id}]}: getOrderById(Long)
+	{DELETE [/orders/{id}]}: deleteById(Long)
+	{PATCH [/orders/{id}]}: patchOrder(Long,StatusUpdateDto)
+	{POST [/orders/{id}]}: postOrder(Long)
+2024-05-16 16:12:42 [main] DEBUG _.s.w.s.HandlerMapping.Mappings - 
+	o.s.b.a.w.s.e.BasicErrorController:
+	{ [/error]}: error(HttpServletRequest)
+	{ [/error], produces [text/html]}: errorHtml(HttpServletRequest,HttpServletResponse)
+2024-05-16 16:12:42 [main] DEBUG _.s.w.s.HandlerMapping.Mappings - 'beanNameHandlerMapping' {}
+2024-05-16 16:12:43 [main] DEBUG _.s.w.s.HandlerMapping.Mappings - 'resourceHandlerMapping' {/webjars/**=ResourceHttpRequestHandler [classpath [META-INF/resources/webjars/]], /**=ResourceHttpRequestHandler [classpath [META-INF/resources/], classpath [resources/], classpath [static/], classpath [public/], ServletContext [/]]}
+2024-05-16 16:12:44 [main] INFO  o.s.b.t.m.w.SpringBootMockServletContext - Initializing Spring TestDispatcherServlet ''
+2024-05-16 16:12:44 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
+2024-05-16 16:12:44 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Completed initialization in 0 ms
+2024-05-16 16:12:44 [main] INFO  c.o.o.c.OrderControllerTest - Started OrderControllerTest in 8.071 seconds (process running for 20.86)
+2024-05-16 16:12:44 [main] DEBUG _.s.w.s.HandlerMapping.Mappings - 
+	c.o.o.c.OrderController:
+	{GET [/orders]}: getAllOrders()
+	{GET [/orders/{id}]}: getOrderById(Long)
+	{DELETE [/orders/{id}]}: deleteById(Long)
+	{PATCH [/orders/{id}]}: patchOrder(Long,StatusUpdateDto)
+	{POST [/orders/{id}]}: postOrder(Long)
+2024-05-16 16:12:44 [main] INFO  o.s.mock.web.MockServletContext - Initializing Spring TestDispatcherServlet ''
+2024-05-16 16:12:44 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
+2024-05-16 16:12:44 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Completed initialization in 0 ms
+2024-05-16 16:12:44 [main] DEBUG _.s.w.s.HandlerMapping.Mappings - 
+	c.o.o.c.OrderController:
+	{GET [/orders]}: getAllOrders()
+	{GET [/orders/{id}]}: getOrderById(Long)
+	{DELETE [/orders/{id}]}: deleteById(Long)
+	{PATCH [/orders/{id}]}: patchOrder(Long,StatusUpdateDto)
+	{POST [/orders/{id}]}: postOrder(Long)
+2024-05-16 16:12:44 [main] INFO  o.s.mock.web.MockServletContext - Initializing Spring TestDispatcherServlet ''
+2024-05-16 16:12:44 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
+2024-05-16 16:12:44 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Completed initialization in 0 ms
+2024-05-16 16:12:45 [main] DEBUG c.j.j.internal.path.CompiledPath - Evaluating path: $[0]['id']
+2024-05-16 16:12:45 [main] DEBUG c.j.j.internal.path.CompiledPath - Evaluating path: $[0]['id']
+2024-05-16 16:12:45 [main] DEBUG c.j.j.internal.path.CompiledPath - Evaluating path: $[1]['id']
+2024-05-16 16:12:45 [main] DEBUG c.j.j.internal.path.CompiledPath - Evaluating path: $[1]['id']
+2024-05-16 16:12:45 [main] DEBUG c.j.j.internal.path.CompiledPath - Evaluating path: $[0]['status']
+2024-05-16 16:12:45 [main] DEBUG c.j.j.internal.path.CompiledPath - Evaluating path: $[1]['status']
+2024-05-16 16:12:45 [main] DEBUG c.j.j.internal.path.CompiledPath - Evaluating path: $
+2024-05-16 16:12:45 [main] DEBUG _.s.w.s.HandlerMapping.Mappings - 
+	c.o.o.c.OrderController:
+	{GET [/orders]}: getAllOrders()
+	{GET [/orders/{id}]}: getOrderById(Long)
+	{DELETE [/orders/{id}]}: deleteById(Long)
+	{PATCH [/orders/{id}]}: patchOrder(Long,StatusUpdateDto)
+	{POST [/orders/{id}]}: postOrder(Long)
+2024-05-16 16:12:45 [main] INFO  o.s.mock.web.MockServletContext - Initializing Spring TestDispatcherServlet ''
+2024-05-16 16:12:45 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
+2024-05-16 16:12:45 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Completed initialization in 0 ms
+2024-05-16 16:12:45 [main] DEBUG _.s.w.s.HandlerMapping.Mappings - 
+	c.o.o.c.OrderController:
+	{GET [/orders]}: getAllOrders()
+	{GET [/orders/{id}]}: getOrderById(Long)
+	{DELETE [/orders/{id}]}: deleteById(Long)
+	{PATCH [/orders/{id}]}: patchOrder(Long,StatusUpdateDto)
+	{POST [/orders/{id}]}: postOrder(Long)
+2024-05-16 16:12:45 [main] INFO  o.s.mock.web.MockServletContext - Initializing Spring TestDispatcherServlet ''
+2024-05-16 16:12:45 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
+2024-05-16 16:12:45 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Completed initialization in 0 ms
+2024-05-16 16:12:45 [main] DEBUG c.j.j.internal.path.CompiledPath - Evaluating path: $['id']
+2024-05-16 16:12:45 [main] DEBUG c.j.j.internal.path.CompiledPath - Evaluating path: $['id']
+2024-05-16 16:12:45 [main] DEBUG c.j.j.internal.path.CompiledPath - Evaluating path: $['status']
+2024-05-16 16:12:45 [main] DEBUG _.s.w.s.HandlerMapping.Mappings - 
+	c.o.o.c.OrderController:
+	{GET [/orders]}: getAllOrders()
+	{GET [/orders/{id}]}: getOrderById(Long)
+	{DELETE [/orders/{id}]}: deleteById(Long)
+	{PATCH [/orders/{id}]}: patchOrder(Long,StatusUpdateDto)
+	{POST [/orders/{id}]}: postOrder(Long)
+2024-05-16 16:12:45 [main] INFO  o.s.mock.web.MockServletContext - Initializing Spring TestDispatcherServlet ''
+2024-05-16 16:12:45 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
+2024-05-16 16:12:45 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Completed initialization in 16 ms
+2024-05-16 16:12:45 [main] DEBUG _.s.w.s.HandlerMapping.Mappings - 
+	c.o.o.c.OrderController:
+	{GET [/orders]}: getAllOrders()
+	{GET [/orders/{id}]}: getOrderById(Long)
+	{DELETE [/orders/{id}]}: deleteById(Long)
+	{PATCH [/orders/{id}]}: patchOrder(Long,StatusUpdateDto)
+	{POST [/orders/{id}]}: postOrder(Long)
+2024-05-16 16:12:45 [main] INFO  o.s.mock.web.MockServletContext - Initializing Spring TestDispatcherServlet ''
+2024-05-16 16:12:45 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
+2024-05-16 16:12:45 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Completed initialization in 0 ms
+2024-05-16 16:12:45 [main] DEBUG c.j.j.internal.path.CompiledPath - Evaluating path: $['userId']
+2024-05-16 16:12:45 [main] DEBUG c.j.j.internal.path.CompiledPath - Evaluating path: $['fromAddress']
+2024-05-16 16:12:45 [main] DEBUG c.j.j.internal.path.CompiledPath - Evaluating path: $['dateOrdered']
+2024-05-16 16:12:45 [main] INFO  c.o.o.s.i.OrderedProductServiceImpl - obteniendo todos los productos del pedido con Id: 1 
+2024-05-16 16:12:46 [main] INFO  c.o.o.services.impl.OrderServiceImpl - Actualizando pedido ID: 1 con nuevo estado: CANCELLED
+2024-05-16 16:12:46 [main] ERROR c.o.o.services.impl.OrderServiceImpl - El pedido que se quiere actualizar no existe
+2024-05-16 16:12:46 [main] INFO  c.o.o.services.impl.OrderServiceImpl - Actualizando pedido ID: 1 con nuevo estado: CANCELLED
+2024-05-16 16:12:46 [main] DEBUG c.o.o.services.impl.OrderServiceImpl - Pedido ID: 1 actualizado de DELIVERED a CANCELLED
+2024-05-16 16:12:46 [main] INFO  c.o.o.services.impl.OrderServiceImpl - Creando nuevo pedido para el usuario ID: 1
+2024-05-16 16:12:46 [main] DEBUG c.o.o.services.impl.OrderServiceImpl - Pedido creado exitosamente con ID: null
+2024-05-16 16:12:46 [main] DEBUG c.o.o.services.impl.OrderServiceImpl - Detallaes del pedido: Order(id=null, userId=1, fromAddress=789 Oak St, status=UNPAID, dateOrdered=2024-05-16 16:12, dateDelivered=null, address=null, total_price=null, orderedProducts=null)
+2024-05-16 16:12:46 [main] INFO  c.o.o.services.impl.OrderServiceImpl - Recuperando todos los pedidos
+2024-05-16 16:12:46 [main] INFO  c.o.o.services.impl.OrderServiceImpl - Buscando pedido con ID: 1
+2024-05-16 16:12:46 [main] INFO  c.o.o.services.impl.OrderServiceImpl - Eliminando pedido con ID: 1
+2024-05-16 16:12:46 [main] INFO  o.s.t.c.s.AnnotationConfigContextLoaderUtils - Could not detect default configuration classes for test class [com.ordersmicroservice.orders_microservice.controllers.OrderedProductControllerTest]: OrderedProductControllerTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+2024-05-16 16:12:46 [main] INFO  o.s.b.t.c.SpringBootTestContextBootstrapper - Found @SpringBootConfiguration com.ordersmicroservice.orders_microservice.OrdersMicroserviceApplication for test class com.ordersmicroservice.orders_microservice.controllers.OrderedProductControllerTest
+2024-05-16 16:12:46 [main] INFO  o.s.b.d.r.RestartApplicationListener - Restart disabled due to context in which it is running
+2024-05-16 16:12:46 [main] INFO  c.o.o.c.OrderedProductControllerTest - Starting OrderedProductControllerTest using Java 17.0.2 with PID 10760 (started by csjn in C:\Workshop\Orders_microservice)
+2024-05-16 16:12:46 [main] DEBUG c.o.o.c.OrderedProductControllerTest - Running with Spring Boot v3.2.5, Spring v6.1.6
+2024-05-16 16:12:46 [main] INFO  c.o.o.c.OrderedProductControllerTest - No active profile set, falling back to 1 default profile: "default"
+2024-05-16 16:12:47 [main] DEBUG _.s.w.s.HandlerMapping.Mappings - 
+	c.o.o.c.OrderedProductController:
+	{GET [/orders/products/{orderId}]}: getAllProductsFromOrder(Long)
+2024-05-16 16:12:47 [main] DEBUG _.s.w.s.HandlerMapping.Mappings - 
+	o.s.b.a.w.s.e.BasicErrorController:
+	{ [/error]}: error(HttpServletRequest)
+	{ [/error], produces [text/html]}: errorHtml(HttpServletRequest,HttpServletResponse)
+2024-05-16 16:12:47 [main] DEBUG _.s.w.s.HandlerMapping.Mappings - 'beanNameHandlerMapping' {}
+2024-05-16 16:12:48 [main] DEBUG _.s.w.s.HandlerMapping.Mappings - 'resourceHandlerMapping' {/webjars/**=ResourceHttpRequestHandler [classpath [META-INF/resources/webjars/]], /**=ResourceHttpRequestHandler [classpath [META-INF/resources/], classpath [resources/], classpath [static/], classpath [public/], ServletContext [/]]}
+2024-05-16 16:12:48 [main] INFO  o.s.b.t.m.w.SpringBootMockServletContext - Initializing Spring TestDispatcherServlet ''
+2024-05-16 16:12:48 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
+2024-05-16 16:12:48 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Completed initialization in 0 ms
+2024-05-16 16:12:49 [main] INFO  c.o.o.c.OrderedProductControllerTest - Started OrderedProductControllerTest in 2.439 seconds (process running for 25.37)
+2024-05-16 16:12:49 [main] DEBUG _.s.w.s.HandlerMapping.Mappings - 
+	c.o.o.c.OrderedProductController:
+	{GET [/orders/products/{orderId}]}: getAllProductsFromOrder(Long)
+2024-05-16 16:12:49 [main] INFO  o.s.mock.web.MockServletContext - Initializing Spring TestDispatcherServlet ''
+2024-05-16 16:12:49 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
+2024-05-16 16:12:49 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Completed initialization in 0 ms
+2024-05-16 16:12:49 [main] DEBUG c.j.j.internal.path.CompiledPath - Evaluating path: $[0]['orderId']
+2024-05-16 16:12:49 [main] DEBUG c.j.j.internal.path.CompiledPath - Evaluating path: $[0]['orderId']
+2024-05-16 16:12:49 [main] DEBUG c.j.j.internal.path.CompiledPath - Evaluating path: $[1]['orderId']
+2024-05-16 16:12:49 [main] DEBUG c.j.j.internal.path.CompiledPath - Evaluating path: $[1]['orderId']
+2024-05-16 16:12:49 [main] DEBUG c.j.j.internal.path.CompiledPath - Evaluating path: $[0]['productId']
+2024-05-16 16:12:49 [main] DEBUG c.j.j.internal.path.CompiledPath - Evaluating path: $[0]['productId']
+2024-05-16 16:12:49 [main] DEBUG c.j.j.internal.path.CompiledPath - Evaluating path: $[1]['productId']
+2024-05-16 16:12:49 [main] DEBUG c.j.j.internal.path.CompiledPath - Evaluating path: $[1]['productId']
+2024-05-16 16:12:49 [main] DEBUG c.j.j.internal.path.CompiledPath - Evaluating path: $[0]['quantity']
+2024-05-16 16:12:49 [main] DEBUG c.j.j.internal.path.CompiledPath - Evaluating path: $[1]['quantity']
+2024-05-16 16:12:49 [main] DEBUG c.j.j.internal.path.CompiledPath - Evaluating path: $
