@@ -10,8 +10,9 @@ import jakarta.persistence.EntityNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import com.ordersmicroservice.orders_microservice.exception.GlobalExceptionHandler;
 
-import java.util.Date;
+
 import java.util.List;
 
 import static org.springframework.http.HttpStatus.*;
@@ -54,14 +55,18 @@ public class OrderController {
     })
     public ResponseEntity<Order> postOrder(@PathVariable Long id){
         Order order = orderService.addOrder(id);
-        return ResponseEntity.ok(order);
+        return ResponseEntity.status(HttpStatus.CREATED).body(order);
     }
 
     @PatchMapping("/{id}")
     @Operation(summary = "Update an order", description = "This endpoint retrieves example data from the server.")
     public ResponseEntity<Order> patchOrder(@PathVariable Long id, @RequestBody Order patchData){
-        Order order = orderService.patchOrder(id,patchData);
-        return ResponseEntity.ok(order);
+        try {
+            Order order = orderService.patchOrder(id, patchData);
+            return ResponseEntity.ok(order);
+        } catch (GlobalExceptionHandler.NotFoundException e) {
+            return ResponseEntity.notFound().build();
+        }
     }
 
     @DeleteMapping("/{id}")
@@ -69,9 +74,9 @@ public class OrderController {
     @Operation(summary = "Cancel an order", description = "This endpoint retrieves example data from the server.")
     public void deleteById(@PathVariable Long id) {orderService.deleteById(id);}
 
+
     @ExceptionHandler(EntityNotFoundException.class)
     public ResponseEntity<String> handleNotFound(EntityNotFoundException ex) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
     }
-
 }

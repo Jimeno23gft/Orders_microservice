@@ -1,7 +1,7 @@
 package com.ordersmicroservice.orders_microservice.services.impl;
 
 import com.ordersmicroservice.orders_microservice.dto.Status;
-import com.ordersmicroservice.orders_microservice.exception.ExceptionHandler;
+import com.ordersmicroservice.orders_microservice.exception.GlobalExceptionHandler;
 import com.ordersmicroservice.orders_microservice.models.Order;
 import com.ordersmicroservice.orders_microservice.repositories.OrderRepository;
 import com.ordersmicroservice.orders_microservice.services.OrderService;
@@ -26,16 +26,16 @@ public class OrderServiceImpl implements OrderService {
     public List<Order> getAllOrders() {
 
         return Optional.of(orderRepository.findAll()).filter(orders -> !orders.isEmpty())
-                .orElseThrow(() -> new ExceptionHandler.NotFoundException("No orders were found"));
+                .orElseThrow(() -> new GlobalExceptionHandler.NotFoundException("No orders were found"));
 
     }
 
     @Override
     public Order getOrderById(Long orderId){
         if (orderId == null || orderId <= 0) {
-            throw new ExceptionHandler.BadRequest("Invalid id type. Expected type: Long");
+            throw new GlobalExceptionHandler.BadRequest("Invalid id type. Expected type: Long");
         }
-        return orderRepository.findById(orderId).orElseThrow(() -> new ExceptionHandler.NotFoundException("Order not found with ID: " + orderId));
+        return orderRepository.findById(orderId).orElseThrow(() -> new GlobalExceptionHandler.NotFoundException("Order not found with ID: " + orderId));
     }
 
     @Override
@@ -44,34 +44,34 @@ public class OrderServiceImpl implements OrderService {
         try {
             Order order = new Order();
             order.setUser_id(id);
-            order.setFrom_address(RandomAndress());
+            order.setFrom_address(RandomAddress());
             order.setStatus(Status.UNPAID);
             order.setDate_ordered(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")));
 
             return orderRepository.save(order);
-        }catch (ExceptionHandler.BadRequest ex){
-            throw new ExceptionHandler.BadRequest("");
+        }catch (GlobalExceptionHandler.BadRequest ex){
+            throw new GlobalExceptionHandler.BadRequest("");
         }
     }
 
-    private String RandomAndress() {
-        String[] adresses = {"123 Main St", "456 Elm St", "789 Oak St", "101 Maple Ave", "222 Pine St", "333 Cedar Rd"};
+    private String RandomAddress() {
+        String[] addresses = {"123 Main St", "456 Elm St", "789 Oak St", "101 Maple Ave", "222 Pine St", "333 Cedar Rd"};
         Random random = new Random();
-        return adresses[random.nextInt(adresses.length)];
+        return addresses[random.nextInt(addresses.length)];
     }
 
     public Order patchOrder(Long id, Order updatedOrder) {
     try {
         Order existingOrder = orderRepository.findById(id)
-                .orElseThrow();
+                .orElseThrow(() -> new GlobalExceptionHandler.NotFoundException("Order not found with id: " + id));
 
         existingOrder.setStatus(updatedOrder.getStatus());
         if (updatedOrder.getStatus() == Status.DELIVERED) {
             existingOrder.setDate_delivered(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
         }
         return orderRepository.save(existingOrder);
-    }catch(ExceptionHandler.BadRequest ex){
-        throw new ExceptionHandler.BadRequest("QWEQWE");
+    }catch(GlobalExceptionHandler.BadRequest ex){
+        throw new GlobalExceptionHandler.BadRequest("QWEQWE");
     }
     }
 
