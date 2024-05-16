@@ -81,11 +81,11 @@ public class OrderControllerTest {
     @Test
     void testPostNewOrder() throws Exception {
 
-        Long user_id = 1L;
+        Long cart_id = 1L;
 
-        when(orderService.addOrder(user_id)).thenAnswer(invocation -> {
+        when(orderService.addOrder(cart_id)).thenAnswer(invocation -> {
             Order order = new Order();
-            order.setUserId(1L);
+            order.setCartId(1L);
             order.setFromAddress("Madrid");
             order.setStatus(Status.DELIVERED);
             order.setDateOrdered("2001-01-21");
@@ -93,14 +93,14 @@ public class OrderControllerTest {
             return order;
         });
 
-        mockMvc.perform(post("/orders/{id}", user_id))
+        mockMvc.perform(post("/orders/{id}", cart_id))
                 .andExpect(status().isCreated())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.userId", is(user_id.intValue())))
+                .andExpect(jsonPath("$.cartId", is(cart_id.intValue())))
                 .andExpect(jsonPath("$.fromAddress", is("Madrid")))
                 .andExpect(jsonPath("$.dateOrdered", is("2001-01-21")));
 
-        verify(orderService).addOrder(user_id);
+        verify(orderService).addOrder(cart_id);
     }
 
     @Test

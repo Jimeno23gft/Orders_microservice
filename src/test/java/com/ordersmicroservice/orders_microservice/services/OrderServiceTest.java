@@ -37,14 +37,14 @@ public class OrderServiceTest {
     public void setup() {
         order1 = Order.builder()
                 .id(1L)
-                .userId(1L)
+                .cartId(1L)
                 .fromAddress("Barcelona")
                 .status(DELIVERED)
                 .dateOrdered("2024-5-9")
                 .dateDelivered("2024-5-10").build();
         order2 = Order.builder()
                 .id(2L)
-                .userId(2L)
+                .cartId(2L)
                 .fromAddress("Valencia")
                 .status(IN_DELIVERY)
                 .dateOrdered("2024-5-11")
@@ -83,7 +83,7 @@ public class OrderServiceTest {
         Order savedOrder = orderService.addOrder(1L);
 
         assertNotNull(savedOrder);
-        assertEquals(1L, savedOrder.getUserId());
+        assertEquals(1L, savedOrder.getCartId());
         assertTrue(Arrays.asList(adresses).contains( savedOrder.getFromAddress()));
         assertEquals(Status.UNPAID, savedOrder.getStatus());
         assertNotNull(savedOrder.getDateOrdered());

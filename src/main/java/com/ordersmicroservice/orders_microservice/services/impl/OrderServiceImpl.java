@@ -36,7 +36,7 @@ public class OrderServiceImpl implements OrderService {
     public Order addOrder(Long id) {
 
         Order order = new Order();
-        order.setUserId(id);
+        order.setCartId(id);
         order.setFromAddress(randomAddress());
         order.setStatus(Status.UNPAID);
         order.setDateOrdered(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")));
