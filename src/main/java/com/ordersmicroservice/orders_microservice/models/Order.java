@@ -50,5 +50,4 @@ public class Order {
     @JsonManagedReference
     private List<OrderedProduct> orderedProducts;
 
-
 }

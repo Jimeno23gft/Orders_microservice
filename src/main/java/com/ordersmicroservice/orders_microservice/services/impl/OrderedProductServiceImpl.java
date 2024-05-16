@@ -1,11 +1,13 @@
 package com.ordersmicroservice.orders_microservice.services.impl;
 
+import com.ordersmicroservice.orders_microservice.exception.GlobalExceptionHandler;
 import com.ordersmicroservice.orders_microservice.models.OrderedProduct;
 import com.ordersmicroservice.orders_microservice.repositories.OrderedProductRepository;
 import com.ordersmicroservice.orders_microservice.services.OrderedProductService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class OrderedProductServiceImpl implements OrderedProductService {
@@ -15,6 +17,7 @@ public class OrderedProductServiceImpl implements OrderedProductService {
     }
     @Override
     public List<OrderedProduct> getAllProductsFromOrder(Long orderId) {
-        return orderedProductRepository.findByOrderId(orderId);
+        return Optional.of(orderedProductRepository.findAll()).filter(orderedProducts -> !orderedProducts.isEmpty())
+                .orElseThrow(() -> new GlobalExceptionHandler.NotFoundException("No orders were found"));
     }
 }
