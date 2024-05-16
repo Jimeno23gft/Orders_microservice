@@ -571,3 +571,372 @@
 2024-05-15 17:54:29 [HikariPool-1 connection closer] DEBUG com.zaxxer.hikari.pool.PoolBase - HikariPool-1 - Closing connection conn9: url=jdbc:h2:mem:testdb user=SA: (connection evicted)
 2024-05-15 17:54:29 [SpringApplicationShutdownHook] DEBUG com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - After shutdown stats (total=0, active=0, idle=0, waiting=0)
 2024-05-15 17:54:29 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.
+2024-05-16 08:25:57 [restartedMain] INFO  c.o.o.OrdersMicroserviceApplication - Starting OrdersMicroserviceApplication using Java 17.0.2 with PID 6904 (C:\orders_microservice\target\classes started by lonj in C:\orders_microservice)
+2024-05-16 08:25:57 [restartedMain] DEBUG c.o.o.OrdersMicroserviceApplication - Running with Spring Boot v3.2.5, Spring v6.1.6
+2024-05-16 08:25:57 [restartedMain] INFO  c.o.o.OrdersMicroserviceApplication - No active profile set, falling back to 1 default profile: "default"
+2024-05-16 08:25:58 [restartedMain] INFO  o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor - Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2024-05-16 08:25:58 [restartedMain] INFO  o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor - For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2024-05-16 08:26:00 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2024-05-16 08:26:01 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 421 ms. Found 2 JPA repository interfaces.
+2024-05-16 08:26:02 [restartedMain] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 8080 (http)
+2024-05-16 08:26:03 [restartedMain] INFO  o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8080"]
+2024-05-16 08:26:03 [restartedMain] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2024-05-16 08:26:03 [restartedMain] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.20]
+2024-05-16 08:26:03 [restartedMain] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+2024-05-16 08:26:03 [restartedMain] INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 5176 ms
+2024-05-16 08:26:03 [restartedMain] DEBUG com.zaxxer.hikari.HikariConfig - Driver class org.h2.Driver found in Thread context class loader jdk.internal.loader.ClassLoaders$AppClassLoader@1d44bcfa
+2024-05-16 08:26:03 [restartedMain] DEBUG com.zaxxer.hikari.HikariConfig - HikariPool-1 - configuration:
+2024-05-16 08:26:03 [restartedMain] DEBUG com.zaxxer.hikari.HikariConfig - allowPoolSuspension.............false
+2024-05-16 08:26:03 [restartedMain] DEBUG com.zaxxer.hikari.HikariConfig - autoCommit......................true
+2024-05-16 08:26:03 [restartedMain] DEBUG com.zaxxer.hikari.HikariConfig - catalog.........................none
+2024-05-16 08:26:03 [restartedMain] DEBUG com.zaxxer.hikari.HikariConfig - connectionInitSql...............none
+2024-05-16 08:26:03 [restartedMain] DEBUG com.zaxxer.hikari.HikariConfig - connectionTestQuery.............none
+2024-05-16 08:26:03 [restartedMain] DEBUG com.zaxxer.hikari.HikariConfig - connectionTimeout...............30000
+2024-05-16 08:26:03 [restartedMain] DEBUG com.zaxxer.hikari.HikariConfig - dataSource......................none
+2024-05-16 08:26:03 [restartedMain] DEBUG com.zaxxer.hikari.HikariConfig - dataSourceClassName.............none
+2024-05-16 08:26:03 [restartedMain] DEBUG com.zaxxer.hikari.HikariConfig - dataSourceJNDI..................none
+2024-05-16 08:26:03 [restartedMain] DEBUG com.zaxxer.hikari.HikariConfig - dataSourceProperties............{password=<masked>}
+2024-05-16 08:26:03 [restartedMain] DEBUG com.zaxxer.hikari.HikariConfig - driverClassName................."org.h2.Driver"
+2024-05-16 08:26:03 [restartedMain] DEBUG com.zaxxer.hikari.HikariConfig - exceptionOverrideClassName......none
+2024-05-16 08:26:03 [restartedMain] DEBUG com.zaxxer.hikari.HikariConfig - healthCheckProperties...........{}
+2024-05-16 08:26:03 [restartedMain] DEBUG com.zaxxer.hikari.HikariConfig - healthCheckRegistry.............none
+2024-05-16 08:26:03 [restartedMain] DEBUG com.zaxxer.hikari.HikariConfig - idleTimeout.....................600000
+2024-05-16 08:26:03 [restartedMain] DEBUG com.zaxxer.hikari.HikariConfig - initializationFailTimeout.......1
+2024-05-16 08:26:03 [restartedMain] DEBUG com.zaxxer.hikari.HikariConfig - isolateInternalQueries..........false
+2024-05-16 08:26:03 [restartedMain] DEBUG com.zaxxer.hikari.HikariConfig - jdbcUrl.........................jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
+2024-05-16 08:26:03 [restartedMain] DEBUG com.zaxxer.hikari.HikariConfig - keepaliveTime...................0
+2024-05-16 08:26:03 [restartedMain] DEBUG com.zaxxer.hikari.HikariConfig - leakDetectionThreshold..........0
+2024-05-16 08:26:03 [restartedMain] DEBUG com.zaxxer.hikari.HikariConfig - maxLifetime.....................1800000
+2024-05-16 08:26:03 [restartedMain] DEBUG com.zaxxer.hikari.HikariConfig - maximumPoolSize.................10
+2024-05-16 08:26:03 [restartedMain] DEBUG com.zaxxer.hikari.HikariConfig - metricRegistry..................none
+2024-05-16 08:26:03 [restartedMain] DEBUG com.zaxxer.hikari.HikariConfig - metricsTrackerFactory...........none
+2024-05-16 08:26:03 [restartedMain] DEBUG com.zaxxer.hikari.HikariConfig - minimumIdle.....................10
+2024-05-16 08:26:03 [restartedMain] DEBUG com.zaxxer.hikari.HikariConfig - password........................<masked>
+2024-05-16 08:26:03 [restartedMain] DEBUG com.zaxxer.hikari.HikariConfig - poolName........................"HikariPool-1"
+2024-05-16 08:26:03 [restartedMain] DEBUG com.zaxxer.hikari.HikariConfig - readOnly........................false
+2024-05-16 08:26:03 [restartedMain] DEBUG com.zaxxer.hikari.HikariConfig - registerMbeans..................false
+2024-05-16 08:26:03 [restartedMain] DEBUG com.zaxxer.hikari.HikariConfig - scheduledExecutor...............none
+2024-05-16 08:26:03 [restartedMain] DEBUG com.zaxxer.hikari.HikariConfig - schema..........................none
+2024-05-16 08:26:03 [restartedMain] DEBUG com.zaxxer.hikari.HikariConfig - threadFactory...................internal
+2024-05-16 08:26:03 [restartedMain] DEBUG com.zaxxer.hikari.HikariConfig - transactionIsolation............default
+2024-05-16 08:26:03 [restartedMain] DEBUG com.zaxxer.hikari.HikariConfig - username........................"sa"
+2024-05-16 08:26:03 [restartedMain] DEBUG com.zaxxer.hikari.HikariConfig - validationTimeout...............5000
+2024-05-16 08:26:03 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2024-05-16 08:26:04 [restartedMain] INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection conn0: url=jdbc:h2:mem:testdb user=SA
+2024-05-16 08:26:04 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+2024-05-16 08:26:04 [restartedMain] INFO  o.s.b.a.h.H2ConsoleAutoConfiguration - H2 console available at '/h2-console'. Database available at 'jdbc:h2:mem:testdb'
+2024-05-16 08:26:04 [HikariPool-1 housekeeper] DEBUG com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Pool stats (total=1, active=0, idle=1, waiting=0)
+2024-05-16 08:26:04 [HikariPool-1 connection adder] DEBUG com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection conn1: url=jdbc:h2:mem:testdb user=SA
+2024-05-16 08:26:04 [HikariPool-1 connection adder] DEBUG com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection conn2: url=jdbc:h2:mem:testdb user=SA
+2024-05-16 08:26:04 [HikariPool-1 connection adder] DEBUG com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection conn3: url=jdbc:h2:mem:testdb user=SA
+2024-05-16 08:26:04 [HikariPool-1 connection adder] DEBUG com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection conn4: url=jdbc:h2:mem:testdb user=SA
+2024-05-16 08:26:04 [HikariPool-1 connection adder] DEBUG com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection conn5: url=jdbc:h2:mem:testdb user=SA
+2024-05-16 08:26:04 [restartedMain] DEBUG org.jboss.logging - Logging Provider: org.jboss.logging.Slf4jLoggerProvider found via system property
+2024-05-16 08:26:04 [HikariPool-1 connection adder] DEBUG com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection conn6: url=jdbc:h2:mem:testdb user=SA
+2024-05-16 08:26:04 [HikariPool-1 connection adder] DEBUG com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection conn7: url=jdbc:h2:mem:testdb user=SA
+2024-05-16 08:26:04 [HikariPool-1 connection adder] DEBUG com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection conn8: url=jdbc:h2:mem:testdb user=SA
+2024-05-16 08:26:04 [HikariPool-1 connection adder] DEBUG com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection conn9: url=jdbc:h2:mem:testdb user=SA
+2024-05-16 08:26:04 [HikariPool-1 connection adder] DEBUG com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - After adding stats (total=10, active=0, idle=10, waiting=0)
+2024-05-16 08:26:04 [restartedMain] INFO  o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+2024-05-16 08:26:04 [restartedMain] INFO  org.hibernate.Version - HHH000412: Hibernate ORM core version 6.4.4.Final
+2024-05-16 08:26:04 [restartedMain] INFO  o.h.c.i.RegionFactoryInitiator - HHH000026: Second-level cache disabled
+2024-05-16 08:26:05 [restartedMain] INFO  o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2024-05-16 08:26:05 [restartedMain] WARN  org.hibernate.orm.deprecation - HHH90000025: H2Dialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2024-05-16 08:26:06 [restartedMain] WARN  org.hibernate.mapping.RootClass - HHH000038: Composite-id class does not override equals(): com.ordersmicroservice.orders_microservice.models.OrderedProductId
+2024-05-16 08:26:06 [restartedMain] WARN  org.hibernate.mapping.RootClass - HHH000039: Composite-id class does not override hashCode(): com.ordersmicroservice.orders_microservice.models.OrderedProductId
+2024-05-16 08:26:07 [restartedMain] INFO  o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2024-05-16 08:26:07 [restartedMain] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2024-05-16 08:26:08 [restartedMain] DEBUG reactor.util.Loggers - Using Slf4j logging framework
+2024-05-16 08:26:08 [restartedMain] DEBUG i.n.u.i.l.InternalLoggerFactory - Using SLF4J as the default logging framework
+2024-05-16 08:26:08 [restartedMain] DEBUG i.n.util.internal.PlatformDependent0 - -Dio.netty.noUnsafe: false
+2024-05-16 08:26:08 [restartedMain] DEBUG i.n.util.internal.PlatformDependent0 - Java version: 17
+2024-05-16 08:26:08 [restartedMain] DEBUG i.n.util.internal.PlatformDependent0 - sun.misc.Unsafe.theUnsafe: available
+2024-05-16 08:26:08 [restartedMain] DEBUG i.n.util.internal.PlatformDependent0 - sun.misc.Unsafe.copyMemory: available
+2024-05-16 08:26:08 [restartedMain] DEBUG i.n.util.internal.PlatformDependent0 - sun.misc.Unsafe.storeFence: available
+2024-05-16 08:26:08 [restartedMain] DEBUG i.n.util.internal.PlatformDependent0 - java.nio.Buffer.address: available
+2024-05-16 08:26:08 [restartedMain] DEBUG i.n.util.internal.PlatformDependent0 - direct buffer constructor: unavailable: Reflective setAccessible(true) disabled
+2024-05-16 08:26:08 [restartedMain] DEBUG i.n.util.internal.PlatformDependent0 - java.nio.Bits.unaligned: available, true
+2024-05-16 08:26:08 [restartedMain] DEBUG i.n.util.internal.PlatformDependent0 - jdk.internal.misc.Unsafe.allocateUninitializedArray(int): unavailable: class io.netty.util.internal.PlatformDependent0$7 cannot access class jdk.internal.misc.Unsafe (in module java.base) because module java.base does not export jdk.internal.misc to unnamed module @43d7741f
+2024-05-16 08:26:08 [restartedMain] DEBUG i.n.util.internal.PlatformDependent0 - java.nio.DirectByteBuffer.<init>(long, {int,long}): unavailable
+2024-05-16 08:26:08 [restartedMain] DEBUG i.n.util.internal.PlatformDependent - sun.misc.Unsafe: available
+2024-05-16 08:26:08 [restartedMain] DEBUG i.n.util.internal.PlatformDependent - -Dio.netty.tmpdir: C:\Users\lonj\AppData\Local\Temp (java.io.tmpdir)
+2024-05-16 08:26:08 [restartedMain] DEBUG i.n.util.internal.PlatformDependent - -Dio.netty.bitMode: 64 (sun.arch.data.model)
+2024-05-16 08:26:08 [restartedMain] DEBUG i.n.util.internal.PlatformDependent - Platform: Windows
+2024-05-16 08:26:08 [restartedMain] DEBUG i.n.util.internal.PlatformDependent - -Dio.netty.maxDirectMemory: -1 bytes
+2024-05-16 08:26:08 [restartedMain] DEBUG i.n.util.internal.PlatformDependent - -Dio.netty.uninitializedArrayAllocationThreshold: -1
+2024-05-16 08:26:08 [restartedMain] DEBUG io.netty.util.internal.CleanerJava9 - java.nio.ByteBuffer.cleaner(): available
+2024-05-16 08:26:08 [restartedMain] DEBUG i.n.util.internal.PlatformDependent - -Dio.netty.noPreferDirect: false
+2024-05-16 08:26:08 [restartedMain] DEBUG reactor.netty.tcp.TcpResources - [http] resources will use the default LoopResources: DefaultLoopResources {prefix=reactor-http, daemon=true, selectCount=4, workerCount=4}
+2024-05-16 08:26:08 [restartedMain] DEBUG reactor.netty.tcp.TcpResources - [http] resources will use the default ConnectionProvider: reactor.netty.resources.DefaultPooledConnectionProvider@774b5cb5
+2024-05-16 08:26:08 [restartedMain] DEBUG i.n.u.i.InternalThreadLocalMap - -Dio.netty.threadLocalMap.stringBuilder.initialSize: 1024
+2024-05-16 08:26:08 [restartedMain] DEBUG i.n.u.i.InternalThreadLocalMap - -Dio.netty.threadLocalMap.stringBuilder.maxSize: 4096
+2024-05-16 08:26:08 [restartedMain] DEBUG io.netty.util.ResourceLeakDetector - -Dio.netty.leakDetection.level: simple
+2024-05-16 08:26:08 [restartedMain] DEBUG io.netty.util.ResourceLeakDetector - -Dio.netty.leakDetection.targetRecords: 4
+2024-05-16 08:26:08 [restartedMain] DEBUG r.netty.resources.DefaultLoopIOUring - Default io_uring support : false
+2024-05-16 08:26:08 [restartedMain] DEBUG r.netty.resources.DefaultLoopEpoll - Default Epoll support : false
+2024-05-16 08:26:08 [restartedMain] DEBUG r.netty.resources.DefaultLoopKQueue - Default KQueue support : false
+2024-05-16 08:26:08 [restartedMain] DEBUG i.n.c.MultithreadEventLoopGroup - -Dio.netty.eventLoopThreads: 8
+2024-05-16 08:26:08 [restartedMain] DEBUG i.n.u.concurrent.GlobalEventExecutor - -Dio.netty.globalEventExecutor.quietPeriodSeconds: 1
+2024-05-16 08:26:08 [restartedMain] DEBUG io.netty.channel.nio.NioEventLoop - -Dio.netty.noKeySetOptimization: false
+2024-05-16 08:26:08 [restartedMain] DEBUG io.netty.channel.nio.NioEventLoop - -Dio.netty.selectorAutoRebuildThreshold: 512
+2024-05-16 08:26:09 [restartedMain] DEBUG i.n.util.internal.PlatformDependent - org.jctools-core.MpscChunkedArrayQueue: available
+2024-05-16 08:26:09 [restartedMain] DEBUG io.netty.util.NetUtil - -Djava.net.preferIPv4Stack: false
+2024-05-16 08:26:09 [restartedMain] DEBUG io.netty.util.NetUtil - -Djava.net.preferIPv6Addresses: false
+2024-05-16 08:26:09 [restartedMain] DEBUG i.netty.util.NetUtilInitializations - Loopback interface: lo (Software Loopback Interface 1, 127.0.0.1)
+2024-05-16 08:26:09 [restartedMain] DEBUG io.netty.util.NetUtil - Failed to get SOMAXCONN from sysctl and file \proc\sys\net\core\somaxconn. Default: 200
+2024-05-16 08:26:09 [restartedMain] DEBUG i.netty.resolver.dns.DnsNameResolver - Default ResolvedAddressTypes: IPV4_ONLY
+2024-05-16 08:26:09 [restartedMain] DEBUG i.netty.resolver.dns.DnsNameResolver - Localhost address: localhost/127.0.0.1
+2024-05-16 08:26:09 [restartedMain] DEBUG i.netty.resolver.dns.DnsNameResolver - Windows hostname: GFT-mugVBNNfOXU
+2024-05-16 08:26:09 [restartedMain] DEBUG i.netty.resolver.dns.DnsNameResolver - Default search domains: []
+2024-05-16 08:26:09 [restartedMain] DEBUG i.netty.resolver.dns.DnsNameResolver - Default UnixResolverOptions{ndots=1, timeout=5, attempts=16}
+2024-05-16 08:26:09 [restartedMain] DEBUG i.n.r.DefaultHostsFileEntriesResolver - -Dio.netty.hostsFileRefreshInterval: 0
+2024-05-16 08:26:09 [restartedMain] DEBUG i.n.r.d.DefaultDnsServerAddressStreamProvider - Default DNS servers: [/10.0.0.1:53, /8.8.8.8:53, /8.8.4.4:53] (sun.net.dns.ResolverConfiguration)
+2024-05-16 08:26:10 [restartedMain] WARN  o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2024-05-16 08:26:10 [restartedMain] DEBUG _.s.w.s.HandlerMapping.Mappings - 
+	c.o.o.c.OrderController:
+	{DELETE [/orders/{id}]}: deleteById(Long)
+	{GET [/orders/{id}]}: getOrderById(Long)
+	{POST [/orders/{id}]}: postOrder(Long)
+	{GET [/orders]}: getAllOrders()
+	{PATCH [/orders/{id}]}: patchOrder(Long,StatusUpdateDto)
+2024-05-16 08:26:10 [restartedMain] DEBUG _.s.w.s.HandlerMapping.Mappings - 
+	c.o.o.c.OrderedProductController:
+	{GET [/orders/products/{orderId}]}: getAllProductsFromOrder(Long)
+2024-05-16 08:26:10 [restartedMain] DEBUG _.s.w.s.HandlerMapping.Mappings - 
+	o.s.b.a.w.s.e.BasicErrorController:
+	{ [/error]}: error(HttpServletRequest)
+	{ [/error], produces [text/html]}: errorHtml(HttpServletRequest,HttpServletResponse)
+2024-05-16 08:26:10 [restartedMain] DEBUG _.s.w.s.HandlerMapping.Mappings - 
+	o.s.w.a.OpenApiWebMvcResource:
+	{GET [/v3/api-docs], produces [application/json]}: openapiJson(HttpServletRequest,String,Locale)
+	{GET [/v3/api-docs.yaml], produces [application/vnd.oai.openapi]}: openapiYaml(HttpServletRequest,String,Locale)
+2024-05-16 08:26:10 [restartedMain] DEBUG _.s.w.s.HandlerMapping.Mappings - 
+	o.s.w.u.SwaggerWelcomeWebMvc:
+	{GET [/swagger-ui.html]}: redirectToUi(HttpServletRequest)
+2024-05-16 08:26:10 [restartedMain] DEBUG _.s.w.s.HandlerMapping.Mappings - 
+	o.s.w.u.SwaggerConfigResource:
+	{GET [/v3/api-docs/swagger-config], produces [application/json]}: openapiJson(HttpServletRequest)
+2024-05-16 08:26:10 [restartedMain] DEBUG _.s.w.s.HandlerMapping.Mappings - 'beanNameHandlerMapping' {}
+2024-05-16 08:26:13 [restartedMain] DEBUG _.s.w.s.HandlerMapping.Mappings - 'resourceHandlerMapping' {/webjars/**=ResourceHttpRequestHandler [classpath [META-INF/resources/webjars/]], /**=ResourceHttpRequestHandler [classpath [META-INF/resources/], classpath [resources/], classpath [static/], classpath [public/], ServletContext [/]], /swagger-ui*/*swagger-initializer.js=ResourceHttpRequestHandler [classpath [META-INF/resources/webjars/]], /swagger-ui*/**=ResourceHttpRequestHandler [classpath [META-INF/resources/webjars/]]}
+2024-05-16 08:26:15 [restartedMain] INFO  o.s.b.d.a.OptionalLiveReloadServer - LiveReload server is running on port 35729
+2024-05-16 08:26:15 [restartedMain] INFO  o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-8080"]
+2024-05-16 08:26:15 [restartedMain] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port 8080 (http) with context path ''
+2024-05-16 08:26:15 [restartedMain] INFO  c.o.o.OrdersMicroserviceApplication - Started OrdersMicroserviceApplication in 18.366 seconds (process running for 20.288)
+2024-05-16 08:26:34 [HikariPool-1 housekeeper] DEBUG com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Pool stats (total=10, active=0, idle=10, waiting=0)
+2024-05-16 08:26:34 [HikariPool-1 housekeeper] DEBUG com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Fill pool skipped, pool has sufficient level or currently being filled (queueDepth=0).
+2024-05-16 08:27:04 [HikariPool-1 housekeeper] DEBUG com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Pool stats (total=10, active=0, idle=10, waiting=0)
+2024-05-16 08:27:04 [HikariPool-1 housekeeper] DEBUG com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Fill pool skipped, pool has sufficient level or currently being filled (queueDepth=0).
+2024-05-16 08:27:34 [HikariPool-1 housekeeper] DEBUG com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Pool stats (total=10, active=0, idle=10, waiting=0)
+2024-05-16 08:27:34 [HikariPool-1 housekeeper] DEBUG com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Fill pool skipped, pool has sufficient level or currently being filled (queueDepth=0).
+2024-05-16 08:28:04 [HikariPool-1 housekeeper] DEBUG com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Pool stats (total=10, active=0, idle=10, waiting=0)
+2024-05-16 08:28:04 [HikariPool-1 housekeeper] DEBUG com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Fill pool skipped, pool has sufficient level or currently being filled (queueDepth=0).
+2024-05-16 08:28:34 [HikariPool-1 housekeeper] DEBUG com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Pool stats (total=10, active=0, idle=10, waiting=0)
+2024-05-16 08:28:34 [HikariPool-1 housekeeper] DEBUG com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Fill pool skipped, pool has sufficient level or currently being filled (queueDepth=0).
+2024-05-16 08:28:56 [http-nio-8080-exec-1] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+2024-05-16 08:28:56 [http-nio-8080-exec-1] INFO  o.s.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+2024-05-16 08:28:56 [http-nio-8080-exec-1] INFO  o.s.web.servlet.DispatcherServlet - Completed initialization in 3 ms
+2024-05-16 08:28:57 [http-nio-8080-exec-9] DEBUG i.s.v.c.c.ModelConverterContextImpl - resolve class java.lang.Long
+2024-05-16 08:28:57 [http-nio-8080-exec-9] DEBUG i.s.v.c.c.ModelConverterContextImpl - resolve class java.lang.Long
+2024-05-16 08:28:57 [http-nio-8080-exec-9] DEBUG i.s.v.c.c.ModelConverterContextImpl - resolve class com.ordersmicroservice.orders_microservice.dto.StatusUpdateDto
+2024-05-16 08:28:57 [http-nio-8080-exec-9] DEBUG i.s.v.c.c.ModelConverterContextImpl - resolve [simple type, class com.ordersmicroservice.orders_microservice.dto.Status]
+2024-05-16 08:28:57 [http-nio-8080-exec-9] DEBUG i.s.v.c.c.ModelConverterContextImpl - resolve org.springframework.http.ResponseEntity<com.ordersmicroservice.orders_microservice.models.Order>
+2024-05-16 08:28:57 [http-nio-8080-exec-9] DEBUG i.s.v.c.c.ModelConverterContextImpl - resolve [simple type, class com.ordersmicroservice.orders_microservice.models.Order]
+2024-05-16 08:28:57 [http-nio-8080-exec-9] DEBUG i.s.v.c.c.ModelConverterContextImpl - resolve [simple type, class java.lang.Long]
+2024-05-16 08:28:57 [http-nio-8080-exec-9] DEBUG i.s.v.c.c.ModelConverterContextImpl - resolve [simple type, class java.lang.Long]
+2024-05-16 08:28:57 [http-nio-8080-exec-9] DEBUG i.s.v.c.c.ModelConverterContextImpl - resolve [simple type, class java.lang.String]
+2024-05-16 08:28:57 [http-nio-8080-exec-9] DEBUG i.s.v.c.c.ModelConverterContextImpl - resolve [simple type, class com.ordersmicroservice.orders_microservice.dto.Status]
+2024-05-16 08:28:57 [http-nio-8080-exec-9] DEBUG i.s.v.c.c.ModelConverterContextImpl - resolve [simple type, class java.lang.String]
+2024-05-16 08:28:57 [http-nio-8080-exec-9] DEBUG i.s.v.c.c.ModelConverterContextImpl - resolve [simple type, class java.lang.String]
+2024-05-16 08:28:57 [http-nio-8080-exec-9] DEBUG i.s.v.c.c.ModelConverterContextImpl - resolve [simple type, class com.ordersmicroservice.orders_microservice.models.Address]
+2024-05-16 08:28:57 [http-nio-8080-exec-9] DEBUG i.s.v.c.c.ModelConverterContextImpl - resolve [simple type, class java.lang.Long]
+2024-05-16 08:28:57 [http-nio-8080-exec-9] DEBUG i.s.v.c.c.ModelConverterContextImpl - resolve [simple type, class com.ordersmicroservice.orders_microservice.models.Order]
+2024-05-16 08:28:57 [http-nio-8080-exec-9] DEBUG i.s.v.c.c.ModelConverterContextImpl - resolve [simple type, class java.math.BigDecimal]
+2024-05-16 08:28:57 [http-nio-8080-exec-9] DEBUG i.s.v.c.c.ModelConverterContextImpl - resolve [collection type; class java.util.List, contains [simple type, class com.ordersmicroservice.orders_microservice.models.OrderedProduct]]
+2024-05-16 08:28:57 [http-nio-8080-exec-9] DEBUG i.s.v.c.c.ModelConverterContextImpl - resolve [simple type, class com.ordersmicroservice.orders_microservice.models.OrderedProduct]
+2024-05-16 08:28:57 [http-nio-8080-exec-9] DEBUG i.s.v.c.c.ModelConverterContextImpl - resolve [simple type, class java.lang.Long]
+2024-05-16 08:28:57 [http-nio-8080-exec-9] DEBUG i.s.v.c.c.ModelConverterContextImpl - resolve [simple type, class com.ordersmicroservice.orders_microservice.models.Order]
+2024-05-16 08:28:58 [http-nio-8080-exec-9] DEBUG i.s.v.c.c.ModelConverterContextImpl - resolve [simple type, class java.lang.Long]
+2024-05-16 08:28:58 [http-nio-8080-exec-9] DEBUG i.s.v.c.c.ModelConverterContextImpl - resolve [simple type, class java.lang.String]
+2024-05-16 08:28:58 [http-nio-8080-exec-9] DEBUG i.s.v.c.c.ModelConverterContextImpl - resolve [simple type, class java.lang.String]
+2024-05-16 08:28:58 [http-nio-8080-exec-9] DEBUG i.s.v.c.c.ModelConverterContextImpl - resolve [simple type, class java.lang.String]
+2024-05-16 08:28:58 [http-nio-8080-exec-9] DEBUG i.s.v.c.c.ModelConverterContextImpl - resolve [simple type, class java.lang.Long]
+2024-05-16 08:28:58 [http-nio-8080-exec-9] DEBUG i.s.v.c.c.ModelConverterContextImpl - resolve [simple type, class java.lang.Integer]
+2024-05-16 08:28:58 [http-nio-8080-exec-9] DEBUG i.s.v.c.c.ModelConverterContextImpl - resolve [simple type, class java.lang.String]
+2024-05-16 08:28:58 [http-nio-8080-exec-9] DEBUG i.s.v.c.c.ModelConverterContextImpl - resolve [simple type, class java.lang.Integer]
+2024-05-16 08:28:58 [http-nio-8080-exec-9] DEBUG i.s.v.c.c.ModelConverterContextImpl - resolve [simple type, class java.lang.String]
+2024-05-16 08:28:58 [http-nio-8080-exec-9] DEBUG i.s.v.c.c.ModelConverterContextImpl - resolve [simple type, class java.lang.String]
+2024-05-16 08:28:58 [http-nio-8080-exec-9] DEBUG i.s.v.c.c.ModelConverterContextImpl - resolve [simple type, class java.lang.String]
+2024-05-16 08:28:58 [http-nio-8080-exec-9] DEBUG i.s.v.c.c.ModelConverterContextImpl - resolve [simple type, class java.lang.Long]
+2024-05-16 08:28:58 [http-nio-8080-exec-9] DEBUG i.s.v.c.c.ModelConverterContextImpl - resolve java.util.List<com.ordersmicroservice.orders_microservice.models.Order>
+2024-05-16 08:28:58 [http-nio-8080-exec-9] DEBUG i.s.v.c.c.ModelConverterContextImpl - resolve [simple type, class com.ordersmicroservice.orders_microservice.models.Order]
+2024-05-16 08:28:58 [http-nio-8080-exec-9] DEBUG i.s.v.c.c.ModelConverterContextImpl - resolve [simple type, class java.lang.Long]
+2024-05-16 08:28:58 [http-nio-8080-exec-9] DEBUG i.s.v.c.c.ModelConverterContextImpl - resolve [simple type, class java.lang.Long]
+2024-05-16 08:28:58 [http-nio-8080-exec-9] DEBUG i.s.v.c.c.ModelConverterContextImpl - resolve [simple type, class java.lang.String]
+2024-05-16 08:28:58 [http-nio-8080-exec-9] DEBUG i.s.v.c.c.ModelConverterContextImpl - resolve [simple type, class com.ordersmicroservice.orders_microservice.dto.Status]
+2024-05-16 08:28:58 [http-nio-8080-exec-9] DEBUG i.s.v.c.c.ModelConverterContextImpl - resolve [simple type, class java.lang.String]
+2024-05-16 08:28:58 [http-nio-8080-exec-9] DEBUG i.s.v.c.c.ModelConverterContextImpl - resolve [simple type, class java.lang.String]
+2024-05-16 08:28:58 [http-nio-8080-exec-9] DEBUG i.s.v.c.c.ModelConverterContextImpl - resolve [simple type, class com.ordersmicroservice.orders_microservice.models.Address]
+2024-05-16 08:28:58 [http-nio-8080-exec-9] DEBUG i.s.v.c.c.ModelConverterContextImpl - resolve [simple type, class java.lang.Long]
+2024-05-16 08:28:58 [http-nio-8080-exec-9] DEBUG i.s.v.c.c.ModelConverterContextImpl - resolve [simple type, class com.ordersmicroservice.orders_microservice.models.Order]
+2024-05-16 08:28:58 [http-nio-8080-exec-9] DEBUG i.s.v.c.c.ModelConverterContextImpl - resolve [simple type, class java.math.BigDecimal]
+2024-05-16 08:28:58 [http-nio-8080-exec-9] DEBUG i.s.v.c.c.ModelConverterContextImpl - resolve [collection type; class java.util.List, contains [simple type, class com.ordersmicroservice.orders_microservice.models.OrderedProduct]]
+2024-05-16 08:28:58 [http-nio-8080-exec-9] DEBUG i.s.v.c.c.ModelConverterContextImpl - resolve [simple type, class com.ordersmicroservice.orders_microservice.models.OrderedProduct]
+2024-05-16 08:28:58 [http-nio-8080-exec-9] DEBUG i.s.v.c.c.ModelConverterContextImpl - resolve [simple type, class java.lang.Long]
+2024-05-16 08:28:58 [http-nio-8080-exec-9] DEBUG i.s.v.c.c.ModelConverterContextImpl - resolve [simple type, class com.ordersmicroservice.orders_microservice.models.Order]
+2024-05-16 08:28:58 [http-nio-8080-exec-9] DEBUG i.s.v.c.c.ModelConverterContextImpl - resolve [simple type, class java.lang.Long]
+2024-05-16 08:28:58 [http-nio-8080-exec-9] DEBUG i.s.v.c.c.ModelConverterContextImpl - resolve [simple type, class java.lang.String]
+2024-05-16 08:28:58 [http-nio-8080-exec-9] DEBUG i.s.v.c.c.ModelConverterContextImpl - resolve [simple type, class java.lang.String]
+2024-05-16 08:28:58 [http-nio-8080-exec-9] DEBUG i.s.v.c.c.ModelConverterContextImpl - resolve [simple type, class java.lang.String]
+2024-05-16 08:28:58 [http-nio-8080-exec-9] DEBUG i.s.v.c.c.ModelConverterContextImpl - resolve [simple type, class java.lang.Long]
+2024-05-16 08:28:58 [http-nio-8080-exec-9] DEBUG i.s.v.c.c.ModelConverterContextImpl - resolve [simple type, class java.lang.Integer]
+2024-05-16 08:28:58 [http-nio-8080-exec-9] DEBUG i.s.v.c.c.ModelConverterContextImpl - resolve [simple type, class java.lang.String]
+2024-05-16 08:28:58 [http-nio-8080-exec-9] DEBUG i.s.v.c.c.ModelConverterContextImpl - resolve [simple type, class java.lang.Integer]
+2024-05-16 08:28:58 [http-nio-8080-exec-9] DEBUG i.s.v.c.c.ModelConverterContextImpl - resolve [simple type, class java.lang.String]
+2024-05-16 08:28:58 [http-nio-8080-exec-9] DEBUG i.s.v.c.c.ModelConverterContextImpl - resolve [simple type, class java.lang.String]
+2024-05-16 08:28:58 [http-nio-8080-exec-9] DEBUG i.s.v.c.c.ModelConverterContextImpl - resolve [simple type, class java.lang.String]
+2024-05-16 08:28:58 [http-nio-8080-exec-9] DEBUG i.s.v.c.c.ModelConverterContextImpl - resolve [simple type, class java.lang.Long]
+2024-05-16 08:28:58 [http-nio-8080-exec-9] DEBUG i.s.v.c.c.ModelConverterContextImpl - resolve class java.lang.Long
+2024-05-16 08:28:58 [http-nio-8080-exec-9] DEBUG i.s.v.c.c.ModelConverterContextImpl - resolve class java.lang.Long
+2024-05-16 08:28:58 [http-nio-8080-exec-9] DEBUG i.s.v.c.c.ModelConverterContextImpl - resolve java.util.List<com.ordersmicroservice.orders_microservice.models.OrderedProduct>
+2024-05-16 08:28:58 [http-nio-8080-exec-9] DEBUG i.s.v.c.c.ModelConverterContextImpl - resolve [simple type, class com.ordersmicroservice.orders_microservice.models.OrderedProduct]
+2024-05-16 08:28:58 [http-nio-8080-exec-9] DEBUG i.s.v.c.c.ModelConverterContextImpl - resolve [simple type, class java.lang.Long]
+2024-05-16 08:28:58 [http-nio-8080-exec-9] DEBUG i.s.v.c.c.ModelConverterContextImpl - resolve [simple type, class com.ordersmicroservice.orders_microservice.models.Order]
+2024-05-16 08:28:58 [http-nio-8080-exec-9] DEBUG i.s.v.c.c.ModelConverterContextImpl - resolve [simple type, class java.lang.Long]
+2024-05-16 08:28:58 [http-nio-8080-exec-9] DEBUG i.s.v.c.c.ModelConverterContextImpl - resolve [simple type, class java.lang.Long]
+2024-05-16 08:28:58 [http-nio-8080-exec-9] DEBUG i.s.v.c.c.ModelConverterContextImpl - resolve [simple type, class java.lang.String]
+2024-05-16 08:28:58 [http-nio-8080-exec-9] DEBUG i.s.v.c.c.ModelConverterContextImpl - resolve [simple type, class com.ordersmicroservice.orders_microservice.dto.Status]
+2024-05-16 08:28:58 [http-nio-8080-exec-9] DEBUG i.s.v.c.c.ModelConverterContextImpl - resolve [simple type, class java.lang.String]
+2024-05-16 08:28:58 [http-nio-8080-exec-9] DEBUG i.s.v.c.c.ModelConverterContextImpl - resolve [simple type, class java.lang.String]
+2024-05-16 08:28:58 [http-nio-8080-exec-9] DEBUG i.s.v.c.c.ModelConverterContextImpl - resolve [simple type, class com.ordersmicroservice.orders_microservice.models.Address]
+2024-05-16 08:28:58 [http-nio-8080-exec-9] DEBUG i.s.v.c.c.ModelConverterContextImpl - resolve [simple type, class java.lang.Long]
+2024-05-16 08:28:58 [http-nio-8080-exec-9] DEBUG i.s.v.c.c.ModelConverterContextImpl - resolve [simple type, class com.ordersmicroservice.orders_microservice.models.Order]
+2024-05-16 08:28:58 [http-nio-8080-exec-9] DEBUG i.s.v.c.c.ModelConverterContextImpl - resolve [simple type, class java.math.BigDecimal]
+2024-05-16 08:28:58 [http-nio-8080-exec-9] DEBUG i.s.v.c.c.ModelConverterContextImpl - resolve [collection type; class java.util.List, contains [simple type, class com.ordersmicroservice.orders_microservice.models.OrderedProduct]]
+2024-05-16 08:28:58 [http-nio-8080-exec-9] DEBUG i.s.v.c.c.ModelConverterContextImpl - resolve [simple type, class java.lang.String]
+2024-05-16 08:28:58 [http-nio-8080-exec-9] DEBUG i.s.v.c.c.ModelConverterContextImpl - resolve [simple type, class java.lang.Integer]
+2024-05-16 08:28:58 [http-nio-8080-exec-9] DEBUG i.s.v.c.c.ModelConverterContextImpl - resolve [simple type, class java.lang.String]
+2024-05-16 08:28:58 [http-nio-8080-exec-9] DEBUG i.s.v.c.c.ModelConverterContextImpl - resolve [simple type, class java.lang.String]
+2024-05-16 08:28:58 [http-nio-8080-exec-9] DEBUG i.s.v.c.c.ModelConverterContextImpl - resolve [simple type, class java.lang.String]
+2024-05-16 08:28:58 [http-nio-8080-exec-9] DEBUG i.s.v.c.c.ModelConverterContextImpl - resolve [simple type, class java.lang.Long]
+2024-05-16 08:28:58 [http-nio-8080-exec-9] DEBUG i.s.v.c.c.ModelConverterContextImpl - resolve [simple type, class java.lang.Long]
+2024-05-16 08:28:58 [http-nio-8080-exec-9] DEBUG i.s.v.c.c.ModelConverterContextImpl - resolve [simple type, class java.lang.String]
+2024-05-16 08:28:58 [http-nio-8080-exec-9] DEBUG i.s.v.c.c.ModelConverterContextImpl - resolve [simple type, class java.lang.String]
+2024-05-16 08:28:58 [http-nio-8080-exec-9] DEBUG i.s.v.c.c.ModelConverterContextImpl - resolve [simple type, class java.lang.String]
+2024-05-16 08:28:58 [http-nio-8080-exec-9] DEBUG i.s.v.c.c.ModelConverterContextImpl - resolve [simple type, class java.lang.Long]
+2024-05-16 08:28:58 [http-nio-8080-exec-9] DEBUG i.s.v.c.c.ModelConverterContextImpl - resolve [simple type, class java.lang.Integer]
+2024-05-16 08:28:58 [http-nio-8080-exec-9] DEBUG i.s.v.c.c.ModelConverterContextImpl - resolve class java.lang.Long
+2024-05-16 08:28:58 [http-nio-8080-exec-9] INFO  o.s.api.AbstractOpenApiResource - Init duration for springdoc-openapi is: 1112 ms
+2024-05-16 08:29:04 [HikariPool-1 housekeeper] DEBUG com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Pool stats (total=10, active=0, idle=10, waiting=0)
+2024-05-16 08:29:04 [HikariPool-1 housekeeper] DEBUG com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Fill pool skipped, pool has sufficient level or currently being filled (queueDepth=0).
+2024-05-16 08:29:34 [HikariPool-1 housekeeper] DEBUG com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Pool stats (total=10, active=0, idle=10, waiting=0)
+2024-05-16 08:29:34 [HikariPool-1 housekeeper] DEBUG com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Fill pool skipped, pool has sufficient level or currently being filled (queueDepth=0).
+2024-05-16 08:30:04 [HikariPool-1 housekeeper] DEBUG com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Pool stats (total=10, active=0, idle=10, waiting=0)
+2024-05-16 08:30:04 [HikariPool-1 housekeeper] DEBUG com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Fill pool skipped, pool has sufficient level or currently being filled (queueDepth=0).
+2024-05-16 08:30:34 [HikariPool-1 housekeeper] DEBUG com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Pool stats (total=10, active=0, idle=10, waiting=0)
+2024-05-16 08:30:34 [HikariPool-1 housekeeper] DEBUG com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Fill pool skipped, pool has sufficient level or currently being filled (queueDepth=0).
+2024-05-16 08:31:04 [HikariPool-1 housekeeper] DEBUG com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Pool stats (total=10, active=0, idle=10, waiting=0)
+2024-05-16 08:31:04 [HikariPool-1 housekeeper] DEBUG com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Fill pool skipped, pool has sufficient level or currently being filled (queueDepth=0).
+2024-05-16 08:31:34 [HikariPool-1 housekeeper] DEBUG com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Pool stats (total=10, active=0, idle=10, waiting=0)
+2024-05-16 08:31:34 [HikariPool-1 housekeeper] DEBUG com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Fill pool skipped, pool has sufficient level or currently being filled (queueDepth=0).
+2024-05-16 08:32:04 [HikariPool-1 housekeeper] DEBUG com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Pool stats (total=10, active=0, idle=10, waiting=0)
+2024-05-16 08:32:04 [HikariPool-1 housekeeper] DEBUG com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Fill pool skipped, pool has sufficient level or currently being filled (queueDepth=0).
+2024-05-16 08:32:34 [HikariPool-1 housekeeper] DEBUG com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Pool stats (total=10, active=0, idle=10, waiting=0)
+2024-05-16 08:32:34 [HikariPool-1 housekeeper] DEBUG com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Fill pool skipped, pool has sufficient level or currently being filled (queueDepth=0).
+2024-05-16 08:33:04 [HikariPool-1 housekeeper] DEBUG com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Pool stats (total=10, active=0, idle=10, waiting=0)
+2024-05-16 08:33:04 [HikariPool-1 housekeeper] DEBUG com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Fill pool skipped, pool has sufficient level or currently being filled (queueDepth=0).
+2024-05-16 08:33:34 [HikariPool-1 housekeeper] DEBUG com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Pool stats (total=10, active=0, idle=10, waiting=0)
+2024-05-16 08:33:34 [HikariPool-1 housekeeper] DEBUG com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Fill pool skipped, pool has sufficient level or currently being filled (queueDepth=0).
+2024-05-16 08:34:04 [HikariPool-1 housekeeper] DEBUG com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Pool stats (total=10, active=0, idle=10, waiting=0)
+2024-05-16 08:34:04 [HikariPool-1 housekeeper] DEBUG com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Fill pool skipped, pool has sufficient level or currently being filled (queueDepth=0).
+2024-05-16 08:34:34 [HikariPool-1 housekeeper] DEBUG com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Pool stats (total=10, active=0, idle=10, waiting=0)
+2024-05-16 08:34:34 [HikariPool-1 housekeeper] DEBUG com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Fill pool skipped, pool has sufficient level or currently being filled (queueDepth=0).
+2024-05-16 08:35:04 [HikariPool-1 housekeeper] DEBUG com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Pool stats (total=10, active=0, idle=10, waiting=0)
+2024-05-16 08:35:04 [HikariPool-1 housekeeper] DEBUG com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Fill pool skipped, pool has sufficient level or currently being filled (queueDepth=0).
+2024-05-16 08:35:34 [HikariPool-1 housekeeper] DEBUG com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Pool stats (total=10, active=0, idle=10, waiting=0)
+2024-05-16 08:35:34 [HikariPool-1 housekeeper] DEBUG com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Fill pool skipped, pool has sufficient level or currently being filled (queueDepth=0).
+2024-05-16 08:36:04 [HikariPool-1 housekeeper] DEBUG com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Pool stats (total=10, active=0, idle=10, waiting=0)
+2024-05-16 08:36:04 [HikariPool-1 housekeeper] DEBUG com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Fill pool skipped, pool has sufficient level or currently being filled (queueDepth=0).
+2024-05-16 08:36:34 [HikariPool-1 housekeeper] DEBUG com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Pool stats (total=10, active=0, idle=10, waiting=0)
+2024-05-16 08:36:34 [HikariPool-1 housekeeper] DEBUG com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Fill pool skipped, pool has sufficient level or currently being filled (queueDepth=0).
+2024-05-16 08:37:04 [HikariPool-1 housekeeper] DEBUG com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Pool stats (total=10, active=0, idle=10, waiting=0)
+2024-05-16 08:37:04 [HikariPool-1 housekeeper] DEBUG com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Fill pool skipped, pool has sufficient level or currently being filled (queueDepth=0).
+2024-05-16 08:37:34 [HikariPool-1 housekeeper] DEBUG com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Pool stats (total=10, active=0, idle=10, waiting=0)
+2024-05-16 08:37:34 [HikariPool-1 housekeeper] DEBUG com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Fill pool skipped, pool has sufficient level or currently being filled (queueDepth=0).
+2024-05-16 08:38:04 [HikariPool-1 housekeeper] DEBUG com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Pool stats (total=10, active=0, idle=10, waiting=0)
+2024-05-16 08:38:04 [HikariPool-1 housekeeper] DEBUG com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Fill pool skipped, pool has sufficient level or currently being filled (queueDepth=0).
+2024-05-16 08:38:34 [HikariPool-1 housekeeper] DEBUG com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Pool stats (total=10, active=0, idle=10, waiting=0)
+2024-05-16 08:38:34 [HikariPool-1 housekeeper] DEBUG com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Fill pool skipped, pool has sufficient level or currently being filled (queueDepth=0).
+2024-05-16 08:39:04 [HikariPool-1 housekeeper] DEBUG com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Pool stats (total=10, active=0, idle=10, waiting=0)
+2024-05-16 08:39:04 [HikariPool-1 housekeeper] DEBUG com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Fill pool skipped, pool has sufficient level or currently being filled (queueDepth=0).
+2024-05-16 08:39:34 [HikariPool-1 housekeeper] DEBUG com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Pool stats (total=10, active=0, idle=10, waiting=0)
+2024-05-16 08:39:34 [HikariPool-1 housekeeper] DEBUG com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Fill pool skipped, pool has sufficient level or currently being filled (queueDepth=0).
+2024-05-16 08:40:04 [HikariPool-1 housekeeper] DEBUG com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Pool stats (total=10, active=0, idle=10, waiting=0)
+2024-05-16 08:40:04 [HikariPool-1 housekeeper] DEBUG com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Fill pool skipped, pool has sufficient level or currently being filled (queueDepth=0).
+2024-05-16 08:40:34 [HikariPool-1 housekeeper] DEBUG com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Pool stats (total=10, active=0, idle=10, waiting=0)
+2024-05-16 08:40:34 [HikariPool-1 housekeeper] DEBUG com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Fill pool skipped, pool has sufficient level or currently being filled (queueDepth=0).
+2024-05-16 08:41:04 [HikariPool-1 housekeeper] DEBUG com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Pool stats (total=10, active=0, idle=10, waiting=0)
+2024-05-16 08:41:04 [HikariPool-1 housekeeper] DEBUG com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Fill pool skipped, pool has sufficient level or currently being filled (queueDepth=0).
+2024-05-16 08:41:34 [HikariPool-1 housekeeper] DEBUG com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Pool stats (total=10, active=0, idle=10, waiting=0)
+2024-05-16 08:41:34 [HikariPool-1 housekeeper] DEBUG com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Fill pool skipped, pool has sufficient level or currently being filled (queueDepth=0).
+2024-05-16 08:42:04 [HikariPool-1 housekeeper] DEBUG com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Pool stats (total=10, active=0, idle=10, waiting=0)
+2024-05-16 08:42:04 [HikariPool-1 housekeeper] DEBUG com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Fill pool skipped, pool has sufficient level or currently being filled (queueDepth=0).
+2024-05-16 08:42:34 [HikariPool-1 housekeeper] DEBUG com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Pool stats (total=10, active=0, idle=10, waiting=0)
+2024-05-16 08:42:34 [HikariPool-1 housekeeper] DEBUG com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Fill pool skipped, pool has sufficient level or currently being filled (queueDepth=0).
+2024-05-16 08:43:04 [HikariPool-1 housekeeper] DEBUG com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Pool stats (total=10, active=0, idle=10, waiting=0)
+2024-05-16 08:43:04 [HikariPool-1 housekeeper] DEBUG com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Fill pool skipped, pool has sufficient level or currently being filled (queueDepth=0).
+2024-05-16 08:43:34 [HikariPool-1 housekeeper] DEBUG com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Pool stats (total=10, active=0, idle=10, waiting=0)
+2024-05-16 08:43:34 [HikariPool-1 housekeeper] DEBUG com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Fill pool skipped, pool has sufficient level or currently being filled (queueDepth=0).
+2024-05-16 08:44:04 [HikariPool-1 housekeeper] DEBUG com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Pool stats (total=10, active=0, idle=10, waiting=0)
+2024-05-16 08:44:04 [HikariPool-1 housekeeper] DEBUG com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Fill pool skipped, pool has sufficient level or currently being filled (queueDepth=0).
+2024-05-16 08:44:34 [HikariPool-1 housekeeper] DEBUG com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Pool stats (total=10, active=0, idle=10, waiting=0)
+2024-05-16 08:44:34 [HikariPool-1 housekeeper] DEBUG com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Fill pool skipped, pool has sufficient level or currently being filled (queueDepth=0).
+2024-05-16 08:45:04 [HikariPool-1 housekeeper] DEBUG com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Pool stats (total=10, active=0, idle=10, waiting=0)
+2024-05-16 08:45:04 [HikariPool-1 housekeeper] DEBUG com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Fill pool skipped, pool has sufficient level or currently being filled (queueDepth=0).
+2024-05-16 08:45:34 [HikariPool-1 housekeeper] DEBUG com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Pool stats (total=10, active=0, idle=10, waiting=0)
+2024-05-16 08:45:34 [HikariPool-1 housekeeper] DEBUG com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Fill pool skipped, pool has sufficient level or currently being filled (queueDepth=0).
+2024-05-16 08:46:04 [HikariPool-1 housekeeper] DEBUG com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Pool stats (total=10, active=0, idle=10, waiting=0)
+2024-05-16 08:46:04 [HikariPool-1 housekeeper] DEBUG com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Fill pool skipped, pool has sufficient level or currently being filled (queueDepth=0).
+2024-05-16 08:46:34 [HikariPool-1 housekeeper] DEBUG com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Pool stats (total=10, active=0, idle=10, waiting=0)
+2024-05-16 08:46:34 [HikariPool-1 housekeeper] DEBUG com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Fill pool skipped, pool has sufficient level or currently being filled (queueDepth=0).
+2024-05-16 08:47:04 [HikariPool-1 housekeeper] DEBUG com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Pool stats (total=10, active=0, idle=10, waiting=0)
+2024-05-16 08:47:04 [HikariPool-1 housekeeper] DEBUG com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Fill pool skipped, pool has sufficient level or currently being filled (queueDepth=0).
+2024-05-16 08:47:34 [HikariPool-1 housekeeper] DEBUG com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Pool stats (total=10, active=0, idle=10, waiting=0)
+2024-05-16 08:47:34 [HikariPool-1 housekeeper] DEBUG com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Fill pool skipped, pool has sufficient level or currently being filled (queueDepth=0).
+2024-05-16 08:48:04 [HikariPool-1 housekeeper] DEBUG com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Pool stats (total=10, active=0, idle=10, waiting=0)
+2024-05-16 08:48:04 [HikariPool-1 housekeeper] DEBUG com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Fill pool skipped, pool has sufficient level or currently being filled (queueDepth=0).
+2024-05-16 08:48:34 [HikariPool-1 housekeeper] DEBUG com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Pool stats (total=10, active=0, idle=10, waiting=0)
+2024-05-16 08:48:34 [HikariPool-1 housekeeper] DEBUG com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Fill pool skipped, pool has sufficient level or currently being filled (queueDepth=0).
+2024-05-16 08:49:04 [HikariPool-1 housekeeper] DEBUG com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Pool stats (total=10, active=0, idle=10, waiting=0)
+2024-05-16 08:49:04 [HikariPool-1 housekeeper] DEBUG com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Fill pool skipped, pool has sufficient level or currently being filled (queueDepth=0).
+2024-05-16 08:49:34 [HikariPool-1 housekeeper] DEBUG com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Pool stats (total=10, active=0, idle=10, waiting=0)
+2024-05-16 08:49:34 [HikariPool-1 housekeeper] DEBUG com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Fill pool skipped, pool has sufficient level or currently being filled (queueDepth=0).
+2024-05-16 08:50:04 [HikariPool-1 housekeeper] DEBUG com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Pool stats (total=10, active=0, idle=10, waiting=0)
+2024-05-16 08:50:04 [HikariPool-1 housekeeper] DEBUG com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Fill pool skipped, pool has sufficient level or currently being filled (queueDepth=0).
+2024-05-16 08:50:34 [HikariPool-1 housekeeper] DEBUG com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Pool stats (total=10, active=0, idle=10, waiting=0)
+2024-05-16 08:50:34 [HikariPool-1 housekeeper] DEBUG com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Fill pool skipped, pool has sufficient level or currently being filled (queueDepth=0).
+2024-05-16 08:51:04 [HikariPool-1 housekeeper] DEBUG com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Pool stats (total=10, active=0, idle=10, waiting=0)
+2024-05-16 08:51:04 [HikariPool-1 housekeeper] DEBUG com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Fill pool skipped, pool has sufficient level or currently being filled (queueDepth=0).
+2024-05-16 08:51:34 [HikariPool-1 housekeeper] DEBUG com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Pool stats (total=10, active=0, idle=10, waiting=0)
+2024-05-16 08:51:34 [HikariPool-1 housekeeper] DEBUG com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Fill pool skipped, pool has sufficient level or currently being filled (queueDepth=0).
+2024-05-16 08:52:04 [HikariPool-1 housekeeper] DEBUG com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Pool stats (total=10, active=0, idle=10, waiting=0)
+2024-05-16 08:52:04 [HikariPool-1 housekeeper] DEBUG com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Fill pool skipped, pool has sufficient level or currently being filled (queueDepth=0).
+2024-05-16 08:52:34 [HikariPool-1 housekeeper] DEBUG com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Pool stats (total=10, active=0, idle=10, waiting=0)
+2024-05-16 08:52:34 [HikariPool-1 housekeeper] DEBUG com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Fill pool skipped, pool has sufficient level or currently being filled (queueDepth=0).
+2024-05-16 08:53:04 [HikariPool-1 housekeeper] DEBUG com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Pool stats (total=10, active=0, idle=10, waiting=0)
+2024-05-16 08:53:04 [HikariPool-1 housekeeper] DEBUG com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Fill pool skipped, pool has sufficient level or currently being filled (queueDepth=0).
+2024-05-16 08:53:08 [SpringApplicationShutdownHook] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+2024-05-16 08:53:08 [SpringApplicationShutdownHook] WARN  o.s.b.f.s.DisposableBeanAdapter - Invocation of destroy method failed on bean with name 'inMemoryDatabaseShutdownExecutor': org.h2.jdbc.JdbcSQLNonTransientConnectionException: Database is already closed (to disable automatic closing at VM shutdown, add ";DB_CLOSE_ON_EXIT=FALSE" to the db URL) [90121-224]
+2024-05-16 08:53:08 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
+2024-05-16 08:53:08 [SpringApplicationShutdownHook] DEBUG com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Before shutdown stats (total=10, active=0, idle=10, waiting=0)
+2024-05-16 08:53:08 [HikariPool-1 connection closer] DEBUG com.zaxxer.hikari.pool.PoolBase - HikariPool-1 - Closing connection conn0: url=jdbc:h2:mem:testdb user=SA: (connection evicted)
+2024-05-16 08:53:08 [HikariPool-1 connection closer] DEBUG com.zaxxer.hikari.pool.PoolBase - HikariPool-1 - Closing connection conn1: url=jdbc:h2:mem:testdb user=SA: (connection evicted)
+2024-05-16 08:53:08 [HikariPool-1 connection closer] DEBUG com.zaxxer.hikari.pool.PoolBase - HikariPool-1 - Closing connection conn2: url=jdbc:h2:mem:testdb user=SA: (connection evicted)
+2024-05-16 08:53:08 [HikariPool-1 connection closer] DEBUG com.zaxxer.hikari.pool.PoolBase - HikariPool-1 - Closing connection conn3: url=jdbc:h2:mem:testdb user=SA: (connection evicted)
+2024-05-16 08:53:08 [HikariPool-1 connection closer] DEBUG com.zaxxer.hikari.pool.PoolBase - HikariPool-1 - Closing connection conn4: url=jdbc:h2:mem:testdb user=SA: (connection evicted)
+2024-05-16 08:53:08 [HikariPool-1 connection closer] DEBUG com.zaxxer.hikari.pool.PoolBase - HikariPool-1 - Closing connection conn5: url=jdbc:h2:mem:testdb user=SA: (connection evicted)
+2024-05-16 08:53:08 [HikariPool-1 connection closer] DEBUG com.zaxxer.hikari.pool.PoolBase - HikariPool-1 - Closing connection conn6: url=jdbc:h2:mem:testdb user=SA: (connection evicted)
+2024-05-16 08:53:08 [HikariPool-1 connection closer] DEBUG com.zaxxer.hikari.pool.PoolBase - HikariPool-1 - Closing connection conn7: url=jdbc:h2:mem:testdb user=SA: (connection evicted)
+2024-05-16 08:53:08 [HikariPool-1 connection closer] DEBUG com.zaxxer.hikari.pool.PoolBase - HikariPool-1 - Closing connection conn8: url=jdbc:h2:mem:testdb user=SA: (connection evicted)
+2024-05-16 08:53:08 [HikariPool-1 connection closer] DEBUG com.zaxxer.hikari.pool.PoolBase - HikariPool-1 - Closing connection conn9: url=jdbc:h2:mem:testdb user=SA: (connection evicted)
+2024-05-16 08:53:08 [SpringApplicationShutdownHook] DEBUG com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - After shutdown stats (total=0, active=0, idle=0, waiting=0)
+2024-05-16 08:53:08 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.

@@ -30,6 +30,7 @@ public class OrderController {
     @ResponseStatus(OK)
     @Operation(summary = "List all Orders", description = "This endpoint retrieves example data from the server.")
     public List<Order> getAllOrders(){
+
         return orderService.getAllOrders();
     }
 
