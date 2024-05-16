@@ -34,7 +34,7 @@ build/
 
 
 ### .log ###
-logs/orden_microservice.log
+logs/orders_microservice.log
 
 
 

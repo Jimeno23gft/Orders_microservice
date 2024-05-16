@@ -29,7 +29,10 @@ public class OrderServiceImpl implements OrderService {
 
         log.info("Recuperando todos los pedidos");
         return Optional.of(orderRepository.findAll()).filter(orders -> !orders.isEmpty())
-                .orElseThrow(() -> new GlobalExceptionHandler.NotFoundException("No orders were found"));
+                .orElseThrow(() -> {
+                    log.error("No se encontraron pedidos");
+                    return new GlobalExceptionHandler.NotFoundException("No orders were found");
+                });
     }
 
 
@@ -38,10 +41,13 @@ public class OrderServiceImpl implements OrderService {
     public Order getOrderById(Long orderId){
         log.info("Buscando pedido con ID: {}", orderId);
         if (orderId == null || orderId <= 0) {
+            log.error("El id introducido {} no es valido (null|<=0)", orderId);
             throw new GlobalExceptionHandler.BadRequest("Invalid id type. Expected type: Long");
         }
-        return orderRepository.findById(orderId).orElseThrow(() -> new GlobalExceptionHandler.NotFoundException("Order not found with ID: " + orderId));
-
+        return orderRepository.findById(orderId).orElseThrow(() -> {
+            log.error("No se ha encontrado el pedido con id: {}", orderId);
+            throw new GlobalExceptionHandler.NotFoundException("Order not found with ID: " + orderId);
+        });
     }
 
     @Override
@@ -61,9 +67,12 @@ try{
         log.debug("Detallaes del pedido: {}", order);
 
         return savedOrder;
+
     }catch (GlobalExceptionHandler.BadRequest ex){
-        throw new GlobalExceptionHandler.BadRequest("");
+        //log.error("Error, no se ha creado el pedido para el carrito con ID {}: {}", cart_id, ex.getMessage());
+        throw new GlobalExceptionHandler.BadRequest("Error al crear el pedido para el usuario ID " + id + ": " + ex.getMessage());
     }
+
     }
 
     private String randomAddress() {
@@ -77,7 +86,10 @@ try{
             log.info("Actualizando pedido ID: {} con nuevo estado: {}", id, updatedStatus);
 
             Order existingOrder = orderRepository.findById(id)
-                    .orElseThrow(() -> new GlobalExceptionHandler.NotFoundException("Order not found with id " + id));
+                    .orElseThrow(() -> {
+                        log.error("El pedido que se quiere actualizar no existe");
+                        return new GlobalExceptionHandler.NotFoundException("Order not found with id " + id);
+                    });
             Status previousStatus = existingOrder.getStatus();
 
             existingOrder.setStatus(updatedStatus);
@@ -85,7 +97,7 @@ try{
                 existingOrder.setDateDelivered(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
             }
 
-            log.info("Pedido ID: {} actualizado de {} a {}", id, previousStatus, updatedStatus);
+            log.debug("Pedido ID: {} actualizado de {} a {}", id, previousStatus, updatedStatus);
 
             return orderRepository.save(existingOrder);
         } catch (GlobalExceptionHandler.BadRequest ex) {
