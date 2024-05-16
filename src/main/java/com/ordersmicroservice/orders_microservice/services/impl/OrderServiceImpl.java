@@ -73,7 +73,7 @@ public class OrderServiceImpl implements OrderService {
 
             return orderRepository.save(existingOrder);
         } catch (GlobalExceptionHandler.BadRequest ex) {
-            throw new GlobalExceptionHandler.BadRequest("QWEQWE");
+            throw new GlobalExceptionHandler.BadRequest("");
         }
     }
 

@@ -3,6 +3,7 @@ package com.ordersmicroservice.orders_microservice.controllers;
 import com.ordersmicroservice.orders_microservice.models.OrderedProduct;
 import com.ordersmicroservice.orders_microservice.services.impl.OrderedProductServiceImpl;
 import io.swagger.v3.oas.annotations.Operation;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -20,7 +21,8 @@ public class OrderedProductController {
     @GetMapping("/{orderId}")
     @ResponseStatus(OK)
     @Operation(summary = "List all products from an order", description = "This endpoint retrieves example data from the server.")
-    public List<OrderedProduct> getAllProductsFromOrder(@PathVariable("orderId") Long orderId){
-        return orderedProductService.getAllProductsFromOrder(orderId);
+    public ResponseEntity<List<OrderedProduct>> getAllProductsFromOrder(@PathVariable("orderId") Long orderId){
+        List<OrderedProduct> orderedProduct = orderedProductService.getAllProductsFromOrder(orderId);
+        return ResponseEntity.ok(orderedProduct);
     }
 }

@@ -33,7 +33,7 @@ public class OrderController {
     @Operation(summary = "List all Orders", description = "This endpoint retrieves example data from the server.")
     public ResponseEntity<List<Order>> getAllOrders() {
             List<Order> orders = orderService.getAllOrders();
-            return new ResponseEntity<>(orders, HttpStatus.OK);
+            return ResponseEntity.ok(orders);
     }
 
     @GetMapping("/{id}")
