@@ -1,7 +1,11 @@
 package com.ordersmicroservice.orders_microservice.services;
 
 import com.ordersmicroservice.orders_microservice.dto.Status;
+
 import com.ordersmicroservice.orders_microservice.dto.StatusUpdateDto;
+
+import com.ordersmicroservice.orders_microservice.exception.GlobalExceptionHandler;
+
 import com.ordersmicroservice.orders_microservice.models.Order;
 import com.ordersmicroservice.orders_microservice.repositories.OrderRepository;
 import com.ordersmicroservice.orders_microservice.services.impl.OrderServiceImpl;
@@ -77,14 +81,18 @@ public class OrderServiceTest {
 
     @Test
     @DisplayName("Testing Adding a new order with just an id")
-    void testAddOrder() {
-        String[] adresses = {"123 Main St","456 Elm St","789 Oak St","101 Maple Ave","222 Pine St","333 Cedar Rd"};
+
+    public void testAddOrder() {
+        String[] addresses = {"123 Main St","456 Elm St","789 Oak St","101 Maple Ave","222 Pine St","333 Cedar Rd"};
+
         when(orderRepository.save(any(Order.class))).thenAnswer(invocation -> invocation.getArgument(0));
         Order savedOrder = orderService.addOrder(1L);
 
         assertNotNull(savedOrder);
+
         assertEquals(1L, savedOrder.getUserId());
-        assertTrue(Arrays.asList(adresses).contains( savedOrder.getFromAddress()));
+        assertTrue(Arrays.asList(addresses).contains( savedOrder.getFromAddress()));
+
         assertEquals(Status.UNPAID, savedOrder.getStatus());
         assertNotNull(savedOrder.getDateOrdered());
         assertNull(savedOrder.getDateDelivered());
@@ -114,6 +122,7 @@ public class OrderServiceTest {
     }
 
 
+
 @Test
 @DisplayName("Testing the update when order is not found")
 void testPatchOrderIfNotFound(){
@@ -127,12 +136,30 @@ void testPatchOrderIfNotFound(){
     Status status =  statusUpdateDto.getStatus();
     Long order1Id = order1.getId();
 
-    Exception e = assertThrows(RuntimeException.class, ()-> orderService.patchOrder(order1Id, status));
+    GlobalExceptionHandler.NotFoundException e = assertThrows(GlobalExceptionHandler.NotFoundException.class, () -> orderService.patchOrder(order1Id, status));
     assertTrue(e.getMessage().contains(message));
 
     verify(orderRepository, times(1)).findById(order1.getId());
     verify(orderRepository, times(0)).save(any(Order.class));
 }
+
+/*
+    @Test
+    @DisplayName("Testing the update when order is not found")
+    public void testPatchOrderIfNotFound(){
+        Long orderId = 1L;
+        Order updatedOrder = new Order();
+        updatedOrder.setStatus(Status.DELIVERED);
+
+        when(orderRepository.findById(orderId)).thenReturn(Optional.empty());
+
+        GlobalExceptionHandler.NotFoundException exception = assertThrows(GlobalExceptionHandler.NotFoundException.class, () -> {
+            orderService.patchOrder(orderId, updatedOrder);
+        });
+        assertTrue(exception.getMessage().contains("Order not found with id: " + orderId));
+
+    }
+*/
 
     @Test
     @DisplayName("Testing the deleting of an order")
