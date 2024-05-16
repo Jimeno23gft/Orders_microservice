@@ -33,7 +33,6 @@ build/
 .vscode/
 
 
-### .log ###
 logs/orders_microservice.log
 
 
