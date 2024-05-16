@@ -1,5 +1,6 @@
 package com.ordersmicroservice.orders_microservice.controllers;
 
+import com.ordersmicroservice.orders_microservice.dto.StatusUpdateDto;
 import com.ordersmicroservice.orders_microservice.models.Order;
 import com.ordersmicroservice.orders_microservice.services.OrderService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -58,17 +59,6 @@ public class OrderController {
         return ResponseEntity.status(HttpStatus.CREATED).body(order);
     }
 
-    @PatchMapping("/{id}")
-    @Operation(summary = "Update an order", description = "This endpoint retrieves example data from the server.")
-    public ResponseEntity<Order> patchOrder(@PathVariable Long id, @RequestBody Order patchData){
-        try {
-            Order order = orderService.patchOrder(id, patchData);
-            return ResponseEntity.ok(order);
-        } catch (GlobalExceptionHandler.NotFoundException e) {
-            return ResponseEntity.notFound().build();
-        }
-    }
-
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @Operation(summary = "Cancel an order", description = "This endpoint retrieves example data from the server.")
@@ -80,5 +70,12 @@ public class OrderController {
     @ExceptionHandler(EntityNotFoundException.class)
     public ResponseEntity<String> handleNotFound(EntityNotFoundException ex) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
+    }
+
+    @PatchMapping("/{id}")
+    @Operation(summary = "Update an order", description = "This endpoint updates the status of an order based on the provided ID.")
+    public ResponseEntity<Order> patchOrder(@PathVariable Long id, @RequestBody StatusUpdateDto patchData) {
+        Order updatedOrder = orderService.patchOrder(id, patchData.getStatus());
+        return ResponseEntity.ok(updatedOrder);
     }
 }

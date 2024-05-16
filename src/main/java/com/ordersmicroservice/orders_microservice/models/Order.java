@@ -8,6 +8,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @Data
@@ -22,27 +23,31 @@ public class Order {
     @Column(name="id")
     private Long id;
 
-    @Column(name = "user_id")
-    private Long user_id;
+    @Column(name = "cart_id")
+    private Long cartId;
 
     @Column(name="from_address")
-    private String from_address;
-
-    @Column(name="to_address")
-    private String to_address;
+    private String fromAddress;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "status")
     private Status status;
 
     @Column(name = "date_ordered")
-    private String date_ordered;
+    private String dateOrdered;
 
     @Column(name = "date_delivered")
-    private String date_delivered;
+    private String dateDelivered;
+
+    @OneToOne(mappedBy = "order", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonManagedReference
+    private Address address;
+
+    @Column(name = "total_price")
+    private BigDecimal total_price;
 
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
     @JsonManagedReference
-    private List<OrderedProduct> orderedProductList;
+    private List<OrderedProduct> orderedProducts;
 
 }
