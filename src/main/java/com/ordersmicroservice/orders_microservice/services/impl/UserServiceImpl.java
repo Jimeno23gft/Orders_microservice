@@ -2,14 +2,18 @@ package com.ordersmicroservice.orders_microservice.services.impl;
 
 
 import com.ordersmicroservice.orders_microservice.dto.UserDto;
+
 import lombok.extern.slf4j.Slf4j;
+
+import com.ordersmicroservice.orders_microservice.services.UserService;
+
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 
 @Slf4j
 @Service
-public class UserServiceImpl {
+public class UserServiceImpl implements UserService {
     private final WebClient webClient;
 
     public UserServiceImpl(WebClient webClient) {
