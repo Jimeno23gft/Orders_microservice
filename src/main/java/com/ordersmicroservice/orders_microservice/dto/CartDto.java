@@ -18,13 +18,10 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class CartDto {
-
         private Long id;
-
-        @JsonProperty("user_id")
-        private Long userId;
-
-        private List<CartProductDto> cartProducts = new ArrayList<>();;
+        @JsonProperty("cart_id")
+        private Long cartId;
+        private List<CartProductDto> cartProducts = new ArrayList<>();
         private BigDecimal totalPrice;
 
 }

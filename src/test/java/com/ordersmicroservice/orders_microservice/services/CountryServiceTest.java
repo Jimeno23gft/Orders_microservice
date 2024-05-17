@@ -37,7 +37,7 @@ public class CountryServiceTest {
         String countryJson = """
                 {
                         "id": 1,
-                        "name": "Espanya",
+                        "name": "España",
                         "tax": 21,
                         "prefix": "+34",
                         "timeZone": "Europe/Madrid"
@@ -52,7 +52,7 @@ public class CountryServiceTest {
 
         StepVerifier.create(countryMono)
                 .expectNextMatches(country ->
-                                country.getName().equals("Espanya"))
+                                country.getName().equals("España"))
                 .verifyComplete();
 
     }
