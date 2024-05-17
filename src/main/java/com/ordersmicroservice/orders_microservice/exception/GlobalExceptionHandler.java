@@ -1,6 +1,5 @@
 package com.ordersmicroservice.orders_microservice.exception;
-import lombok.AllArgsConstructor;
-import lombok.Data;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.Generated;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -31,54 +30,20 @@ public class GlobalExceptionHandler {
         ErrorMessage message = new ErrorMessage(HttpStatus.INTERNAL_SERVER_ERROR, exception.getMessage(), new Date());
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(message);
     }
-    @org.springframework.web.bind.annotation.ExceptionHandler(GlobalExceptionHandler.ResourceNotFoundException.class)
-    public ResponseEntity<Object> handleResourceNotFoundException(GlobalExceptionHandler.ResourceNotFoundException ex) {
-        GlobalExceptionHandler.ErrorMessage errorResponse = new ErrorMessage(HttpStatus.NOT_FOUND, ex.getMessage(), new Date());
+    @org.springframework.web.bind.annotation.ExceptionHandler(ResourceNotFoundException.class)
+    public ResponseEntity<Object> handleResourceNotFoundException(ResourceNotFoundException ex) {
+        ErrorMessage errorResponse = new ErrorMessage(HttpStatus.NOT_FOUND, ex.getMessage(), new Date());
         return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
     }
-
     @org.springframework.web.bind.annotation.ExceptionHandler(MethodArgumentTypeMismatchException.class)
     public ResponseEntity<Object> handleMethodArgumentTypeMismatch(MethodArgumentTypeMismatchException ex) {
         String errorMessage = "Invalid parameter: " + ex.getName() + ". Value '" + ex.getValue() +
                 "' cannot be converted to type Long ";
-        GlobalExceptionHandler.ErrorMessage errorResponse = new ErrorMessage(HttpStatus.BAD_REQUEST, errorMessage, new Date());
+        ErrorMessage errorResponse = new ErrorMessage(HttpStatus.BAD_REQUEST, errorMessage, new Date());
         return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
     }
-
-    @Generated
-    public static class BadRequest extends RuntimeException{
-        public BadRequest(String message) {
-            super(message);
-        }
+    @org.springframework.web.bind.annotation.ExceptionHandler(EntityNotFoundException.class)
+    public ResponseEntity<String> handleNotFound(EntityNotFoundException ex) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
     }
-    @Generated
-    public static class InternalServerErrorException extends RuntimeException {
-        public InternalServerErrorException(String message) {
-            super(message);
-        }
-
-    }
-    @Generated
-    public static class NotFoundException extends RuntimeException{
-        public NotFoundException(String message) {
-            super(message);
-        }
-
-    }
-    @Generated
-    public static class ResourceNotFoundException extends RuntimeException {
-        public ResourceNotFoundException(String message) {
-            super(message);
-        }
-    }
-
-    @Data
-    @AllArgsConstructor
-    @Generated
-    public static class ErrorMessage {
-        private HttpStatus status;
-        private String message;
-        private Date timestamp;
-    }
-
 }
