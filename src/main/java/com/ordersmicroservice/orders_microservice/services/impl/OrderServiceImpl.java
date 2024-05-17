@@ -1,7 +1,7 @@
 package com.ordersmicroservice.orders_microservice.services.impl;
 
 import com.ordersmicroservice.orders_microservice.dto.Status;
-import com.ordersmicroservice.orders_microservice.exception.GlobalExceptionHandler;
+import com.ordersmicroservice.orders_microservice.exception.NotFoundException;
 import com.ordersmicroservice.orders_microservice.models.Order;
 import com.ordersmicroservice.orders_microservice.repositories.OrderRepository;
 import com.ordersmicroservice.orders_microservice.services.OrderService;
@@ -18,7 +18,6 @@ import java.util.Random;
 public class OrderServiceImpl implements OrderService {
 
     OrderRepository orderRepository;
-    Random random = new Random();
 
     public OrderServiceImpl(OrderRepository orderRepository) {
         this.orderRepository = orderRepository;
@@ -28,18 +27,18 @@ public class OrderServiceImpl implements OrderService {
     public List<Order> getAllOrders() {
 
         return Optional.of(orderRepository.findAll()).filter(orders -> !orders.isEmpty())
-                .orElseThrow(() -> new GlobalExceptionHandler.NotFoundException("No orders were found"));
+                .orElseThrow(() -> new NotFoundException("No orders were found"));
 
     }
 
     @Override
     public Order getOrderById(Long orderId) {
-        return orderRepository.findById(orderId).orElseThrow(() -> new GlobalExceptionHandler.NotFoundException("Order not found with ID: " + orderId));
+        return orderRepository.findById(orderId).orElseThrow(() -> new NotFoundException("Order not found with ID: " + orderId));
     }
 
     @Override
     public Order addOrder(Long id) {
-        try {
+
         Order order = new Order();
         order.setCartId(id);
         order.setFromAddress(randomAddress());
@@ -47,9 +46,6 @@ public class OrderServiceImpl implements OrderService {
         order.setDateOrdered(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")));
 
             return orderRepository.save(order);
-        } catch (GlobalExceptionHandler.BadRequest ex) {
-            throw new GlobalExceptionHandler.BadRequest("");
-        }
     }
 
     private String randomAddress() {
@@ -59,27 +55,21 @@ public class OrderServiceImpl implements OrderService {
     }
 
     public Order patchOrder(Long id, @RequestBody Status updatedStatus) {
-        try {
+
 
             Order existingOrder = orderRepository.findById(id)
-                    .orElseThrow(() -> new GlobalExceptionHandler.NotFoundException("Order not found with id " + id));
-            Status previousStatus = existingOrder.getStatus();
+                    .orElseThrow(() -> new NotFoundException("Order not found with id " + id));
 
             existingOrder.setStatus(updatedStatus);
             if (updatedStatus == Status.DELIVERED) {
                 existingOrder.setDateDelivered(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
             }
-
-
             return orderRepository.save(existingOrder);
-        } catch (GlobalExceptionHandler.BadRequest ex) {
-            throw new GlobalExceptionHandler.BadRequest("");
-        }
     }
 
 
     public void deleteById(Long id) {
-        orderRepository.findById(id).orElseThrow(() -> new GlobalExceptionHandler.NotFoundException("Order not found with id: " + id));
+        orderRepository.findById(id).orElseThrow(() -> new NotFoundException("Order not found with id: " + id));
         orderRepository.deleteById(id);
     }
 }

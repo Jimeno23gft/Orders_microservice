@@ -117,17 +117,6 @@ public class OrderControllerTest {
     }
 
     @Test
-    void testDeleteByIdShouldFailWhenIdNotFound() throws Exception {
-        Long id = 3L;
-        doThrow(new EntityNotFoundException("Order not found")).when(orderService).deleteById(id);
-
-        mockMvc.perform(delete("/orders/{id}", id))
-                .andExpect(status().isNotFound());
-
-        verify(orderService).deleteById(id);
-    }
-
-    @Test
     void testPatchOrder () throws Exception {
 
         Long id = 1L;

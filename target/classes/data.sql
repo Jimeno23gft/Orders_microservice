@@ -56,7 +56,6 @@ INSERT INTO addresses (order_id, street, number, door, city_name, zip_code, coun
 (2, 'Elm Street', 456, 'B', 'Shelbyville', '67890', 2),
 (3, 'Oak Street', 789, 'C', 'Capital City', '10112', 3);
 
-
 INSERT INTO ordered_products (order_id, product_id, name, category, description, price, quantity)
 VALUES (1, 1001, 'Product1', 'Category1', 'Description1', 50, 2);
 
@@ -86,3 +85,4 @@ VALUES (5, 1009, 'Product9', 'Category9', 'Description9', 110, 1);
 
 INSERT INTO ordered_products (order_id, product_id, name, category, description, price, quantity)
 VALUES (6, 1010, 'Product10', 'Category10', 'Description10', 120, 5);
+
