@@ -23,19 +23,17 @@ public class OrderedProductServiceTest {
     @InjectMocks
     OrderedProductServiceImpl orderedProductsService;
     Long orderId;
-    private OrderedProduct orderedProduct1;
-    private OrderedProduct orderedProduct2;
     private List<OrderedProduct> orderedProducts;
 
     @BeforeEach
     void setup(){
         orderId = 1L;
-        orderedProduct1 = OrderedProduct.builder()
+        OrderedProduct orderedProduct1 = OrderedProduct.builder()
                 .orderId(orderId)
                 .productId(1L)
                 .quantity(3)
                 .build();
-        orderedProduct2 = OrderedProduct.builder()
+        OrderedProduct orderedProduct2 = OrderedProduct.builder()
                 .orderId(orderId)
                 .productId(2L)
                 .quantity(5)

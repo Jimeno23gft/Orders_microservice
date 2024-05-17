@@ -8,11 +8,10 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
-import jakarta.persistence.EntityNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import com.ordersmicroservice.orders_microservice.exception.GlobalExceptionHandler;
+
 
 
 import java.util.List;
@@ -43,7 +42,7 @@ public class OrderController {
             @ApiResponse(responseCode = "200", description = "Successful operation", content = @Content(mediaType = "application/json")),
             @ApiResponse(responseCode = "404", description = "Order not found", content = @Content(mediaType = "application/json"))
     })
-    public ResponseEntity<?> getOrderById(@PathVariable Long id) {
+    public ResponseEntity<Order> getOrderById(@PathVariable Long id) {
             Order order = orderService.getOrderById(id);
             return ResponseEntity.ok(order);
     }

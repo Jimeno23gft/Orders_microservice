@@ -18,6 +18,8 @@ import java.util.Random;
 public class OrderServiceImpl implements OrderService {
 
     OrderRepository orderRepository;
+    Random random;
+
 
     public OrderServiceImpl(OrderRepository orderRepository) {
         this.orderRepository = orderRepository;
@@ -50,16 +52,13 @@ public class OrderServiceImpl implements OrderService {
 
     private String randomAddress() {
         String[] addresses = {"123 Main St", "456 Elm St", "789 Oak St", "101 Maple Ave", "222 Pine St", "333 Cedar Rd"};
-        Random random = new Random();
-        return addresses[random.nextInt(addresses.length)];
+        this.random = new Random();
+        return addresses[this.random.nextInt(addresses.length)];
     }
 
     public Order patchOrder(Long id, @RequestBody Status updatedStatus) {
-
-
             Order existingOrder = orderRepository.findById(id)
                     .orElseThrow(() -> new NotFoundException("Order not found with id " + id));
-
             existingOrder.setStatus(updatedStatus);
             if (updatedStatus == Status.DELIVERED) {
                 existingOrder.setDateDelivered(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
