@@ -2,10 +2,8 @@ name: pipeline
  
 on:
   push:
-    branches: [ main ]
-  pull_request:
-    branches: [ main ]
- 
+    branches: [ main, develop ]
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -17,7 +15,7 @@ jobs:
       uses: actions/setup-java@v2
       with:
         java-version: '17'
-        distribution: 'temurin'  # Utiliza la distribución Temurin de AdoptOpenJDK
+        distribution: 'temurin'
  
     - name: Build and test with Maven
       run: mvn clean verify
