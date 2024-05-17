@@ -53,52 +53,19 @@ public class OrderServiceImpl implements OrderService {
     }
 
     private String randomAddress() {
-<<<<<<< HEAD
-<<<<<<< Updated upstream
-        String[] adresses = {"123 Main St","456 Elm St","789 Oak St","101 Maple Ave","222 Pine St","333 Cedar Rd"};
-
-        return adresses[this.random.nextInt(adresses.length)];
-=======
         String[] addresses = {"123 Main St", "456 Elm St", "789 Oak St", "101 Maple Ave", "222 Pine St", "333 Cedar Rd"};
         this.random = new Random();
-        return addresses[random.nextInt(addresses.length)];
->>>>>>> Stashed changes
-=======
-        String[] addresses = {"123 Main St", "456 Elm St", "789 Oak St", "101 Maple Ave", "222 Pine St", "333 Cedar Rd"};
-        Random random = new Random();
-        return addresses[random.nextInt(addresses.length)];
->>>>>>> 279cc33f62c1a3d44ed6f806ea5440c66aa7fbcd
+        return addresses[this.random.nextInt(addresses.length)];
     }
 
     public Order patchOrder(Long id, @RequestBody Status updatedStatus) {
         try {
-
-<<<<<<< HEAD
-<<<<<<< Updated upstream
         Order existingOrder = orderRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Order not found with id " + id));
-=======
-            Order existingOrder = orderRepository.findById(id)
-                    .orElseThrow(() -> new GlobalExceptionHandler.NotFoundException("Order not found with id " + id));
->>>>>>> Stashed changes
-=======
-            Order existingOrder = orderRepository.findById(id)
-                    .orElseThrow(() -> new GlobalExceptionHandler.NotFoundException("Order not found with id " + id));
-            Status previousStatus = existingOrder.getStatus();
->>>>>>> 279cc33f62c1a3d44ed6f806ea5440c66aa7fbcd
-
             existingOrder.setStatus(updatedStatus);
             if (updatedStatus == Status.DELIVERED) {
                 existingOrder.setDateDelivered(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
             }
-<<<<<<< Updated upstream
-
-<<<<<<< HEAD
-=======
->>>>>>> Stashed changes
-=======
-
->>>>>>> 279cc33f62c1a3d44ed6f806ea5440c66aa7fbcd
             return orderRepository.save(existingOrder);
         } catch (GlobalExceptionHandler.BadRequest ex) {
             throw new GlobalExceptionHandler.BadRequest("");
