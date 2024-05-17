@@ -16,7 +16,7 @@ import java.util.Random;
 public class OrderServiceImpl implements OrderService {
 
     OrderRepository orderRepository;
-    Random random = new Random();
+    Random random;
 
     public OrderServiceImpl(OrderRepository orderRepository) {
         this.orderRepository = orderRepository;
@@ -45,21 +45,35 @@ public class OrderServiceImpl implements OrderService {
     }
 
     private String randomAddress() {
+<<<<<<< Updated upstream
         String[] adresses = {"123 Main St","456 Elm St","789 Oak St","101 Maple Ave","222 Pine St","333 Cedar Rd"};
 
         return adresses[this.random.nextInt(adresses.length)];
+=======
+        String[] addresses = {"123 Main St", "456 Elm St", "789 Oak St", "101 Maple Ave", "222 Pine St", "333 Cedar Rd"};
+        this.random = new Random();
+        return addresses[random.nextInt(addresses.length)];
+>>>>>>> Stashed changes
     }
 
     public Order patchOrder(Long id, @RequestBody Status updatedStatus) {
 
+<<<<<<< Updated upstream
         Order existingOrder = orderRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Order not found with id " + id));
+=======
+            Order existingOrder = orderRepository.findById(id)
+                    .orElseThrow(() -> new GlobalExceptionHandler.NotFoundException("Order not found with id " + id));
+>>>>>>> Stashed changes
 
             existingOrder.setStatus(updatedStatus);
             if(updatedStatus == Status.DELIVERED){
                 existingOrder.setDateDelivered(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
             }
+<<<<<<< Updated upstream
 
+=======
+>>>>>>> Stashed changes
             return orderRepository.save(existingOrder);
     }
 
