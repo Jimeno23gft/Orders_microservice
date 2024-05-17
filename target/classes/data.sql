@@ -57,3 +57,32 @@ INSERT INTO addresses (order_id, street, number, door, city_name, zip_code, coun
 (3, 'Oak Street', 789, 'C', 'Capital City', '10112', 3);
 
 
+INSERT INTO ordered_products (order_id, product_id, name, category, description, price, quantity)
+VALUES (1, 1001, 'Product1', 'Category1', 'Description1', 50, 2);
+
+INSERT INTO ordered_products (order_id, product_id, name, category, description, price, quantity)
+VALUES (1, 1002, 'Product2', 'Category2', 'Description2', 30, 1);
+
+INSERT INTO ordered_products (order_id, product_id, name, category, description, price, quantity)
+VALUES (1, 1003, 'Product3', 'Category3', 'Description3', 40, 3);
+
+INSERT INTO ordered_products (order_id, product_id, name, category, description, price, quantity)
+VALUES (2, 1004, 'Product4', 'Category4', 'Description4', 60, 2);
+
+INSERT INTO ordered_products (order_id, product_id, name, category, description, price, quantity)
+VALUES (3, 1005, 'Product5', 'Category5', 'Description5', 70, 1);
+
+INSERT INTO ordered_products (order_id, product_id, name, category, description, price, quantity)
+VALUES (4, 1006, 'Product6', 'Category6', 'Description6', 80, 4);
+
+INSERT INTO ordered_products (order_id, product_id, name, category, description, price, quantity)
+VALUES (4, 1007, 'Product7', 'Category7', 'Description7', 90, 2);
+
+INSERT INTO ordered_products (order_id, product_id, name, category, description, price, quantity)
+VALUES (5, 1008, 'Product8', 'Category8', 'Description8', 100, 3);
+
+INSERT INTO ordered_products (order_id, product_id, name, category, description, price, quantity)
+VALUES (5, 1009, 'Product9', 'Category9', 'Description9', 110, 1);
+
+INSERT INTO ordered_products (order_id, product_id, name, category, description, price, quantity)
+VALUES (6, 1010, 'Product10', 'Category10', 'Description10', 120, 5);

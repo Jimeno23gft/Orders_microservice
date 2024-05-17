@@ -56,7 +56,6 @@ public class OrderServiceImpl implements OrderService {
 
     public Order patchOrder(Long id, @RequestBody Status updatedStatus) {
 
-
             Order existingOrder = orderRepository.findById(id)
                     .orElseThrow(() -> new NotFoundException("Order not found with id " + id));
 
