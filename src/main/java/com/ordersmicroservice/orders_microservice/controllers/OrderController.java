@@ -42,7 +42,7 @@ public class OrderController {
             @ApiResponse(responseCode = "200", description = "Successful operation", content = @Content(mediaType = "application/json")),
             @ApiResponse(responseCode = "404", description = "Order not found", content = @Content(mediaType = "application/json"))
     })
-    public ResponseEntity<?> getOrderById(@PathVariable Long id) {
+    public ResponseEntity<Order> getOrderById(@PathVariable Long id) {
             Order order = orderService.getOrderById(id);
             return ResponseEntity.ok(order);
     }

@@ -48,7 +48,7 @@ public class CartServiceTest {
         String cartJson = """
             {
                 "id": 1,
-                "user_id": 101,
+                "cart_id": 101,
                 "updated_at": "2024-05-01T10:00:00.000+00:00",
                 "cartProducts": [
                     {
@@ -73,7 +73,7 @@ public class CartServiceTest {
         StepVerifier.create(cartMono)
                 .expectNextMatches(cartDto ->
                         cartDto.getId().equals(1L) &&
-                                cartDto.getUserId().equals(101L) &&
+                                cartDto.getCartId().equals(101L) &&
                                 cartDto.getCartProducts().size() == 1 &&
                                 cartDto.getCartProducts().get(0).getProductName().equals("Apple MacBook Pro") &&
                                 cartDto.getCartProducts().get(0).getQuantity().equals(1) &&

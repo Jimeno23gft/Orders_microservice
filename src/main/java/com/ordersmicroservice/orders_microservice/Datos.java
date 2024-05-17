@@ -24,7 +24,7 @@ public class Datos {
         return Optional.of(new Order(1L,1L,"Valencia",PAID, "2001-21-21","2002-21-21", address ,new BigDecimal("15"),productList));
     }
     public static Optional<Order> crearOrder002() {
-        return Optional.of(new Order(2L, 2L, "Valencia", UNPAID, "2001-21-21","2002-21-21", address ,new BigDecimal("15"),productList));
+        return Optional.of(new Order(2L, 2L, "Barcelona", UNPAID, "2001-21-21","2002-21-21", address ,new BigDecimal("15"),productList));
     }
 
     public static Optional<Address> crearAddress001() {
