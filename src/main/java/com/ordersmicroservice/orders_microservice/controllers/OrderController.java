@@ -1,6 +1,7 @@
 package com.ordersmicroservice.orders_microservice.controllers;
 
 import com.ordersmicroservice.orders_microservice.dto.StatusUpdateDto;
+import com.ordersmicroservice.orders_microservice.exception.NotFoundException;
 import com.ordersmicroservice.orders_microservice.models.Order;
 import com.ordersmicroservice.orders_microservice.services.OrderService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -63,7 +64,12 @@ public class OrderController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @Operation(summary = "Cancel an order", description = "This endpoint retrieves example data from the server.")
     public void deleteById(@PathVariable Long id) {
-        orderService.deleteById(id);
+        try{
+            orderService.deleteById(id);
+        }catch (NotFoundException ex){
+            throw new NotFoundException(ex.getMessage());
+        }
+
     }
 
     @PatchMapping("/{id}")
