@@ -13,12 +13,18 @@ import java.util.Optional;
 @Service
 public class OrderedProductServiceImpl implements OrderedProductService {
     OrderedProductRepository orderedProductRepository;
-    public OrderedProductServiceImpl(OrderedProductRepository orderedProductRepository){
+
+    public OrderedProductServiceImpl(OrderedProductRepository orderedProductRepository) {
         this.orderedProductRepository = orderedProductRepository;
     }
+
+
     @Override
     public List<OrderedProduct> getAllProductsFromOrder(Long orderId) {
-        return Optional.of(orderedProductRepository.findAll()).filter(orderedProducts -> !orderedProducts.isEmpty())
-                .orElseThrow(() -> new NotFoundException("No orders were found"));
+        List<OrderedProduct> orderedProducts = orderedProductRepository.findByOrderId(orderId);
+        if (orderedProducts.isEmpty()) {
+            throw new NotFoundException("No orders were found for orderId: " + orderId);
+        }
+        return orderedProducts;
     }
 }
