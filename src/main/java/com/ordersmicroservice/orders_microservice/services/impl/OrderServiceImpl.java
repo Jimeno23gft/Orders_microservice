@@ -1,9 +1,13 @@
 package com.ordersmicroservice.orders_microservice.services.impl;
 
+import com.ordersmicroservice.orders_microservice.dto.CartDto;
+import com.ordersmicroservice.orders_microservice.dto.CartProductDto;
 import com.ordersmicroservice.orders_microservice.dto.Status;
 import com.ordersmicroservice.orders_microservice.exception.NotFoundException;
 import com.ordersmicroservice.orders_microservice.models.Order;
+import com.ordersmicroservice.orders_microservice.models.OrderedProduct;
 import com.ordersmicroservice.orders_microservice.repositories.OrderRepository;
+import com.ordersmicroservice.orders_microservice.services.CartService;
 import com.ordersmicroservice.orders_microservice.services.OrderService;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -19,9 +23,14 @@ public class OrderServiceImpl implements OrderService {
 
     OrderRepository orderRepository;
     Random random;
+    private final CartService cartService;
 
 
-    public OrderServiceImpl(OrderRepository orderRepository) {
+
+
+    public OrderServiceImpl(OrderRepository orderRepository, CartService cartService) {
+
+        this.cartService = cartService;
         this.orderRepository = orderRepository;
     }
 
@@ -41,10 +50,14 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public Order addOrder(Long id) {
 
-
+        CartDto cart = cartService.getCartById(id);
+        List<CartProductDto> cartProducts = cartService.getCartById(id).getCartProducts();
 
         Order order = new Order();
-        order.setCartId(id);
+
+        order.setCartId(cart.getId());
+        order.setTotalPrice(cart.getTotalPrice());
+        order.setOrderedProducts(cartProducts);
         order.setFromAddress(randomAddress());
         order.setStatus(Status.UNPAID);
         order.setDateOrdered(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")));
