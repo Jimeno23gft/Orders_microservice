@@ -17,7 +17,7 @@ import reactor.test.StepVerifier;
 
 import java.io.IOException;
 
-public class CountryServiceTest {
+class CountryServiceTest {
 
     private MockWebServer mockWebServer;
     private CountryServiceImpl countryServiceImpl;
