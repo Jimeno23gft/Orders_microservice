@@ -5,5 +5,5 @@ import reactor.core.publisher.Mono;
 
 public interface CartService {
 
-    Mono<CartDto> getCartById(Long id);
+    CartDto getCartById(Long id);
 }

@@ -1,5 +1,6 @@
 package com.ordersmicroservice.orders_microservice.dto;
 
+import com.ordersmicroservice.orders_microservice.models.OrderedProduct;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
