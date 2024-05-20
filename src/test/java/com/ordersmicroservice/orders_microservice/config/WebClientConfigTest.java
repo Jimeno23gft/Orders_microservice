@@ -6,7 +6,7 @@ import org.springframework.web.reactive.function.client.WebClient;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-public class WebClientConfigTest {
+class WebClientConfigTest {
     @Test
     void testWebClient() {
 
