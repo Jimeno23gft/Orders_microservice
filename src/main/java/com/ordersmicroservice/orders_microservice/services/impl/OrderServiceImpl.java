@@ -68,7 +68,9 @@ public class OrderServiceImpl implements OrderService {
 
 
     public void deleteById(Long id) {
-        orderRepository.findById(id).orElseThrow(() -> new NotFoundException("Order not found with id: " + id));
+        if (!orderRepository.existsById(id)) {
+            throw new NotFoundException("Order with ID " + id + " not found.");
+        }
         orderRepository.deleteById(id);
     }
 }

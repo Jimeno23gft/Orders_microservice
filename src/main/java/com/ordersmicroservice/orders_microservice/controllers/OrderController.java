@@ -59,10 +59,10 @@ public class OrderController {
     }
 
     @DeleteMapping("/{id}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
     @Operation(summary = "Cancel an order", description = "This endpoint retrieves example data from the server.")
-    public void deleteById(@PathVariable Long id) {
-            orderService.deleteById(id);
+    public ResponseEntity<String> deleteById(@PathVariable Long id) {
+        orderService.deleteById(id);
+        return ResponseEntity.status(OK).body("Order with id " + id + " has been deleted successfully");
     }
 
     @PatchMapping("/{id}")
