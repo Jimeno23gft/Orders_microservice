@@ -2,6 +2,7 @@ package com.ordersmicroservice.orders_microservice.services;
 
 import com.ordersmicroservice.orders_microservice.dto.Status;
 import com.ordersmicroservice.orders_microservice.dto.StatusUpdateDto;
+import com.ordersmicroservice.orders_microservice.exception.NotFoundException;
 import com.ordersmicroservice.orders_microservice.models.Order;
 import com.ordersmicroservice.orders_microservice.repositories.OrderRepository;
 import com.ordersmicroservice.orders_microservice.services.impl.OrderServiceImpl;
@@ -20,6 +21,8 @@ import java.util.Optional;
 
 import static com.ordersmicroservice.orders_microservice.dto.Status.DELIVERED;
 import static com.ordersmicroservice.orders_microservice.dto.Status.IN_DELIVERY;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
@@ -158,10 +161,26 @@ class OrderServiceTest {
     void testDeleteById() {
         Long orderId = 1L;
 
-        when(orderRepository.findById(orderId)).thenReturn(Optional.of(order1));
+        when(orderRepository.existsById(orderId)).thenReturn(true);
+
         orderService.deleteById(orderId);
 
-        verify(orderRepository).findById(orderId);
+        verify(orderRepository).existsById(orderId);
         verify(orderRepository).deleteById(orderId);
+    }
+
+    @Test
+    @DisplayName("Testing the deleting of an order if the order with the given id is not found")
+    void testDeleteByIdNotFound() {
+        Long orderId = 1L;
+
+        when(orderRepository.existsById(orderId)).thenReturn(false);
+
+        assertThatThrownBy(() -> orderService.deleteById(orderId))
+                .isInstanceOf(NotFoundException.class)
+                .hasMessage("Order with ID " + orderId + " not found.");
+
+        verify(orderRepository).existsById(orderId);
+        verify(orderRepository, never()).deleteById(orderId);
     }
 }
