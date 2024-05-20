@@ -20,17 +20,14 @@ public class OrderServiceImpl implements OrderService {
     OrderRepository orderRepository;
     Random random;
 
-
     public OrderServiceImpl(OrderRepository orderRepository) {
         this.orderRepository = orderRepository;
     }
 
     @Override
     public List<Order> getAllOrders() {
-
         return Optional.of(orderRepository.findAll()).filter(orders -> !orders.isEmpty())
                 .orElseThrow(() -> new NotFoundException("No orders were found"));
-
     }
 
     @Override
@@ -40,16 +37,15 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public Order addOrder(Long id) {
-
-        Order order = Order.builder()
-                .userId(1L)
-                .cartId(id)
-                .fromAddress(randomAddress())
-                .status(Status.UNPAID)
-                .dateOrdered(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")))
-                .build();
-
-            return orderRepository.save(order);
+        return orderRepository.save(
+                Order.builder()
+                        .userId(1L)
+                        .cartId(id)
+                        .fromAddress(randomAddress())
+                        .status(Status.UNPAID)
+                        .dateOrdered(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")))
+                        .build()
+        );
     }
 
     private String randomAddress() {
@@ -59,22 +55,24 @@ public class OrderServiceImpl implements OrderService {
     }
 
     public Order patchOrder(Long id, @RequestBody Status updatedStatus) {
-
-            Order existingOrder = orderRepository.findById(id)
-                    .orElseThrow(() -> new NotFoundException("Order not found with ID: " + id));
-            existingOrder.setStatus(updatedStatus);
-            if (updatedStatus == Status.DELIVERED) {
-                existingOrder.setDateDelivered(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
-            }
-            return orderRepository.save(existingOrder);
+        Order existingOrder = orderRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Order not found with ID: " + id));
+        existingOrder.setStatus(updatedStatus);
+        Optional.of(updatedStatus)
+                .filter(status -> status == Status.DELIVERED)
+                .ifPresent(status -> existingOrder.setDateDelivered(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"))));
+        return orderRepository.save(existingOrder);
     }
 
 
     public void deleteById(Long id) {
-        if (!orderRepository.existsById(id)) {
-            throw new NotFoundException("Order with ID " + id + " not found.");
-        }
-        orderRepository.deleteById(id);
+        orderRepository.findById(id)
+                .ifPresentOrElse(
+                        order -> orderRepository.deleteById(id),
+                        () -> {
+                            throw new NotFoundException("Order with ID " + id + " not found.");
+                        }
+                );
     }
 }
 
