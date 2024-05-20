@@ -19,7 +19,6 @@ import java.util.List;
 
 import static com.ordersmicroservice.orders_microservice.Datos.crearOrder001;
 import static com.ordersmicroservice.orders_microservice.Datos.crearOrder002;
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -118,7 +117,7 @@ class OrderControllerTest {
     }
 
     @Test
-    void testDeleteByIdShouldFailWhenIdNotFound() throws Exception {
+    void testDeleteByIdShouldFailWhenIdNotFound() {
         Long id = 33L;
         doThrow(new NotFoundException("Order not found")).when(orderService).deleteById(id);
 
