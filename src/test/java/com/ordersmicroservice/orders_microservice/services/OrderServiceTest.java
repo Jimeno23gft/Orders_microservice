@@ -39,6 +39,7 @@ class OrderServiceTest {
     public void setup() {
         order1 = Order.builder()
                 .id(1L)
+                .userId(1L)
                 .cartId(1L)
                 .fromAddress("Barcelona")
                 .status(DELIVERED)
@@ -46,6 +47,7 @@ class OrderServiceTest {
                 .dateDelivered("2024-5-10").build();
         order2 = Order.builder()
                 .id(2L)
+                .userId(2L)
                 .cartId(2L)
                 .fromAddress("Valencia")
                 .status(IN_DELIVERY)
@@ -121,7 +123,7 @@ class OrderServiceTest {
     void testPatchOrderDelivered() {
         Order initialOrder = new Order();
         initialOrder.setId(1L);
-        initialOrder.setStatus(IN_DELIVERY); // Assuming initial status is PENDING
+        initialOrder.setStatus(IN_DELIVERY);
 
         when(orderRepository.findById(1L)).thenReturn(Optional.of(initialOrder));
         when(orderRepository.save(initialOrder)).thenReturn(initialOrder);
@@ -131,7 +133,6 @@ class OrderServiceTest {
         assertNotNull(patchedOrder);
         assertEquals(Status.DELIVERED, patchedOrder.getStatus());
         assertNotNull(patchedOrder.getDateDelivered());
-        // Add assertions for the date format if needed
     }
 
     @Test
@@ -160,11 +161,11 @@ class OrderServiceTest {
     void testDeleteById() {
         Long orderId = 1L;
 
-        when(orderRepository.existsById(orderId)).thenReturn(true);
+        when(orderRepository.findById(orderId)).thenReturn(Optional.of(new Order()));
 
         orderService.deleteById(orderId);
 
-        verify(orderRepository).existsById(orderId);
+        verify(orderRepository).findById(orderId);
         verify(orderRepository).deleteById(orderId);
     }
 
@@ -173,13 +174,13 @@ class OrderServiceTest {
     void testDeleteByIdNotFound() {
         Long orderId = 1L;
 
-        when(orderRepository.existsById(orderId)).thenReturn(false);
+        when(orderRepository.findById(orderId)).thenReturn(Optional.empty());
 
         assertThatThrownBy(() -> orderService.deleteById(orderId))
                 .isInstanceOf(NotFoundException.class)
                 .hasMessage("Order with ID " + orderId + " not found.");
 
-        verify(orderRepository).existsById(orderId);
+        verify(orderRepository).findById(orderId);
         verify(orderRepository, never()).deleteById(orderId);
     }
 }
