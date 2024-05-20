@@ -41,11 +41,13 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public Order addOrder(Long id) {
 
-        Order order = new Order();
-        order.setCartId(id);
-        order.setFromAddress(randomAddress());
-        order.setStatus(Status.UNPAID);
-        order.setDateOrdered(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")));
+        Order order = Order.builder()
+                .userId(1L)
+                .cartId(id)
+                .fromAddress(randomAddress())
+                .status(Status.UNPAID)
+                .dateOrdered(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")))
+                .build();
 
             return orderRepository.save(order);
     }

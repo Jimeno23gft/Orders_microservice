@@ -40,6 +40,7 @@ class OrderServiceTest {
     public void setup() {
         order1 = Order.builder()
                 .id(1L)
+                .userId(1L)
                 .cartId(1L)
                 .fromAddress("Barcelona")
                 .status(DELIVERED)
@@ -47,6 +48,7 @@ class OrderServiceTest {
                 .dateDelivered("2024-5-10").build();
         order2 = Order.builder()
                 .id(2L)
+                .userId(2L)
                 .cartId(2L)
                 .fromAddress("Valencia")
                 .status(IN_DELIVERY)
