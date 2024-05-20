@@ -111,8 +111,7 @@ class OrderControllerTest {
         Long id = 3L;
 
         mockMvc.perform(delete("/orders/{id}", id))
-                .andExpect(status().isNoContent());
-
+                .andExpect(status().isOk());
 
         verify(orderService).deleteById(id);
 
