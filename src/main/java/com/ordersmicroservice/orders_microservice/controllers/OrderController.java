@@ -7,11 +7,10 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
-import jakarta.persistence.EntityNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import com.ordersmicroservice.orders_microservice.exception.GlobalExceptionHandler;
+
 
 
 import java.util.List;
@@ -63,7 +62,7 @@ public class OrderController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @Operation(summary = "Cancel an order", description = "This endpoint retrieves example data from the server.")
     public void deleteById(@PathVariable Long id) {
-        orderService.deleteById(id);
+            orderService.deleteById(id);
     }
 
     @PatchMapping("/{id}")
