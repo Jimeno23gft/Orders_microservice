@@ -17,7 +17,7 @@ import reactor.test.StepVerifier;
 import java.io.IOException;
 import java.math.BigDecimal;
 
-public class CartServiceTest {
+class CartServiceTest {
 
 
         private MockWebServer mockWebServer;

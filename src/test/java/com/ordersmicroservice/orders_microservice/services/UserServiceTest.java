@@ -16,7 +16,7 @@ import okhttp3.mockwebserver.MockResponse;
 
 import java.io.IOException;
 
-public class UserServiceTest {
+class UserServiceTest {
     private MockWebServer mockWebServer;
     private UserServiceImpl userServiceImpl;
 
