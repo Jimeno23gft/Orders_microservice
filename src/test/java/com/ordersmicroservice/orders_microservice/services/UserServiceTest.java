@@ -16,7 +16,7 @@ import okhttp3.mockwebserver.MockResponse;
 
 import java.io.IOException;
 
-public class UserServiceTest {
+class UserServiceTest {
     private MockWebServer mockWebServer;
     private UserServiceImpl userServiceImpl;
 
@@ -70,7 +70,8 @@ public class UserServiceTest {
         StepVerifier.create(userMono)
                 .expectNextMatches(user ->
                         user.getId().equals(100L) &&
-                                user.getPhone().equals("1234567890"))
+                                user.getPhone().equals("1234567890")
+                                && user.getName().equals("John"))
                 .verifyComplete();
 
     }

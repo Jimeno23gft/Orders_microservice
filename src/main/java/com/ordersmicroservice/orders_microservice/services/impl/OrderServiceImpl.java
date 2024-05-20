@@ -57,8 +57,9 @@ public class OrderServiceImpl implements OrderService {
     }
 
     public Order patchOrder(Long id, @RequestBody Status updatedStatus) {
+
             Order existingOrder = orderRepository.findById(id)
-                    .orElseThrow(() -> new NotFoundException("Order not found with id " + id));
+                    .orElseThrow(() -> new NotFoundException("Order not found with ID: " + id));
             existingOrder.setStatus(updatedStatus);
             if (updatedStatus == Status.DELIVERED) {
                 existingOrder.setDateDelivered(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));

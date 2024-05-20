@@ -24,7 +24,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-public class OrderServiceTest {
+class OrderServiceTest {
     @Mock
     OrderRepository orderRepository;
     @InjectMocks
@@ -140,7 +140,7 @@ public class OrderServiceTest {
 
         when(orderRepository.findById(order1.getId())).thenReturn(Optional.empty());
 
-        String message = "Order not found with id " + order1.getId();
+        String message = "Order not found with ID: " + order1.getId();
 
         Status status = statusUpdateDto.getStatus();
         Long order1Id = order1.getId();
