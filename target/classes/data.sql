@@ -22,7 +22,7 @@ INSERT INTO orders (cart_id, from_address, status, date_ordered, date_delivered,
 VALUES (1004, '101 Maple Ave', 'DELIVERED', '2024-05-10 11:00:00', '2024-05-12 18:00:00',17);
 
 INSERT INTO orders (cart_id, from_address, status, date_ordered, date_delivered,total_price)
-VALUES (1005, '222 Pine St', 'UNKNOWN', '2024-05-11 12:00:00', '2024-05-10 14:00:00',16);
+VALUES (1005, '222 Pine St5', 'UNKNOWN', '2024-05-11 12:00:00', '2024-05-10 14:00:00',16);
 
 INSERT INTO orders (cart_id, from_address, status, date_ordered, date_delivered,total_price)
 VALUES (1006, '333 Cedar Rd', 'PAID', '2024-05-12 13:00:00', '2024-05-14 19:00:00',18);
@@ -56,35 +56,6 @@ INSERT INTO addresses (order_id, street, number, door, city_name, zip_code, coun
 (2, 'Elm Street', 456, 'B', 'Shelbyville', '67890', 2),
 (3, 'Oak Street', 789, 'C', 'Capital City', '10112', 3);
 
-INSERT INTO ordered_products (order_id, product_id, name, category, description, price, quantity)
-VALUES (1, 1001, 'Product1', 'Category1', 'Description1', 50, 2);
-
-INSERT INTO ordered_products (order_id, product_id, name, category, description, price, quantity)
-VALUES (1, 1002, 'Product2', 'Category2', 'Description2', 30, 1);
-
-INSERT INTO ordered_products (order_id, product_id, name, category, description, price, quantity)
-VALUES (1, 1003, 'Product3', 'Category3', 'Description3', 40, 3);
-
-INSERT INTO ordered_products (order_id, product_id, name, category, description, price, quantity)
-VALUES (2, 1004, 'Product4', 'Category4', 'Description4', 60, 2);
-
-INSERT INTO ordered_products (order_id, product_id, name, category, description, price, quantity)
-VALUES (3, 1005, 'Product5', 'Category5', 'Description5', 70, 1);
-
-INSERT INTO ordered_products (order_id, product_id, name, category, description, price, quantity)
-VALUES (4, 1006, 'Product6', 'Category6', 'Description6', 80, 4);
-
-INSERT INTO ordered_products (order_id, product_id, name, category, description, price, quantity)
-VALUES (4, 1007, 'Product7', 'Category7', 'Description7', 90, 2);
-
-INSERT INTO ordered_products (order_id, product_id, name, category, description, price, quantity)
-VALUES (5, 1008, 'Product8', 'Category8', 'Description8', 100, 3);
-
-INSERT INTO ordered_products (order_id, product_id, name, category, description, price, quantity)
-VALUES (5, 1009, 'Product9', 'Category9', 'Description9', 110, 1);
-
-INSERT INTO ordered_products (order_id, product_id, name, category, description, price, quantity)
-VALUES (6, 1010, 'Product10', 'Category10', 'Description10', 120, 5);
 
 INSERT INTO ordered_products (order_id, product_id, name, category, description, price, quantity)
 VALUES (1, 1001, 'Product1', 'Category1', 'Description1', 50, 2);
