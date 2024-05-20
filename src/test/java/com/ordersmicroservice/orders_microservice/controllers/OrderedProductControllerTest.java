@@ -39,7 +39,7 @@ public class OrderedProductControllerTest {
     }
 
     @Test
-    void getAllProductsFromOrderTest() throws Exception {
+    void testGetAllProductsFromOrder() throws Exception {
         OrderedProduct orderedProduct1 = OrderedProduct
                 .builder()
                 .orderId(orderId1)

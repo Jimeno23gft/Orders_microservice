@@ -1,7 +1,6 @@
 package com.ordersmicroservice.orders_microservice.services;
 
 import com.ordersmicroservice.orders_microservice.dto.Status;
-import com.ordersmicroservice.orders_microservice.exception.GlobalExceptionHandler;
 import com.ordersmicroservice.orders_microservice.dto.StatusUpdateDto;
 import com.ordersmicroservice.orders_microservice.models.Order;
 import com.ordersmicroservice.orders_microservice.repositories.OrderRepository;
@@ -78,7 +77,7 @@ public class OrderServiceTest {
 
     @Test
     @DisplayName("Testing Adding a new order with just an id")
-    public void testAddOrder() {
+    void testAddOrder() {
         String[] addresses = {"123 Main St", "456 Elm St", "789 Oak St", "101 Maple Ave", "222 Pine St", "333 Cedar Rd"};
 
         when(orderRepository.save(any(Order.class))).thenAnswer(invocation -> invocation.getArgument(0));
