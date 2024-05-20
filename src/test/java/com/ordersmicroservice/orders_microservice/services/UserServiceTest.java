@@ -70,7 +70,8 @@ public class UserServiceTest {
         StepVerifier.create(userMono)
                 .expectNextMatches(user ->
                         user.getId().equals(100L) &&
-                                user.getPhone().equals("1234567890"))
+                                user.getPhone().equals("1234567890")
+                                && user.getName().equals("John"))
                 .verifyComplete();
 
     }

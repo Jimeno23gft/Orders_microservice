@@ -22,7 +22,7 @@ INSERT INTO orders (cart_id, from_address, status, date_ordered, date_delivered,
 VALUES (1004, '101 Maple Ave', 'DELIVERED', '2024-05-10 11:00:00', '2024-05-12 18:00:00',17);
 
 INSERT INTO orders (cart_id, from_address, status, date_ordered, date_delivered,total_price)
-VALUES (1005, '222 Pine St', 'UNKNOWN', '2024-05-11 12:00:00', '2024-05-10 14:00:00',16);
+VALUES (1005, '222 Pine St5', 'UNKNOWN', '2024-05-11 12:00:00', '2024-05-10 14:00:00',16);
 
 INSERT INTO orders (cart_id, from_address, status, date_ordered, date_delivered,total_price)
 VALUES (1006, '333 Cedar Rd', 'PAID', '2024-05-12 13:00:00', '2024-05-14 19:00:00',18);
