@@ -4,6 +4,7 @@ import com.ordersmicroservice.orders_microservice.dto.CartDto;
 import com.ordersmicroservice.orders_microservice.dto.CartProductDto;
 import com.ordersmicroservice.orders_microservice.dto.Status;
 import com.ordersmicroservice.orders_microservice.exception.NotFoundException;
+import com.ordersmicroservice.orders_microservice.exception.ResourceNotFoundException;
 import com.ordersmicroservice.orders_microservice.models.Order;
 import com.ordersmicroservice.orders_microservice.models.OrderedProduct;
 import com.ordersmicroservice.orders_microservice.repositories.OrderRepository;
@@ -46,40 +47,48 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public Order addOrder(Long id) {
 
+        CartDto cart;
+        try {
+            cart = cartService.getCartById(id);
+        }catch(Exception ex){
+            throw new NotFoundException("Cart not found with ID: " + id);
+        }
+
+        if(cart.getCartProducts().isEmpty()){
+            throw new ResourceNotFoundException("Empty cart, order not made");
+        }
+
         Order order = new Order();
 
-        //Carts
-        CartDto cart = cartService.getCartById(id);
-        List<CartProductDto> cartProducts = cartService.getCartById(id).getCartProducts();
+            List<CartProductDto> cartProducts = cartService.getCartById(id).getCartProducts();
 
-        List<OrderedProduct> orderedProducts = cartProducts.stream()
-                .map(cartProductDto -> convertToOrderedProduct(cartProductDto, order))
-                .collect(Collectors.toList());
-        //carts
+            List<OrderedProduct> orderedProducts = cartProducts.stream()
+                    .map(cartProductDto -> convertToOrderedProduct(cartProductDto, order))
+                    .collect(Collectors.toList());
 
-//        //Order Cambiar a Builder
-//        order.setCartId(cart.getId());
-//        order.setTotalPrice(cart.getTotalPrice());
-//        order.setOrderedProducts(orderedProducts);
-//        order.setFromAddress(randomAddress());
-//        order.setStatus(Status.UNPAID);
-//        order.setDateOrdered(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")));
-//
-//            return orderRepository.save(order);
+            order.setUserId(cart.getUserId());
+            order.setCartId(cart.getId());
+            order.setTotalPrice(cart.getTotalPrice());
+            order.setOrderedProducts(orderedProducts);
+            order.setFromAddress(randomAddress());
+            order.setStatus(Status.UNPAID);
+            order.setDateOrdered(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")));
+
+            //cartService.emptyCartProductsById(id);
+            return orderRepository.save(order);
 
 
-        return orderRepository.save(
-                Order.builder()
-                        .userId(1L)
-                        .cartId(id)
-                        .totalPrice(cart.getTotalPrice())
-                        .orderedProducts(orderedProducts)
-                        .fromAddress(randomAddress())
-                        .status(Status.UNPAID)
-                        .dateOrdered(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")))
-                        .build()
-        );
+//         order = Order.builder()
+//                                                    .userId(1L)
+//                                                    .cartId(id)
+//                                                    .totalPrice(cart.getTotalPrice())
+//                                                    .orderedProducts(orderedProducts)
+//                                                    .fromAddress(randomAddress())
+//                                                    .status(Status.UNPAID)
+//                                                    .dateOrdered(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")))
+//                                                    .build();
 
+        //return orderRepository.save(order);
     }
     private OrderedProduct convertToOrderedProduct(CartProductDto cartProductDto, Order order) {
         return OrderedProduct.builder()

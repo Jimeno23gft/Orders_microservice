@@ -19,9 +19,17 @@ public class CartServiceImpl implements CartService {
     public CartDto getCartById(Long id){
 
         return restClient.get()
-                .uri("/carts/" + id)
+                .uri("http://localhost:8081/carts/" + id)
                 .retrieve()
                 .body(CartDto.class);
+    }
+
+    public void emptyCartProductsById(Long id){
+
+        restClient.delete()
+                .uri("http://localhost:8081/carts/{id}" + id)
+                .retrieve()
+                .body(Void.class);
     }
 }
 
