@@ -40,6 +40,7 @@ class ProductServiceTest {
     }
 
     @Test
+    @DisplayName("Testing method updates the stock of a given product")
     void testPatchProductStock() {
         String productJson = """
         {
@@ -68,34 +69,37 @@ class ProductServiceTest {
     }
 
     @Test
+    @DisplayName("Testing method fails to find the order with id given to be updated")
     void testPatchIdNotFound() {
         mockWebServer.enqueue(new MockResponse()
                 .setResponseCode(HttpStatus.NOT_FOUND.value())
                 .setBody("Not found")
                 .addHeader("Content-Type", "application/json"));
 
-        Exception exception = assertThrows(RestClientResponseException.class, () -> {
+        RestClientResponseException exception = assertThrows(RestClientResponseException.class, () -> {
             productService.patchProductStock(1L, -5);
         });
 
-        assertEquals(HttpStatus.NOT_FOUND, ((RestClientResponseException) exception).getStatusCode());
+        assertEquals(HttpStatus.NOT_FOUND, exception.getStatusCode());
     }
 
     @Test
+    @DisplayName("Testing method gives an Internal Server Error")
     void testPatchServerError() {
         mockWebServer.enqueue(new MockResponse()
                 .setResponseCode(HttpStatus.INTERNAL_SERVER_ERROR.value())
                 .setBody("Internal Server Error")
                 .addHeader("Content-Type", "application/json"));
 
-        Exception exception = assertThrows(RestClientResponseException.class, () -> {
+        RestClientResponseException exception = assertThrows(RestClientResponseException.class, () -> {
             productService.patchProductStock(1L, -5);
         });
 
-        assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, ((RestClientResponseException) exception).getStatusCode());
+        assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, exception.getStatusCode());
     }
 
     @Test
+    @DisplayName("Testing method retrieves the product with given id")
     void testGetProductById() {
         String productJson = """
         {
@@ -124,6 +128,7 @@ class ProductServiceTest {
     }
 
     @Test
+    @DisplayName("Testing method fails to find the product with id given to be retrieved")
     void testGetProductByIdNotFound() {
         mockWebServer.enqueue(new MockResponse()
                 .setResponseCode(HttpStatus.NOT_FOUND.value())
@@ -138,6 +143,7 @@ class ProductServiceTest {
     }
 
     @Test
+    @DisplayName("Testing method gives an error whenever product with id given is called for")
     void testGetProductByIdError() {
         mockWebServer.enqueue(new MockResponse()
                 .setResponseCode(HttpStatus.INTERNAL_SERVER_ERROR.value())
