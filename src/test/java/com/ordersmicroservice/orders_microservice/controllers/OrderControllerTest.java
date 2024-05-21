@@ -7,6 +7,7 @@ import com.ordersmicroservice.orders_microservice.exception.NotFoundException;
 import com.ordersmicroservice.orders_microservice.models.Order;
 import com.ordersmicroservice.orders_microservice.services.OrderService;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -42,9 +43,8 @@ class OrderControllerTest {
         mockMvc = MockMvcBuilders.standaloneSetup(orderController).build();
     }
 
-
-
     @Test
+    @DisplayName("Testing to get mock orders")
     void testGetAllOrders() throws Exception {
         List<Order> mockOrders = Arrays.asList(crearOrder001().orElseThrow(),
                 crearOrder002().orElseThrow());
@@ -64,6 +64,7 @@ class OrderControllerTest {
     }
 
     @Test
+    @DisplayName("Testing get a mock order by ID")
     void testGetOrderById() throws Exception {
         Long id = 1L;
         when(orderService.getOrderById(1L)).thenReturn(crearOrder001().orElseThrow());
@@ -81,6 +82,7 @@ class OrderControllerTest {
     }
 
     @Test
+    @DisplayName("Testing posting a order")
     void testPostNewOrder() throws Exception {
 
         Long cart_id = 1L;
@@ -106,6 +108,7 @@ class OrderControllerTest {
     }
 
     @Test
+    @DisplayName("Testing deleting a order by ID")
     void testDeleteById() throws Exception {
 
         Long id = 3L;
@@ -118,6 +121,7 @@ class OrderControllerTest {
     }
 
     @Test
+    @DisplayName("Testing deleting a order that doesn't exists")
     void testDeleteByIdShouldFailWhenIdNotFound() throws Exception {
         Long id = 33L;
         doThrow(new NotFoundException("Order not found")).when(orderService).deleteById(id);
@@ -126,6 +130,7 @@ class OrderControllerTest {
         verify(orderService).deleteById(id);
     }
     @Test
+    @DisplayName("Testing patch an order to status PAID")
     void testPatchOrder () throws Exception {
 
         Long id = 1L;

@@ -47,7 +47,7 @@ public class Order {
     @Column(name = "total_price")
     private BigDecimal totalPrice;
 
-    @OneToMany(mappedBy = "CartProductDto", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
     @JsonManagedReference
-    private List<CartProductDto> orderedProducts;
+    private List<OrderedProduct> orderedProducts;
 }

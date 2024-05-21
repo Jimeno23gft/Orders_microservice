@@ -29,12 +29,10 @@ class OrderedProductServiceTest {
     void setup(){
         orderId = 1L;
         OrderedProduct orderedProduct1 = OrderedProduct.builder()
-                .orderId(orderId)
                 .productId(1L)
                 .quantity(3)
                 .build();
         OrderedProduct orderedProduct2 = OrderedProduct.builder()
-                .orderId(orderId)
                 .productId(2L)
                 .quantity(5)
                 .build();
