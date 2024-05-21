@@ -3,7 +3,6 @@ package com.ordersmicroservice.orders_microservice.services;
 
 import com.ordersmicroservice.orders_microservice.dto.CountryDto;
 import com.ordersmicroservice.orders_microservice.services.impl.CountryServiceImpl;
-import com.ordersmicroservice.orders_microservice.services.impl.ProductServiceImpl;
 import okhttp3.mockwebserver.MockResponse;
 import okhttp3.mockwebserver.MockWebServer;
 import org.junit.jupiter.api.AfterEach;
@@ -13,16 +12,10 @@ import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.client.RestClient;
 import org.springframework.web.client.RestClientResponseException;
-import org.springframework.web.reactive.function.client.WebClient;
-import org.springframework.web.reactive.function.client.WebClientResponseException;
-import reactor.core.publisher.Mono;
-import reactor.test.StepVerifier;
-
 import java.io.IOException;
-
 import static org.junit.jupiter.api.Assertions.*;
 
-public class CountryServiceTest {
+class CountryServiceTest {
 
     private MockWebServer mockWebServer;
     private CountryServiceImpl countryServiceImpl;
@@ -54,11 +47,9 @@ public class CountryServiceTest {
 
         CountryDto countryDto = countryServiceImpl.getCountryById(1L);
 
-
         assertNotNull(countryDto);
         assertEquals(1L, countryDto.getId());
         assertEquals("España", countryDto.getName());
-
     }
 
     @Test

@@ -2,6 +2,7 @@ package com.ordersmicroservice.orders_microservice.services;
 
 import com.ordersmicroservice.orders_microservice.dto.Status;
 import com.ordersmicroservice.orders_microservice.dto.StatusUpdateDto;
+import com.ordersmicroservice.orders_microservice.exception.NotFoundException;
 import com.ordersmicroservice.orders_microservice.models.Order;
 import com.ordersmicroservice.orders_microservice.repositories.OrderRepository;
 import com.ordersmicroservice.orders_microservice.services.impl.OrderServiceImpl;
@@ -20,11 +21,12 @@ import java.util.Optional;
 
 import static com.ordersmicroservice.orders_microservice.dto.Status.DELIVERED;
 import static com.ordersmicroservice.orders_microservice.dto.Status.IN_DELIVERY;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-public class OrderServiceTest {
+class OrderServiceTest {
     @Mock
     OrderRepository orderRepository;
     @InjectMocks
@@ -37,6 +39,7 @@ public class OrderServiceTest {
     public void setup() {
         order1 = Order.builder()
                 .id(1L)
+                .userId(1L)
                 .cartId(1L)
                 .fromAddress("Barcelona")
                 .status(DELIVERED)
@@ -44,6 +47,7 @@ public class OrderServiceTest {
                 .dateDelivered("2024-5-10").build();
         order2 = Order.builder()
                 .id(2L)
+                .userId(2L)
                 .cartId(2L)
                 .fromAddress("Valencia")
                 .status(IN_DELIVERY)
@@ -129,7 +133,6 @@ public class OrderServiceTest {
         assertNotNull(patchedOrder);
         assertEquals(Status.DELIVERED, patchedOrder.getStatus());
         assertNotNull(patchedOrder.getDateDelivered());
-        // Add assertions for the date format if needed
     }
 
     @Test
@@ -140,7 +143,7 @@ public class OrderServiceTest {
 
         when(orderRepository.findById(order1.getId())).thenReturn(Optional.empty());
 
-        String message = "Order not found with id " + order1.getId();
+        String message = "Order not found with ID: " + order1.getId();
 
         Status status = statusUpdateDto.getStatus();
         Long order1Id = order1.getId();
@@ -158,10 +161,26 @@ public class OrderServiceTest {
     void testDeleteById() {
         Long orderId = 1L;
 
-        when(orderRepository.findById(orderId)).thenReturn(Optional.of(order1));
+        when(orderRepository.findById(orderId)).thenReturn(Optional.of(new Order()));
+
         orderService.deleteById(orderId);
 
         verify(orderRepository).findById(orderId);
         verify(orderRepository).deleteById(orderId);
+    }
+
+    @Test
+    @DisplayName("Testing the deleting of an order if the order with the given id is not found")
+    void testDeleteByIdNotFound() {
+        Long orderId = 1L;
+
+        when(orderRepository.findById(orderId)).thenReturn(Optional.empty());
+
+        assertThatThrownBy(() -> orderService.deleteById(orderId))
+                .isInstanceOf(NotFoundException.class)
+                .hasMessage("Order with ID " + orderId + " not found.");
+
+        verify(orderRepository).findById(orderId);
+        verify(orderRepository, never()).deleteById(orderId);
     }
 }

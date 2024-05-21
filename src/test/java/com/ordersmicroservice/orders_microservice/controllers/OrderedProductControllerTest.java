@@ -20,7 +20,7 @@ import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(OrderedProductController.class)
-public class OrderedProductControllerTest {
+class OrderedProductControllerTest {
     MockMvc mockMvc;
     @MockBean
     OrderedProductServiceImpl orderedProductService;

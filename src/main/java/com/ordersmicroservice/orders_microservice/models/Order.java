@@ -23,6 +23,9 @@ public class Order {
     @Column(name="id")
     private Long id;
 
+    @Column(name = "user_id")
+    private Long userId;
+
     @Column(name = "cart_id")
     private Long cartId;
 

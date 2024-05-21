@@ -9,19 +9,15 @@ import org.junit.jupiter.api.AfterEach;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.client.RestClient;
 import org.springframework.web.client.RestClientResponseException;
-import org.springframework.web.reactive.function.client.WebClient;
-import org.springframework.web.reactive.function.client.WebClientResponseException;
-import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 import okhttp3.mockwebserver.MockWebServer;
 import okhttp3.mockwebserver.MockResponse;
-
 import java.io.IOException;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-public class UserServiceTest {
+class UserServiceTest {
+
     private MockWebServer mockWebServer;
     private UserServiceImpl userServiceImpl;
 
@@ -76,7 +72,6 @@ public class UserServiceTest {
         assertEquals("1234567890",userDto.getPhone());
         assertEquals(21,userDto.getCountry().getTax());
         assertEquals("Madrid",userDto.getAddress().getCityName());
-
     }
 
     @Test

@@ -11,19 +11,14 @@ import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.client.RestClient;
 import org.springframework.web.client.RestClientResponseException;
-import org.springframework.web.reactive.function.client.WebClient;
-import org.springframework.web.reactive.function.client.WebClientResponseException;
-import reactor.core.publisher.Mono;
-import reactor.test.StepVerifier;
-
 import java.io.IOException;
 import java.math.BigDecimal;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-public class CartServiceTest {
 
+class CartServiceTest {
 
         private MockWebServer mockWebServer;
         private CartServiceImpl cartServiceImpl;
@@ -51,23 +46,24 @@ public class CartServiceTest {
     void testGetCartById() {
 
         String cartJson = """
-            {
-                "id": 1,
-                "cart_id": 101,
-                "updated_at": "2024-05-01T10:00:00.000+00:00",
-                "cartProducts": [
-                    {
-                        "id": 1,
-                        "productName": "Apple MacBook Pro",
-                        "productCategory": "Electronics",
-                        "productDescription": "Latest model of Apple MacBook Pro 16 inch.",
-                        "quantity": 1,
-                        "price": 2399.99
-                    }
-                ],
-                "totalPrice": 2399.99
-            }
-            """;
+                {
+                    "id": 1,
+                    "user_id":1,
+                    "cart_id": 101,
+                    "updated_at": "2024-05-01T10:00:00.000+00:00",
+                    "cartProducts": [
+                        {
+                            "id": 1,
+                            "productName": "Apple MacBook Pro",
+                            "productCategory": "Electronics",
+                            "productDescription": "Latest model of Apple MacBook Pro 16 inch.",
+                            "quantity": 1,
+                            "price": 2399.99
+                        }
+                    ],
+                    "totalPrice": 2399.99
+                }
+                """;
 
         mockWebServer.enqueue(new MockResponse()
                 .setBody(cartJson)
@@ -75,13 +71,14 @@ public class CartServiceTest {
 
         CartDto cartDto = cartServiceImpl.getCartById(1L);
 
-        assertEquals(1L,(long) cartDto.getId());
-        assertEquals(101,cartDto.getCartId());
-        assertEquals("Apple MacBook Pro",cartDto.getCartProducts().get(0).getProductName());
-        assertEquals(new BigDecimal("2399.99"),cartDto.getCartProducts().get(0).getPrice());
-        assertEquals(new BigDecimal("2399.99"),cartDto.getTotalPrice());
-    }
 
+        assertEquals(1L, (long) cartDto.getId());
+        assertEquals(101, cartDto.getCartId());
+        assertEquals("Apple MacBook Pro", cartDto.getCartProducts().get(0).getProductName());
+        assertEquals(new BigDecimal("2399.99"), cartDto.getCartProducts().get(0).getPrice());
+        assertEquals(new BigDecimal("2399.99"), cartDto.getTotalPrice());
+
+    }
     @Test
     @DisplayName("When fetching a non-existent cart by ID, then a 404 error is returned")
     void testGetCartByIdNotFound() {
