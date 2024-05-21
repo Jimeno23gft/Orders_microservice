@@ -20,7 +20,6 @@ import java.util.List;
 
 import static com.ordersmicroservice.orders_microservice.Datos.crearOrder001;
 import static com.ordersmicroservice.orders_microservice.Datos.crearOrder002;
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -85,26 +84,27 @@ class OrderControllerTest {
     @DisplayName("Testing posting a order")
     void testPostNewOrder() throws Exception {
 
-        Long cart_id = 1L;
+        Long cartId = 1L;
 
-        when(orderService.addOrder(cart_id)).thenAnswer(invocation -> {
-            Order order = new Order();
-            order.setCartId(1L);
-            order.setFromAddress("Madrid");
-            order.setStatus(Status.DELIVERED);
-            order.setDateOrdered("2001-01-21");
-            order.setDateDelivered("2002-01-21");
-            return order;
-        });
+        when(orderService.addOrder(cartId)).thenAnswer(invocation -> Order
+                .builder()
+                .userId(1L)
+                .cartId(1L)
+                .fromAddress("Madrid")
+                .status(Status.DELIVERED)
+                .dateOrdered("2001-01-21")
+                .dateDelivered("2002-01-21")
+                .build());
 
-        mockMvc.perform(post("/orders/{id}", cart_id))
+        mockMvc.perform(post("/orders/{id}", cartId))
                 .andExpect(status().isCreated())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.cartId", is(cart_id.intValue())))
+                .andExpect(jsonPath("$.cartId", is(cartId.intValue())))
+                .andExpect(jsonPath("$.userId", is(1)))
                 .andExpect(jsonPath("$.fromAddress", is("Madrid")))
                 .andExpect(jsonPath("$.dateOrdered", is("2001-01-21")));
 
-        verify(orderService).addOrder(cart_id);
+        verify(orderService).addOrder(cartId);
     }
 
     @Test
@@ -122,7 +122,7 @@ class OrderControllerTest {
 
     @Test
     @DisplayName("Testing deleting a order that doesn't exists")
-    void testDeleteByIdShouldFailWhenIdNotFound() throws Exception {
+    void testDeleteByIdShouldFailWhenIdNotFound(){
         Long id = 33L;
         doThrow(new NotFoundException("Order not found")).when(orderService).deleteById(id);
 

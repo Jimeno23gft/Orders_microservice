@@ -14,6 +14,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class OrderDto {
     private Long id;
+    private Long userId;
     private Long cartId;
     private Address fromAddress;
     private Address toAddress;

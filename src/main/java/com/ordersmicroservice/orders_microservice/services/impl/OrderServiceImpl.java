@@ -26,9 +26,6 @@ public class OrderServiceImpl implements OrderService {
     Random random;
     private final CartService cartService;
 
-
-
-
     public OrderServiceImpl(OrderRepository orderRepository, CartService cartService) {
 
         this.cartService = cartService;
@@ -37,10 +34,8 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public List<Order> getAllOrders() {
-
         return Optional.of(orderRepository.findAll()).filter(orders -> !orders.isEmpty())
                 .orElseThrow(() -> new NotFoundException("No orders were found"));
-
     }
 
     @Override
@@ -50,6 +45,7 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public Order addOrder(Long id) {
+
         Order order = new Order();
 
         //Carts
@@ -61,15 +57,29 @@ public class OrderServiceImpl implements OrderService {
                 .collect(Collectors.toList());
         //carts
 
-        //Order Cambiar a Builder
-        order.setCartId(cart.getId());
-        order.setTotalPrice(cart.getTotalPrice());
-        order.setOrderedProducts(orderedProducts);
-        order.setFromAddress(randomAddress());
-        order.setStatus(Status.UNPAID);
-        order.setDateOrdered(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")));
+//        //Order Cambiar a Builder
+//        order.setCartId(cart.getId());
+//        order.setTotalPrice(cart.getTotalPrice());
+//        order.setOrderedProducts(orderedProducts);
+//        order.setFromAddress(randomAddress());
+//        order.setStatus(Status.UNPAID);
+//        order.setDateOrdered(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")));
+//
+//            return orderRepository.save(order);
 
-            return orderRepository.save(order);
+
+        return orderRepository.save(
+                Order.builder()
+                        .userId(1L)
+                        .cartId(id)
+                        .totalPrice(cart.getTotalPrice())
+                        .orderedProducts(orderedProducts)
+                        .fromAddress(randomAddress())
+                        .status(Status.UNPAID)
+                        .dateOrdered(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")))
+                        .build()
+        );
+
     }
     private OrderedProduct convertToOrderedProduct(CartProductDto cartProductDto, Order order) {
         return OrderedProduct.builder()
@@ -89,22 +99,24 @@ public class OrderServiceImpl implements OrderService {
     }
 
     public Order patchOrder(Long id, @RequestBody Status updatedStatus) {
-
-            Order existingOrder = orderRepository.findById(id)
-                    .orElseThrow(() -> new NotFoundException("Order not found with ID: " + id));
-            existingOrder.setStatus(updatedStatus);
-            if (updatedStatus == Status.DELIVERED) {
-                existingOrder.setDateDelivered(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
-            }
-            return orderRepository.save(existingOrder);
+        Order existingOrder = orderRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Order not found with ID: " + id));
+        existingOrder.setStatus(updatedStatus);
+        Optional.of(updatedStatus)
+                .filter(status -> status == Status.DELIVERED)
+                .ifPresent(status -> existingOrder.setDateDelivered(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"))));
+        return orderRepository.save(existingOrder);
     }
 
 
     public void deleteById(Long id) {
-        if (!orderRepository.existsById(id)) {
-            throw new NotFoundException("Order with ID " + id + " not found.");
-        }
-        orderRepository.deleteById(id);
+        orderRepository.findById(id)
+                .ifPresentOrElse(
+                        order -> orderRepository.deleteById(id),
+                        () -> {
+                            throw new NotFoundException("Order with ID " + id + " not found.");
+                        }
+                );
     }
 }
 
