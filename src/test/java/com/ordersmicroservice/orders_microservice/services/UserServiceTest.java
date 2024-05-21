@@ -7,16 +7,17 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.AfterEach;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.reactive.function.client.WebClient;
-import org.springframework.web.reactive.function.client.WebClientResponseException;
-import reactor.core.publisher.Mono;
+import org.springframework.web.client.RestClient;
+import org.springframework.web.client.RestClientResponseException;
 import reactor.test.StepVerifier;
 import okhttp3.mockwebserver.MockWebServer;
 import okhttp3.mockwebserver.MockResponse;
-
 import java.io.IOException;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class UserServiceTest {
+
     private MockWebServer mockWebServer;
     private UserServiceImpl userServiceImpl;
 
@@ -24,10 +25,10 @@ class UserServiceTest {
     void setUp() throws IOException {
         mockWebServer = new MockWebServer();
         mockWebServer.start();
-        WebClient webClient = WebClient.builder()
+        RestClient restClient = RestClient.builder()
                 .baseUrl(mockWebServer.url("/").toString())
                 .build();
-        userServiceImpl = new UserServiceImpl(webClient);
+        userServiceImpl = new UserServiceImpl(restClient);
     }
 
     @Test
@@ -65,15 +66,12 @@ class UserServiceTest {
                 .setBody(userJson)
                 .addHeader("Content-Type", "application/json"));
 
-        Mono<UserDto> userMono = userServiceImpl.getUserById(100L);
+        UserDto userDto = userServiceImpl.getUserById(100L);
 
-        StepVerifier.create(userMono)
-                .expectNextMatches(user ->
-                        user.getId().equals(100L) &&
-                                user.getPhone().equals("1234567890")
-                                && user.getName().equals("John"))
-                .verifyComplete();
-
+        assertEquals(100L,(long) userDto.getId());
+        assertEquals("1234567890",userDto.getPhone());
+        assertEquals(21,userDto.getCountry().getTax());
+        assertEquals("Madrid",userDto.getAddress().getCityName());
     }
 
     @Test
@@ -83,12 +81,11 @@ class UserServiceTest {
                 .setResponseCode(404)
                 .setBody("User not found")
                 .addHeader("Content-Type", "text/plain"));
-        Mono<UserDto> userMono = userServiceImpl.getUserById(999L);
-        StepVerifier.create(userMono)
-                .expectErrorMatches(throwable ->
-                        throwable instanceof WebClientResponseException &&
-                                ((WebClientResponseException) throwable).getStatusCode() == HttpStatus.NOT_FOUND)
-                .verify();
+        Exception exception = assertThrows(RestClientResponseException.class, () -> {
+            userServiceImpl.getUserById(1L);
+        });
+
+        assertEquals(HttpStatus.NOT_FOUND, ((RestClientResponseException) exception).getStatusCode());
     }
 
     @Test
@@ -98,13 +95,11 @@ class UserServiceTest {
                 .setResponseCode(500)
                 .setBody("Internal Server Error")
                 .addHeader("Content-Type", "text/plain"));
-        Mono<UserDto> userMono = userServiceImpl.getUserById(1L);
+        Exception exception = assertThrows(RestClientResponseException.class, () -> {
+            userServiceImpl.getUserById(1L);
+        });
 
-        StepVerifier.create(userMono)
-                .expectErrorMatches(throwable ->
-                        throwable instanceof WebClientResponseException &&
-                                ((WebClientResponseException) throwable).getStatusCode() == HttpStatus.INTERNAL_SERVER_ERROR)
-                .verify();
+        assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, ((RestClientResponseException) exception).getStatusCode());
     }
 
     @AfterEach

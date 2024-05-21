@@ -13,7 +13,7 @@ CREATE TABLE IF NOT EXISTS orders (
 INSERT INTO orders (cart_id, user_id, from_address, status, date_ordered, date_delivered,total_price)
 VALUES (1001, 1, '123 Main St', 'PAID', '2024-05-07 08:00:00', '2024-05-10 15:00:00',18);
 
-INSERT INTO orders (cart_id, from_address, status, date_ordered, date_delivered,total_price)
+INSERT INTO orders (cart_id, user_id, from_address, status, date_ordered, date_delivered,total_price)
 VALUES (1002, 2, '456 Elm St', 'UNPAID', '2024-05-08 09:00:00', '2024-05-10 16:00:00',18);
 
 INSERT INTO orders (cart_id, user_id, from_address, status, date_ordered, date_delivered,total_price)

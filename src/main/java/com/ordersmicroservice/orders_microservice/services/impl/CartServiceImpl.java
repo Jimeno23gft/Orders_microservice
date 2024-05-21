@@ -4,6 +4,7 @@ package com.ordersmicroservice.orders_microservice.services.impl;
 import com.ordersmicroservice.orders_microservice.dto.CartDto;
 import com.ordersmicroservice.orders_microservice.services.CartService;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestClient;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 
@@ -11,18 +12,18 @@ import reactor.core.publisher.Mono;
 @Service
 public class CartServiceImpl implements CartService {
 
-    private final WebClient webClient;
+    private final RestClient restClient;
 
-    public CartServiceImpl(WebClient webClient) {
-        this.webClient = webClient;
+    public CartServiceImpl(RestClient restClient) {
+        this.restClient = restClient;
     }
 
-    public Mono<CartDto> getCartById(Long id){
+    public CartDto getCartById(Long id){
 
-        return webClient.get()
+        return restClient.get()
                 .uri("/carts/" + id)
                 .retrieve()
-                .bodyToMono(CartDto.class);
+                .body(CartDto.class);
     }
 
 }

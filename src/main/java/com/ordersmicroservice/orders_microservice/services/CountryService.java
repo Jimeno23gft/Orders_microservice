@@ -5,6 +5,6 @@ import reactor.core.publisher.Mono;
 
 public interface CountryService {
 
-    Mono<CountryDto> getCountryById(Long countryId);
+    CountryDto getCountryById(Long countryId);
 
 }
