@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ordersmicroservice.orders_microservice.models.OrderedProduct;
 import com.ordersmicroservice.orders_microservice.services.impl.OrderedProductServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -39,6 +40,7 @@ class OrderedProductControllerTest {
     }
 
     @Test
+    @DisplayName("Testing method retrieves all products from the order with id given")
     void testGetAllProductsFromOrder() throws Exception {
         OrderedProduct orderedProduct1 = OrderedProduct
                 .builder()

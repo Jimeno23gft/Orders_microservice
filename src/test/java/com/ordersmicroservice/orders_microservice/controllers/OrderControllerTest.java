@@ -7,6 +7,7 @@ import com.ordersmicroservice.orders_microservice.exception.NotFoundException;
 import com.ordersmicroservice.orders_microservice.models.Order;
 import com.ordersmicroservice.orders_microservice.services.OrderService;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -44,6 +45,7 @@ class OrderControllerTest {
 
 
     @Test
+    @DisplayName("Testing method retrieves all orders from the endpoint")
     void testGetAllOrders() throws Exception {
         List<Order> mockOrders = Arrays.asList(crearOrder001().orElseThrow(),
                 crearOrder002().orElseThrow());
@@ -63,6 +65,7 @@ class OrderControllerTest {
     }
 
     @Test
+    @DisplayName("Testing method retrieves order with given id from the endpoint")
     void testGetOrderById() throws Exception {
         Long id = 1L;
         when(orderService.getOrderById(1L)).thenReturn(crearOrder001().orElseThrow());
@@ -80,6 +83,7 @@ class OrderControllerTest {
     }
 
     @Test
+    @DisplayName("Testing method posts a new order to the endpoint")
     void testPostNewOrder() throws Exception {
 
         Long cartId = 1L;
@@ -106,6 +110,7 @@ class OrderControllerTest {
     }
 
     @Test
+    @DisplayName("Testing method deletes order with given id from the endpoint")
     void testDeleteById() throws Exception {
 
         Long id = 3L;
@@ -118,6 +123,7 @@ class OrderControllerTest {
     }
 
     @Test
+    @DisplayName("Testing method fails to find the order with id given to be deleted")
     void testDeleteByIdShouldFailWhenIdNotFound(){
         Long id = 33L;
         doThrow(new NotFoundException("Order not found")).when(orderService).deleteById(id);
@@ -126,6 +132,7 @@ class OrderControllerTest {
         verify(orderService).deleteById(id);
     }
     @Test
+    @DisplayName("Testing method updates the order with given id from the endpoint")
     void testPatchOrder () throws Exception {
 
         Long id = 1L;
@@ -145,7 +152,6 @@ class OrderControllerTest {
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON));
 
         verify(orderService).patchOrder(id, statusUpdateDto.getStatus());
-
     }
 
 
