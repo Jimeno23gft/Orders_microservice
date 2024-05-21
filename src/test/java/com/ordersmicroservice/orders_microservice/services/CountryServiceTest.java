@@ -3,6 +3,7 @@ package com.ordersmicroservice.orders_microservice.services;
 
 import com.ordersmicroservice.orders_microservice.dto.CountryDto;
 import com.ordersmicroservice.orders_microservice.services.impl.CountryServiceImpl;
+import com.ordersmicroservice.orders_microservice.services.impl.ProductServiceImpl;
 import okhttp3.mockwebserver.MockResponse;
 import okhttp3.mockwebserver.MockWebServer;
 import org.junit.jupiter.api.AfterEach;
@@ -10,12 +11,16 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.client.RestClient;
+import org.springframework.web.client.RestClientResponseException;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.reactive.function.client.WebClientResponseException;
 import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 
 import java.io.IOException;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 public class CountryServiceTest {
 
@@ -26,10 +31,10 @@ public class CountryServiceTest {
     void setUp() throws IOException {
         mockWebServer = new MockWebServer();
         mockWebServer.start();
-        WebClient webClient = WebClient.builder()
+        RestClient restClient = RestClient.builder()
                 .baseUrl(mockWebServer.url("/").toString())
                 .build();
-        countryServiceImpl = new CountryServiceImpl(webClient);
+        countryServiceImpl = new CountryServiceImpl(restClient);
     }
 
     @Test
@@ -47,13 +52,12 @@ public class CountryServiceTest {
                 .setBody(countryJson)
                 .addHeader("Content-Type", "application/json"));
 
-        Mono<CountryDto> countryMono = countryServiceImpl.getCountryById(1L);
+        CountryDto countryDto = countryServiceImpl.getCountryById(1L);
 
 
-        StepVerifier.create(countryMono)
-                .expectNextMatches(country ->
-                                country.getName().equals("España"))
-                .verifyComplete();
+        assertNotNull(countryDto);
+        assertEquals(1L, countryDto.getId());
+        assertEquals("España", countryDto.getName());
 
     }
 
@@ -64,12 +68,11 @@ public class CountryServiceTest {
                 .setResponseCode(404)
                 .setBody("User not found")
                 .addHeader("Content-Type", "text/plain"));
-        Mono<CountryDto> countryMono = countryServiceImpl.getCountryById(717L);
-        StepVerifier.create(countryMono)
-                .expectErrorMatches(throwable ->
-                        throwable instanceof WebClientResponseException &&
-                                ((WebClientResponseException) throwable).getStatusCode() == HttpStatus.NOT_FOUND)
-                .verify();
+        Exception exception = assertThrows(RestClientResponseException.class, () -> {
+            countryServiceImpl.getCountryById(1L);
+        });
+
+        assertEquals(HttpStatus.NOT_FOUND, ((RestClientResponseException) exception).getStatusCode());
     }
 
     @Test
@@ -79,13 +82,12 @@ public class CountryServiceTest {
                 .setResponseCode(500)
                 .setBody("Internal Server Error")
                 .addHeader("Content-Type", "text/plain"));
-        Mono<CountryDto> countryMono = countryServiceImpl.getCountryById(1L);
+        Exception exception = assertThrows(RestClientResponseException.class, () -> {
+            countryServiceImpl.getCountryById(1L);
+        });
 
-        StepVerifier.create(countryMono)
-                .expectErrorMatches(throwable ->
-                        throwable instanceof WebClientResponseException &&
-                                ((WebClientResponseException) throwable).getStatusCode() == HttpStatus.INTERNAL_SERVER_ERROR)
-                .verify();
+        assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, ((RestClientResponseException) exception).getStatusCode());
+
     }
 
     @AfterEach

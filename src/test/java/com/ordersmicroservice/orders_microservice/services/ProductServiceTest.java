@@ -64,7 +64,7 @@ class ProductServiceTest {
         assertNotNull(productDto);
         assertEquals(1L, productDto.getId());
         assertEquals("Ball", productDto.getName());
-        assertEquals(15, productDto.getCurrentStock());;
+        assertEquals(15, productDto.getCurrentStock());
     }
 
     @Test

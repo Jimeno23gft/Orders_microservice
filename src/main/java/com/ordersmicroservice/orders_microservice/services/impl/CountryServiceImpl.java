@@ -3,21 +3,21 @@ package com.ordersmicroservice.orders_microservice.services.impl;
 import com.ordersmicroservice.orders_microservice.dto.CountryDto;
 import com.ordersmicroservice.orders_microservice.services.CountryService;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestClient;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 
 @Service
 public class CountryServiceImpl implements CountryService {
-    private final WebClient webClient;
+    private final RestClient restClient;
 
-    public CountryServiceImpl(WebClient webClient) {
-        this.webClient = webClient;
+    public CountryServiceImpl(RestClient restClient) {
+        this.restClient = restClient;
     }
-
-    public Mono<CountryDto> getCountryById(Long countryId) {
-        return webClient.get()
+    public CountryDto getCountryById(Long countryId) {
+        return restClient.get()
                 .uri("/country/{id}", countryId)
                 .retrieve()
-                .bodyToMono(CountryDto.class);
+                .body(CountryDto.class);
     }
 }

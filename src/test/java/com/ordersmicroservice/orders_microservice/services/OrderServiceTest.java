@@ -119,7 +119,7 @@ public class OrderServiceTest {
     void testPatchOrderDelivered() {
         Order initialOrder = new Order();
         initialOrder.setId(1L);
-        initialOrder.setStatus(IN_DELIVERY); // Assuming initial status is PENDING
+        initialOrder.setStatus(IN_DELIVERY);
 
         when(orderRepository.findById(1L)).thenReturn(Optional.of(initialOrder));
         when(orderRepository.save(initialOrder)).thenReturn(initialOrder);
