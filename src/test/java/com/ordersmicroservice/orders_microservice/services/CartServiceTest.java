@@ -25,7 +25,7 @@ class CartServiceTest {
     @BeforeEach
     void setUp() throws IOException {
         mockWebServer = new MockWebServer();
-        mockWebServer.start();
+        mockWebServer.start(8089);
 
         RestClient restClient = RestClient.builder()
                 .baseUrl(mockWebServer.url("/").toString())
@@ -42,10 +42,10 @@ class CartServiceTest {
     @Test
     @DisplayName("When fetching a cart by ID, then the correct cart details are returned")
     void testGetCartById() {
-<<<<<<< HEAD
-=======
-            cartServiceImpl.cartUri = "/carts";
->>>>>>> 59bb75f8197604bc7648cf211253b6f62c487186
+
+
+        cartServiceImpl.cartUri = "/carts";
+
         String cartJson = """
                 {
                     "id": 1,

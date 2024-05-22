@@ -67,7 +67,7 @@ public class OrderServiceImpl implements OrderService {
                     .collect(Collectors.toList());
 
             order.setUserId(cart.getUserId());
-            order.setCartId(cart.getId());
+            order.setCartId(id);
             order.setTotalPrice(cart.getTotalPrice());
             order.setOrderedProducts(orderedProducts);
             order.setFromAddress(randomAddress());
@@ -118,11 +118,7 @@ public class OrderServiceImpl implements OrderService {
         return orderRepository.save(existingOrder);
     }
 
-<<<<<<< HEAD
-
     @Override
-=======
->>>>>>> 59bb75f8197604bc7648cf211253b6f62c487186
     public void deleteById(Long id) {
         orderRepository.findById(id)
                 .ifPresentOrElse(
