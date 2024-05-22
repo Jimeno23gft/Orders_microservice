@@ -115,7 +115,6 @@ public class OrderServiceImpl implements OrderService {
         );
 
         statusActions.getOrDefault(updatedStatus, order -> {
-            throw new IllegalStateException("Unexpected status: " + updatedStatus);
         }).accept(existingOrder);
 
         return orderRepository.save(existingOrder);
