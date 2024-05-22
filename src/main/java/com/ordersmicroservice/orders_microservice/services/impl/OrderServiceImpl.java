@@ -67,7 +67,7 @@ public class OrderServiceImpl implements OrderService {
                     .collect(Collectors.toList());
 
             order.setUserId(cart.getUserId());
-            order.setCartId(cart.getId());
+            order.setCartId(id);
             order.setTotalPrice(cart.getTotalPrice());
             order.setOrderedProducts(orderedProducts);
             order.setFromAddress(randomAddress());
