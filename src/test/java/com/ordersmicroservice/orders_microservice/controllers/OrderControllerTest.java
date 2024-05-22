@@ -43,7 +43,7 @@ class OrderControllerTest {
     }
 
     @Test
-    @DisplayName("Testing to get mock orders")
+    @DisplayName("Testing method retrieves all orders from the endpoint")
     void testGetAllOrders() throws Exception {
         List<Order> mockOrders = Arrays.asList(crearOrder001().orElseThrow(),
                 crearOrder002().orElseThrow());
@@ -63,7 +63,7 @@ class OrderControllerTest {
     }
 
     @Test
-    @DisplayName("Testing get a mock order by ID")
+    @DisplayName("Testing method retrieves order with given id from the endpoint")
     void testGetOrderById() throws Exception {
         Long id = 1L;
         when(orderService.getOrderById(1L)).thenReturn(crearOrder001().orElseThrow());
@@ -81,7 +81,7 @@ class OrderControllerTest {
     }
 
     @Test
-    @DisplayName("Testing posting a order")
+    @DisplayName("Testing method posts a new order to the endpoint")
     void testPostNewOrder() throws Exception {
 
         Long cartId = 1L;
@@ -108,7 +108,7 @@ class OrderControllerTest {
     }
 
     @Test
-    @DisplayName("Testing deleting a order by ID")
+    @DisplayName("Testing method deletes order with given id from the endpoint")
     void testDeleteById() throws Exception {
 
         Long id = 3L;
@@ -121,7 +121,7 @@ class OrderControllerTest {
     }
 
     @Test
-    @DisplayName("Testing deleting a order that doesn't exists")
+    @DisplayName("Testing method fails to find the order with id given to be deleted")
     void testDeleteByIdShouldFailWhenIdNotFound(){
         Long id = 33L;
         doThrow(new NotFoundException("Order not found")).when(orderService).deleteById(id);
@@ -130,7 +130,7 @@ class OrderControllerTest {
         verify(orderService).deleteById(id);
     }
     @Test
-    @DisplayName("Testing patch an order to status PAID")
+    @DisplayName("Testing method updates the order with given id from the endpoint")
     void testPatchOrder () throws Exception {
 
         Long id = 1L;
@@ -150,7 +150,6 @@ class OrderControllerTest {
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON));
 
         verify(orderService).patchOrder(id, statusUpdateDto.getStatus());
-
     }
 
 

@@ -4,6 +4,7 @@ import com.ordersmicroservice.orders_microservice.models.OrderedProduct;
 import com.ordersmicroservice.orders_microservice.repositories.OrderedProductRepository;
 import com.ordersmicroservice.orders_microservice.services.impl.OrderedProductServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -40,6 +41,7 @@ class OrderedProductServiceTest {
     }
 
     @Test
+    @DisplayName("Testing method retrieves all products from an order with given id")
     void testGetAllProductsFromOrder(){
         when(orderedProductRepository.findByOrderId(orderId)).thenReturn(orderedProducts);
 

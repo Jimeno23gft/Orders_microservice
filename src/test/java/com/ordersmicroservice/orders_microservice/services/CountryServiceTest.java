@@ -31,6 +31,7 @@ class CountryServiceTest {
     }
 
     @Test
+    @DisplayName("Testing method retrieves country with given id")
     void testGetCountryById() {
         String countryJson = """
                 {

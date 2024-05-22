@@ -10,6 +10,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.client.RestClient;
 import org.springframework.web.client.RestClientResponseException;
+
 import java.io.IOException;
 import java.math.BigDecimal;
 
@@ -18,22 +19,20 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 
 class CartServiceTest {
+    private MockWebServer mockWebServer;
+    private CartServiceImpl cartServiceImpl;
 
-        private MockWebServer mockWebServer;
-        private CartServiceImpl cartServiceImpl;
+    @BeforeEach
+    void setUp() throws IOException {
+        mockWebServer = new MockWebServer();
+        mockWebServer.start();
 
-        @BeforeEach
-        void setUp() throws IOException {
+        RestClient restClient = RestClient.builder()
+                .baseUrl(mockWebServer.url("/").toString())
+                .build();
 
-            mockWebServer = new MockWebServer();
-            mockWebServer.start();
-
-            RestClient restClient = RestClient.builder()
-                    .baseUrl(mockWebServer.url("/").toString())
-                    .build();
-
-            cartServiceImpl = new CartServiceImpl(restClient);
-        }
+        cartServiceImpl = new CartServiceImpl(restClient);
+    }
 
     @AfterEach
     void tearDown() throws IOException {
@@ -44,6 +43,7 @@ class CartServiceTest {
     @DisplayName("When fetching a cart by ID, then the correct cart details are returned")
     void testGetCartById() {
             cartServiceImpl.cartUri = "/carts";
+
         String cartJson = """
                 {
                     "id": 1,
@@ -70,14 +70,13 @@ class CartServiceTest {
 
         CartDto cartDto = cartServiceImpl.getCartById(1L);
 
-
         assertEquals(1L, (long) cartDto.getId());
         assertEquals(101, cartDto.getCartId());
         assertEquals("Apple MacBook Pro", cartDto.getCartProducts().get(0).getProductName());
         assertEquals(new BigDecimal("2399.99"), cartDto.getCartProducts().get(0).getPrice());
         assertEquals(new BigDecimal("2399.99"), cartDto.getTotalPrice());
-
     }
+
     @Test
     @DisplayName("When fetching a non-existent cart by ID, then a 404 error is returned")
     void testGetCartByIdNotFound() {
@@ -87,13 +86,11 @@ class CartServiceTest {
                 .setBody("Cart not found")
                 .addHeader("Content-Type", "text/plain"));
 
-
         Exception exception = assertThrows(RestClientResponseException.class, () -> {
             cartServiceImpl.getCartById(1L);
         });
 
         assertEquals(HttpStatus.NOT_FOUND, ((RestClientResponseException) exception).getStatusCode());
-
     }
 
 
@@ -112,6 +109,5 @@ class CartServiceTest {
         });
 
         assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, ((RestClientResponseException) exception).getStatusCode());
-
     }
 }

@@ -107,6 +107,7 @@ public class OrderServiceImpl implements OrderService {
         return addresses[this.random.nextInt(addresses.length)];
     }
 
+    @Override
     public Order patchOrder(Long id, @RequestBody Status updatedStatus) {
         Order existingOrder = orderRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Order not found with ID: " + id));
@@ -117,6 +118,7 @@ public class OrderServiceImpl implements OrderService {
         return orderRepository.save(existingOrder);
     }
 
+    @Override
     public void deleteById(Long id) {
         orderRepository.findById(id)
                 .ifPresentOrElse(
