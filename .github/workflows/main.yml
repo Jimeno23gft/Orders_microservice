@@ -2,7 +2,7 @@ name: pipeline
  
 on:
   push:
-    branches: [ main, develop, integration_test_post ]
+    branches: [ main, develop ]
 
 jobs:
   build:
