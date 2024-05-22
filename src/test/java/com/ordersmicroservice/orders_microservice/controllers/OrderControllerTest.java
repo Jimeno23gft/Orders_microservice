@@ -44,8 +44,6 @@ class OrderControllerTest {
         mockMvc = MockMvcBuilders.standaloneSetup(orderController).build();
     }
 
-
-
     @Test
     @DisplayName("Testing method retrieves all orders from the endpoint")
     void testGetAllOrders() throws Exception {

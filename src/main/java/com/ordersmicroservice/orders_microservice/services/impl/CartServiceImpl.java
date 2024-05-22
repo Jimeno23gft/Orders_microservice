@@ -5,12 +5,12 @@ import com.ordersmicroservice.orders_microservice.dto.CartDto;
 import com.ordersmicroservice.orders_microservice.services.CartService;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClient;
-import org.springframework.web.reactive.function.client.WebClient;
-import reactor.core.publisher.Mono;
 
 
 @Service
 public class CartServiceImpl implements CartService {
+
+    public String cartUri = "http://localhost:8081/carts/";
 
     private final RestClient restClient;
 
@@ -21,9 +21,18 @@ public class CartServiceImpl implements CartService {
     public CartDto getCartById(Long id){
 
         return restClient.get()
-                .uri("/carts/" + id)
+                .uri(cartUri + id)
                 .retrieve()
                 .body(CartDto.class);
     }
 
+    public void emptyCartProductsById(Long id){
+
+        restClient.delete()
+                .uri(cartUri + "/{id}", id)
+                .retrieve()
+                .body(Void.class);
+    }
 }
+
+

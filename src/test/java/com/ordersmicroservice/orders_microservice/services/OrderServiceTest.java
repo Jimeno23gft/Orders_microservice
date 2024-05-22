@@ -1,11 +1,18 @@
 package com.ordersmicroservice.orders_microservice.services;
 
+<<<<<<< HEAD
 import com.ordersmicroservice.orders_microservice.dto.CreditCardDto;
+=======
+import com.ordersmicroservice.orders_microservice.dto.CartDto;
+import com.ordersmicroservice.orders_microservice.dto.CartProductDto;
+>>>>>>> 6c48fa45b08cc1b7c0e0ce93d2a56dfd43b9521e
 import com.ordersmicroservice.orders_microservice.dto.Status;
 import com.ordersmicroservice.orders_microservice.dto.StatusUpdateDto;
 import com.ordersmicroservice.orders_microservice.exception.NotFoundException;
 import com.ordersmicroservice.orders_microservice.models.Order;
+import com.ordersmicroservice.orders_microservice.models.OrderedProduct;
 import com.ordersmicroservice.orders_microservice.repositories.OrderRepository;
+import com.ordersmicroservice.orders_microservice.services.impl.CartServiceImpl;
 import com.ordersmicroservice.orders_microservice.services.impl.OrderServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -14,8 +21,13 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.web.client.RestClient;
 
+<<<<<<< HEAD
 import java.math.BigInteger;
+=======
+import java.math.BigDecimal;
+>>>>>>> 6c48fa45b08cc1b7c0e0ce93d2a56dfd43b9521e
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -33,9 +45,12 @@ class OrderServiceTest {
     OrderRepository orderRepository;
     @InjectMocks
     OrderServiceImpl orderService;
+    @Mock
+    CartServiceImpl cartService;
     private Order order1;
     private Order order2;
     private List<Order> orders;
+    private RestClient restClient;
 
     @BeforeEach
     public void setup() {
@@ -86,6 +101,7 @@ class OrderServiceTest {
     void testAddOrder() {
         String[] addresses = {"123 Main St", "456 Elm St", "789 Oak St", "101 Maple Ave", "222 Pine St", "333 Cedar Rd"};
 
+<<<<<<< HEAD
         CreditCardDto creditCardDto = new CreditCardDto();
         creditCardDto.setCardNumber(new BigInteger("1234567812345678"));
         creditCardDto.setExpirationDate("12/25");
@@ -93,13 +109,57 @@ class OrderServiceTest {
 
         when(orderRepository.save(any(Order.class))).thenAnswer(invocation -> invocation.getArgument(0));
         Order savedOrder = orderService.addOrder(1L, creditCardDto);
+=======
+        // Mock the CartDto
+        Long cartId = 1L;
+        Long user_id = 1L;
+        BigDecimal totalPrice = new BigDecimal("100.00");
+        List<CartProductDto> cartProducts = List.of(
+                new CartProductDto(1L, "Product1", "Category1", "Description1", 2,new BigDecimal("20.00")),
+                new CartProductDto(2L, "Product2", "Category2", "Description2", 1,new BigDecimal("30.00"))
+        );
+        CartDto cartDto = CartDto.builder()
+                .cartId(cartId)
+                .userId(user_id)
+                .cartProducts(cartProducts)
+                .totalPrice(totalPrice)
+                .build();
+>>>>>>> 6c48fa45b08cc1b7c0e0ce93d2a56dfd43b9521e
 
+        // Mock the cartService to return the CartDto
+        when(cartService.getCartById(cartId)).thenReturn(cartDto);
+
+        // Mock the orderRepository to return the Order when saved
+        when(orderRepository.save(any(Order.class))).thenAnswer(invocation -> invocation.getArgument(0));
+
+        // Call the service method
+        Order savedOrder = orderService.addOrder(cartId);
+
+        // Verify the results
         assertNotNull(savedOrder);
-        assertEquals(1L, savedOrder.getCartId());
+        assertEquals(cartId, savedOrder.getCartId());
+        assertEquals(totalPrice, savedOrder.getTotalPrice());
         assertTrue(Arrays.asList(addresses).contains(savedOrder.getFromAddress()));
         assertEquals(Status.PAID, savedOrder.getStatus());
         assertNotNull(savedOrder.getDateOrdered());
         assertNull(savedOrder.getDateDelivered());
+
+        // Verify ordered products
+        List<OrderedProduct> orderedProducts = savedOrder.getOrderedProducts();
+        assertNotNull(orderedProducts);
+        assertEquals(cartProducts.size(), orderedProducts.size());
+
+        for (int i = 0; i < cartProducts.size(); i++) {
+            CartProductDto cartProduct = cartProducts.get(i);
+            OrderedProduct orderedProduct = orderedProducts.get(i);
+
+            assertEquals(cartProduct.getId(), orderedProduct.getProductId());
+            assertEquals(cartProduct.getProductName(), orderedProduct.getName());
+            assertEquals(cartProduct.getProductCategory(), orderedProduct.getCategory());
+            assertEquals(cartProduct.getProductDescription(), orderedProduct.getDescription());
+            assertEquals(cartProduct.getPrice(), orderedProduct.getPrice());
+            assertEquals(cartProduct.getQuantity(), orderedProduct.getQuantity());
+        }
     }
 
 

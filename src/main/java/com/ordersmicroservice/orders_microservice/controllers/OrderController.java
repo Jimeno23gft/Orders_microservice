@@ -8,6 +8,11 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -42,7 +47,7 @@ public class OrderController {
             @ApiResponse(responseCode = "200", description = "Successful operation", content = @Content(mediaType = "application/json")),
             @ApiResponse(responseCode = "404", description = "Order not found", content = @Content(mediaType = "application/json"))
     })
-    public ResponseEntity<Order> getOrderById(@PathVariable Long id) {
+    public ResponseEntity<Order> getOrderById(@PathVariable @Positive Long id) {
             Order order = orderService.getOrderById(id);
             return ResponseEntity.ok(order);
     }
@@ -54,21 +59,21 @@ public class OrderController {
             @ApiResponse(responseCode = "201", description = "Order Created", content = @Content(mediaType = "application/json")),
             @ApiResponse(responseCode = "500", description = "Internal server error", content = @Content(mediaType = "application/json"))
     })
-    public ResponseEntity<Order> postOrder(@PathVariable Long id, @RequestBody CreditCardDto creditCart){
+    public ResponseEntity<Order> postOrder(@PathVariable @Positive Long id, @RequestBody CreditCardDto creditCart){
         Order order = orderService.addOrder(id,creditCart);
         return ResponseEntity.status(HttpStatus.CREATED).body(order);
     }
 
     @DeleteMapping("/{id}")
     @Operation(summary = "Cancel an order", description = "This endpoint retrieves example data from the server.")
-    public ResponseEntity<String> deleteById(@PathVariable Long id) {
+    public ResponseEntity<String> deleteById(@PathVariable @Positive Long id) {
         orderService.deleteById(id);
         return ResponseEntity.status(OK).body("Order with id " + id + " has been deleted successfully");
     }
 
     @PatchMapping("/{id}")
     @Operation(summary = "Update an order", description = "This endpoint updates the status of an order based on the provided ID.")
-    public ResponseEntity<Order> patchOrder(@PathVariable Long id, @RequestBody StatusUpdateDto patchData) {
+    public ResponseEntity<Order> patchOrder(@PathVariable @Positive Long id, @RequestBody StatusUpdateDto patchData) {
         Order updatedOrder = orderService.patchOrder(id, patchData.getStatus());
         return ResponseEntity.ok(updatedOrder);
     }

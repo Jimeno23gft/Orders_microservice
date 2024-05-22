@@ -1,5 +1,4 @@
 package com.ordersmicroservice.orders_microservice.services;
-
 import com.ordersmicroservice.orders_microservice.dto.CartDto;
 import com.ordersmicroservice.orders_microservice.services.impl.CartServiceImpl;
 import okhttp3.mockwebserver.MockResponse;
@@ -43,6 +42,8 @@ class CartServiceTest {
     @Test
     @DisplayName("When fetching a cart by ID, then the correct cart details are returned")
     void testGetCartById() {
+            cartServiceImpl.cartUri = "/carts";
+
         String cartJson = """
                 {
                     "id": 1,
@@ -79,7 +80,7 @@ class CartServiceTest {
     @Test
     @DisplayName("When fetching a non-existent cart by ID, then a 404 error is returned")
     void testGetCartByIdNotFound() {
-
+        cartServiceImpl.cartUri = "/carts";
         mockWebServer.enqueue(new MockResponse()
                 .setResponseCode(404)
                 .setBody("Cart not found")
@@ -96,7 +97,7 @@ class CartServiceTest {
     @Test
     @DisplayName("When fetching a Cart by ID and an internal server error occurs, then a 500 error is returned")
     void testGetCartByIdServerError() {
-
+        cartServiceImpl.cartUri = "/carts";
         mockWebServer.enqueue(new MockResponse()
                 .setResponseCode(500)
                 .setBody("Internal Server Error")
@@ -108,5 +109,22 @@ class CartServiceTest {
         });
 
         assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, ((RestClientResponseException) exception).getStatusCode());
+    }
+
+    @Test
+    @DisplayName("When deleting the products in a Cart, the cart must get empty")
+    void testEmptyCart() throws InterruptedException {
+
+        cartServiceImpl.cartUri = "/carts";
+        Long cartId = 1L;
+
+        mockWebServer.enqueue(new MockResponse()
+                .setResponseCode(200));
+
+        cartServiceImpl.emptyCartProductsById(cartId);
+        var recordedRequest = mockWebServer.takeRequest();
+        assertEquals("DELETE", recordedRequest.getMethod());
+        assertEquals("/carts/" + cartId, recordedRequest.getPath());
+
     }
 }
