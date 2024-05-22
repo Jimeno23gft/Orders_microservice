@@ -1,6 +1,7 @@
 package com.ordersmicroservice.orders_microservice.controllers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.ordersmicroservice.orders_microservice.dto.CreditCardDto;
 import com.ordersmicroservice.orders_microservice.dto.Status;
 import com.ordersmicroservice.orders_microservice.dto.StatusUpdateDto;
 import com.ordersmicroservice.orders_microservice.exception.NotFoundException;
@@ -15,6 +16,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
+import java.math.BigInteger;
 import java.util.Arrays;
 import java.util.List;
 
@@ -86,7 +88,15 @@ class OrderControllerTest {
 
         Long cartId = 1L;
 
-        when(orderService.addOrder(cartId)).thenAnswer(invocation -> Order
+
+        CreditCardDto creditCardDto = new CreditCardDto();
+        creditCardDto.setCardNumber(new BigInteger("1234567812345678"));
+        creditCardDto.setExpirationDate("12/25");
+        creditCardDto.setCVCCode(123);
+
+        String creditCardJson = objectMapper.writeValueAsString(creditCardDto);
+
+        when(orderService.addOrder(cartId,creditCardDto)).thenAnswer(invocation -> Order
                 .builder()
                 .userId(1L)
                 .cartId(1L)
@@ -96,7 +106,9 @@ class OrderControllerTest {
                 .dateDelivered("2002-01-21")
                 .build());
 
-        mockMvc.perform(post("/orders/{id}", cartId))
+        mockMvc.perform(post("/orders/{id}", cartId)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(creditCardJson))
                 .andExpect(status().isCreated())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.cartId", is(cartId.intValue())))
@@ -104,7 +116,7 @@ class OrderControllerTest {
                 .andExpect(jsonPath("$.fromAddress", is("Madrid")))
                 .andExpect(jsonPath("$.dateOrdered", is("2001-01-21")));
 
-        verify(orderService).addOrder(cartId);
+        verify(orderService).addOrder(cartId,creditCardDto);
     }
 
     @Test
