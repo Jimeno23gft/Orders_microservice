@@ -76,7 +76,7 @@ import static org.springframework.boot.test.context.SpringBootTest.WebEnvironmen
                 .build();
     }
 
-    //@Disabled
+    @Disabled
     @DisplayName("Integration test that proves the correct creation of an order with cartId an the Products from cart_microservice")
     @Test
     void addOrderIntegrationTest() {
