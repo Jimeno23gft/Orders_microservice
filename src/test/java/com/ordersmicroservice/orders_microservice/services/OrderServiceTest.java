@@ -1,5 +1,7 @@
 package com.ordersmicroservice.orders_microservice.services;
 
+
+import com.ordersmicroservice.orders_microservice.dto.CreditCardDto;
 import com.ordersmicroservice.orders_microservice.dto.CartDto;
 import com.ordersmicroservice.orders_microservice.dto.CartProductDto;
 import com.ordersmicroservice.orders_microservice.dto.Status;
@@ -18,7 +20,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.web.client.RestClient;
-
+import java.math.BigInteger;
 import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.Collections;
@@ -93,6 +95,12 @@ class OrderServiceTest {
     void testAddOrder() {
         String[] addresses = {"123 Main St", "456 Elm St", "789 Oak St", "101 Maple Ave", "222 Pine St", "333 Cedar Rd"};
 
+
+        CreditCardDto creditCard = new CreditCardDto();
+        creditCard.setCardNumber(new BigInteger("1234567812345678"));
+        creditCard.setExpirationDate("12/25");
+        creditCard.setCVCCode(123);
+
         // Mock the CartDto
         Long cartId = 1L;
         Long user_id = 1L;
@@ -115,14 +123,14 @@ class OrderServiceTest {
         when(orderRepository.save(any(Order.class))).thenAnswer(invocation -> invocation.getArgument(0));
 
         // Call the service method
-        Order savedOrder = orderService.addOrder(cartId);
+        Order savedOrder = orderService.addOrder(cartId,creditCard);
 
         // Verify the results
         assertNotNull(savedOrder);
         assertEquals(cartId, savedOrder.getCartId());
         assertEquals(totalPrice, savedOrder.getTotalPrice());
         assertTrue(Arrays.asList(addresses).contains(savedOrder.getFromAddress()));
-        assertEquals(Status.UNPAID, savedOrder.getStatus());
+        assertEquals(Status.PAID, savedOrder.getStatus());
         assertNotNull(savedOrder.getDateOrdered());
         assertNull(savedOrder.getDateDelivered());
 
