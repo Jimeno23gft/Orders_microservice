@@ -75,7 +75,7 @@ public class OrderServiceImpl implements OrderService {
             order.setTotalPrice(cart.getTotalPrice());
             order.setOrderedProducts(orderedProducts);
             order.setFromAddress(randomAddress());
-            order.setStatus(Status.UNPAID);
+            order.setStatus(Status.PAID);
             order.setDateOrdered(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")));
 
             cartService.emptyCartProductsById(id);

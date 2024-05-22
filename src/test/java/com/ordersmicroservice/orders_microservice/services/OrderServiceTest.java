@@ -1,11 +1,9 @@
 package com.ordersmicroservice.orders_microservice.services;
 
-<<<<<<< HEAD
+
 import com.ordersmicroservice.orders_microservice.dto.CreditCardDto;
-=======
 import com.ordersmicroservice.orders_microservice.dto.CartDto;
 import com.ordersmicroservice.orders_microservice.dto.CartProductDto;
->>>>>>> 6c48fa45b08cc1b7c0e0ce93d2a56dfd43b9521e
 import com.ordersmicroservice.orders_microservice.dto.Status;
 import com.ordersmicroservice.orders_microservice.dto.StatusUpdateDto;
 import com.ordersmicroservice.orders_microservice.exception.NotFoundException;
@@ -22,12 +20,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.web.client.RestClient;
-
-<<<<<<< HEAD
 import java.math.BigInteger;
-=======
 import java.math.BigDecimal;
->>>>>>> 6c48fa45b08cc1b7c0e0ce93d2a56dfd43b9521e
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -101,15 +95,12 @@ class OrderServiceTest {
     void testAddOrder() {
         String[] addresses = {"123 Main St", "456 Elm St", "789 Oak St", "101 Maple Ave", "222 Pine St", "333 Cedar Rd"};
 
-<<<<<<< HEAD
-        CreditCardDto creditCardDto = new CreditCardDto();
-        creditCardDto.setCardNumber(new BigInteger("1234567812345678"));
-        creditCardDto.setExpirationDate("12/25");
-        creditCardDto.setCVCCode(123);
 
-        when(orderRepository.save(any(Order.class))).thenAnswer(invocation -> invocation.getArgument(0));
-        Order savedOrder = orderService.addOrder(1L, creditCardDto);
-=======
+        CreditCardDto creditCard = new CreditCardDto();
+        creditCard.setCardNumber(new BigInteger("1234567812345678"));
+        creditCard.setExpirationDate("12/25");
+        creditCard.setCVCCode(123);
+
         // Mock the CartDto
         Long cartId = 1L;
         Long user_id = 1L;
@@ -124,7 +115,6 @@ class OrderServiceTest {
                 .cartProducts(cartProducts)
                 .totalPrice(totalPrice)
                 .build();
->>>>>>> 6c48fa45b08cc1b7c0e0ce93d2a56dfd43b9521e
 
         // Mock the cartService to return the CartDto
         when(cartService.getCartById(cartId)).thenReturn(cartDto);
@@ -133,7 +123,7 @@ class OrderServiceTest {
         when(orderRepository.save(any(Order.class))).thenAnswer(invocation -> invocation.getArgument(0));
 
         // Call the service method
-        Order savedOrder = orderService.addOrder(cartId);
+        Order savedOrder = orderService.addOrder(cartId,creditCard);
 
         // Verify the results
         assertNotNull(savedOrder);
