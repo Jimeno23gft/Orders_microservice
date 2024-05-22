@@ -9,6 +9,7 @@ import com.ordersmicroservice.orders_microservice.repositories.OrderRepository;
 import com.ordersmicroservice.orders_microservice.services.CartService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.core.AutoConfigureCache;
@@ -76,6 +77,7 @@ import static org.springframework.boot.test.context.SpringBootTest.WebEnvironmen
     }
 
     @Disabled
+    @DisplayName("Integration test that proves the correct creation of an order with cartId an the Products from cart_microservice")
     @Test
     void addOrderIntegrationTest() {
 
@@ -95,5 +97,12 @@ import static org.springframework.boot.test.context.SpringBootTest.WebEnvironmen
                     assertThat(responseOrder.getOrderedProducts().get(0).getName()).isEqualTo("Apple MacBook Pro");
                     assertThat(responseOrder.getOrderedProducts().get(1).getName()).isEqualTo("Logitech Mouse");
                 });
+
+        webTestClient.get().uri("http://localhost:8081/carts/{id}", cartId)
+                .exchange()
+                .expectStatus().isOk()
+                .expectBody()
+                .jsonPath("$.cartProducts").isEmpty();
+
     }
 }
