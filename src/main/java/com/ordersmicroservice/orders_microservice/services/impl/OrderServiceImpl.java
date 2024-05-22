@@ -20,13 +20,13 @@ import org.springframework.web.client.RestClient;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Random;
-import java.util.stream.Collectors;
+import java.util.function.Consumer;
 
 @Service
 public class OrderServiceImpl implements OrderService {
-
     OrderRepository orderRepository;
     Random random;
     private final CartService cartService;
@@ -72,7 +72,7 @@ public class OrderServiceImpl implements OrderService {
 
             List<OrderedProduct> orderedProducts = cartProducts.stream()
                     .map(cartProductDto -> convertToOrderedProduct(cartProductDto, order))
-                    .collect(Collectors.toList());
+                    .toList();
 
             order.setUserId(cart.getUserId());
             order.setCartId(id);
@@ -84,19 +84,6 @@ public class OrderServiceImpl implements OrderService {
 
             cartService.emptyCartProductsById(id);
             return orderRepository.save(order);
-
-
-//         order = Order.builder()
-//                                                    .userId(1L)
-//                                                    .cartId(id)
-//                                                    .totalPrice(cart.getTotalPrice())
-//                                                    .orderedProducts(orderedProducts)
-//                                                    .fromAddress(randomAddress())
-//                                                    .status(Status.UNPAID)
-//                                                    .dateOrdered(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")))
-//                                                    .build();
-
-        //return orderRepository.save(order);
     }
     private OrderedProduct convertToOrderedProduct(CartProductDto cartProductDto, Order order) {
         return OrderedProduct.builder()
@@ -120,23 +107,31 @@ public class OrderServiceImpl implements OrderService {
         Order existingOrder = orderRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Order not found with ID: " + id));
         existingOrder.setStatus(updatedStatus);
-        switch (updatedStatus){
-            case DELIVERED: Optional.of(updatedStatus)
-                    .filter(status -> status == Status.DELIVERED)
-                    .ifPresent(status -> existingOrder.setDateDelivered(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"))));
-            break;
 
-            case RETURNED:
-                List<UpdateStockRequest> updateStockRequests = existingOrder.getOrderedProducts().stream()
-                        .map(product -> new UpdateStockRequest(product.getProductId(), product.getQuantity()))
-                        .toList();
+        Map<Status, Consumer<Order>> statusActions = Map.of(
+                Status.DELIVERED, this::handleDeliveredStatus,
+                Status.RETURNED, this::handleReturnedStatus
+                //Aqui podemos controlar mas status si hiciera falta y hacer un metodo para cada uno
+        );
 
-                String url = "http://localhost:8081/catalog/products/";
-                updateStockRequests.forEach(request -> restClient.patch().uri(url + request.getProductId() +"/stock?newStock=" + request.getQuantity()).retrieve().body(UpdateStockRequest.class));
-            break;
-        }
+        statusActions.getOrDefault(updatedStatus, order -> {
+            throw new IllegalStateException("Unexpected status: " + updatedStatus);
+        }).accept(existingOrder);
 
         return orderRepository.save(existingOrder);
+    }
+
+    private void handleDeliveredStatus(Order order) {
+        order.setDateDelivered(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
+    }
+
+    private void handleReturnedStatus(Order order) {
+        List<UpdateStockRequest> updateStockRequests = order.getOrderedProducts().stream()
+                .map(product -> new UpdateStockRequest(product.getProductId(), product.getQuantity()))
+                .toList();
+
+        String url = "http://localhost:8081/catalog/products/";
+        updateStockRequests.forEach(request -> restClient.patch().uri(url + request.getProductId() +"/stock?newStock=" + request.getQuantity()).retrieve().body(UpdateStockRequest.class));
     }
 
     @Override
