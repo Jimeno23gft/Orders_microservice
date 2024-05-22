@@ -42,8 +42,8 @@ class CartServiceTest {
     @Test
     @DisplayName("When fetching a cart by ID, then the correct cart details are returned")
     void testGetCartById() {
-            cartServiceImpl.cartUri = "/carts";
 
+            cartServiceImpl.cartUri = "/carts";
         String cartJson = """
                 {
                     "id": 1,
