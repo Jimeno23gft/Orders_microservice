@@ -115,7 +115,7 @@ public class OrderServiceImpl implements OrderService {
         );
 
         statusActions.getOrDefault(updatedStatus, order -> {
-            throw new IllegalStateException("Unexpected status: " + updatedStatus);
+            //Aqui si en un futuro queremos, podemos hacer que si el status que nos mandan no coincide con ninguno de los del map lance una excepcion
         }).accept(existingOrder);
 
         return orderRepository.save(existingOrder);
