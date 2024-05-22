@@ -1,6 +1,8 @@
 package com.ordersmicroservice.orders_microservice.dto;
 
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -12,9 +14,14 @@ import java.math.BigDecimal;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@Entity
 public class CartProductDto {
+
+    @Id
     private Long id;
     private String productName;
+    private String productCategory;
+    private String productDescription;
     private Integer quantity;
     private BigDecimal price;
 

@@ -44,12 +44,10 @@ class OrderedProductControllerTest {
     void testGetAllProductsFromOrder() throws Exception {
         OrderedProduct orderedProduct1 = OrderedProduct
                 .builder()
-                .orderId(orderId1)
                 .productId(1L)
                 .quantity(3).build();
         OrderedProduct orderedProduct2 = OrderedProduct
                 .builder()
-                .orderId(orderId1)
                 .productId(2L)
                 .quantity(5).build();
 
@@ -59,8 +57,6 @@ class OrderedProductControllerTest {
         mockMvc.perform(MockMvcRequestBuilders.get("/orders/products/" + orderId1).contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$[0].orderId").value(1L))
-                .andExpect(jsonPath("$[1].orderId").value(1L))
                 .andExpect(jsonPath("$[0].productId").value(1L))
                 .andExpect(jsonPath("$[1].productId").value(2L))
                 .andExpect(jsonPath("$[0].quantity").value(3))
