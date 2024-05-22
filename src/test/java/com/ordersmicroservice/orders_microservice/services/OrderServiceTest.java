@@ -41,10 +41,12 @@ class OrderServiceTest {
     OrderServiceImpl orderService;
     @Mock
     CartServiceImpl cartService;
+    @Mock
+    RestClient restClient;
     private Order order1;
     private Order order2;
     private List<Order> orders;
-    private RestClient restClient;
+
 
     @BeforeEach
     public void setup() {
@@ -68,7 +70,6 @@ class OrderServiceTest {
     }
 
     @Test
-
     @DisplayName("Testing get all Orders from Repository Method")
     void testGetAllOrders() {
         when(orderRepository.findAll()).thenReturn(orders);
@@ -224,6 +225,41 @@ class OrderServiceTest {
 
         verify(orderRepository).findById(orderId);
         verify(orderRepository).deleteById(orderId);
+    }
+    @Test
+    @DisplayName("Testing patching an order with RETURNED status")
+    void testPatchOrderReturned() {
+        RestClient.RequestBodyUriSpec requestBodyUriSpec = mock(RestClient.RequestBodyUriSpec.class);
+        RestClient.ResponseSpec responseSpec = mock(RestClient.ResponseSpec.class);
+
+        Order initialOrder = new Order();
+        OrderedProduct product1 = new OrderedProduct();
+        OrderedProduct product2 = new OrderedProduct();
+        product1.setProductId(1L);
+        product2.setProductId(2L);
+        product1.setQuantity(5);
+        product2.setQuantity(3);
+        initialOrder.setId(1L);
+        initialOrder.setStatus(IN_DELIVERY);
+        initialOrder.setOrderedProducts(Arrays.asList(
+                product1,
+                product2
+        ));
+
+        when(restClient.patch()).thenReturn(requestBodyUriSpec);
+        when(requestBodyUriSpec.uri(anyString())).thenReturn(requestBodyUriSpec);
+        when(requestBodyUriSpec.retrieve()).thenReturn(responseSpec);
+
+        when(orderRepository.findById(1L)).thenReturn(Optional.of(initialOrder));
+        when(orderRepository.save(initialOrder)).thenReturn(initialOrder);
+
+        Order patchedOrder = orderService.patchOrder(1L, Status.RETURNED);
+
+        assertNotNull(patchedOrder);
+        assertEquals(Status.RETURNED, patchedOrder.getStatus());
+
+        // Verify that the REST client was called for each product in the order
+        verify(restClient, times(initialOrder.getOrderedProducts().size())).patch();
     }
 
     @Test
