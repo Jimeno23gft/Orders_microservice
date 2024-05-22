@@ -25,7 +25,7 @@ class CartServiceTest {
     @BeforeEach
     void setUp() throws IOException {
         mockWebServer = new MockWebServer();
-        mockWebServer.start(8089);
+        mockWebServer.start();
 
         RestClient restClient = RestClient.builder()
                 .baseUrl(mockWebServer.url("/").toString())
