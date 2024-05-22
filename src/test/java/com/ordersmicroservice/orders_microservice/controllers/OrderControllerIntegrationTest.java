@@ -89,7 +89,7 @@ import static org.springframework.boot.test.context.SpringBootTest.WebEnvironmen
                 .value(responseOrder -> {
                     assertThat(responseOrder.getUserId()).isEqualTo(expectedOrder.getUserId());
                     assertThat(responseOrder.getTotalPrice()).isEqualTo(expectedOrder.getTotalPrice());
-                    assertThat(responseOrder.getStatus()).isEqualTo(Status.UNPAID);
+                    assertThat(responseOrder.getStatus()).isEqualTo(Status.PAID);
                     assertThat(responseOrder.getOrderedProducts()).hasSize(2);
                     assertThat(responseOrder.getOrderedProducts().get(0).getName()).isEqualTo("Apple MacBook Pro");
                     assertThat(responseOrder.getOrderedProducts().get(1).getName()).isEqualTo("Logitech Mouse");

@@ -43,9 +43,7 @@ class CartServiceTest {
     @DisplayName("When fetching a cart by ID, then the correct cart details are returned")
     void testGetCartById() {
 
-
-        cartServiceImpl.cartUri = "/carts";
-
+            cartServiceImpl.cartUri = "/carts";
         String cartJson = """
                 {
                     "id": 1,
@@ -111,5 +109,22 @@ class CartServiceTest {
         });
 
         assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, ((RestClientResponseException) exception).getStatusCode());
+    }
+
+    @Test
+    @DisplayName("When deleting the products in a Cart, the cart must get empty")
+    void testEmptyCart() throws InterruptedException {
+
+        cartServiceImpl.cartUri = "/carts";
+        Long cartId = 1L;
+
+        mockWebServer.enqueue(new MockResponse()
+                .setResponseCode(200));
+
+        cartServiceImpl.emptyCartProductsById(cartId);
+        var recordedRequest = mockWebServer.takeRequest();
+        assertEquals("DELETE", recordedRequest.getMethod());
+        assertEquals("/carts/" + cartId, recordedRequest.getPath());
+
     }
 }

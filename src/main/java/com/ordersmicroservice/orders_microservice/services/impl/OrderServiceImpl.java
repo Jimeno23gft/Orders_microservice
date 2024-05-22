@@ -1,10 +1,13 @@
 package com.ordersmicroservice.orders_microservice.services.impl;
 
+
+import com.ordersmicroservice.orders_microservice.dto.CreditCardDto;
 import com.ordersmicroservice.orders_microservice.dto.CartDto;
 import com.ordersmicroservice.orders_microservice.dto.CartProductDto;
 import com.ordersmicroservice.orders_microservice.dto.Status;
+import com.ordersmicroservice.orders_microservice.dto.UpdateStockRequest;
+import com.ordersmicroservice.orders_microservice.exception.EmptyCartException;
 import com.ordersmicroservice.orders_microservice.exception.NotFoundException;
-import com.ordersmicroservice.orders_microservice.exception.ResourceNotFoundException;
 import com.ordersmicroservice.orders_microservice.models.Order;
 import com.ordersmicroservice.orders_microservice.models.OrderedProduct;
 import com.ordersmicroservice.orders_microservice.repositories.OrderRepository;
@@ -12,6 +15,7 @@ import com.ordersmicroservice.orders_microservice.services.CartService;
 import com.ordersmicroservice.orders_microservice.services.OrderService;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.client.RestClient;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -26,11 +30,13 @@ public class OrderServiceImpl implements OrderService {
     OrderRepository orderRepository;
     Random random;
     private final CartService cartService;
+    private final RestClient restClient;
 
-    public OrderServiceImpl(OrderRepository orderRepository, CartService cartService) {
+    public OrderServiceImpl(OrderRepository orderRepository, CartService cartService, RestClient restClient) {
 
         this.cartService = cartService;
         this.orderRepository = orderRepository;
+        this.restClient = restClient;
     }
 
     @Override
@@ -45,7 +51,9 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public Order addOrder(Long id) {
+    public Order addOrder(Long id, CreditCardDto creditCard) {
+        //log.info("Sending credit card info to payment Server...")
+        //log.info("Payment with the credit card " + creditCard.getNumber() + " has been made successfully" )
 
         CartDto cart;
         try {
@@ -55,7 +63,7 @@ public class OrderServiceImpl implements OrderService {
         }
 
         if(cart.getCartProducts().isEmpty()){
-            throw new ResourceNotFoundException("Empty cart, order not made");
+            throw new EmptyCartException("Empty cart, order not made");
         }
 
         Order order = new Order();
@@ -71,7 +79,7 @@ public class OrderServiceImpl implements OrderService {
             order.setTotalPrice(cart.getTotalPrice());
             order.setOrderedProducts(orderedProducts);
             order.setFromAddress(randomAddress());
-            order.setStatus(Status.UNPAID);
+            order.setStatus(Status.PAID);
             order.setDateOrdered(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")));
 
             cartService.emptyCartProductsById(id);
@@ -112,9 +120,22 @@ public class OrderServiceImpl implements OrderService {
         Order existingOrder = orderRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Order not found with ID: " + id));
         existingOrder.setStatus(updatedStatus);
-        Optional.of(updatedStatus)
-                .filter(status -> status == Status.DELIVERED)
-                .ifPresent(status -> existingOrder.setDateDelivered(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"))));
+        switch (updatedStatus){
+            case DELIVERED: Optional.of(updatedStatus)
+                    .filter(status -> status == Status.DELIVERED)
+                    .ifPresent(status -> existingOrder.setDateDelivered(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"))));
+            break;
+
+            case RETURNED:
+                List<UpdateStockRequest> updateStockRequests = existingOrder.getOrderedProducts().stream()
+                        .map(product -> new UpdateStockRequest(product.getProductId(), product.getQuantity()))
+                        .toList();
+
+                String url = "http://localhost:8081/catalog/products/";
+                updateStockRequests.forEach(request -> restClient.patch().uri(url + request.getProductId() +"/stock?newStock=" + request.getQuantity()).retrieve().body(UpdateStockRequest.class));
+            break;
+        }
+
         return orderRepository.save(existingOrder);
     }
 

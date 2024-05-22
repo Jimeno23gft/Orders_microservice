@@ -1,5 +1,7 @@
 package com.ordersmicroservice.orders_microservice.services;
 
+
+import com.ordersmicroservice.orders_microservice.dto.CreditCardDto;
 import com.ordersmicroservice.orders_microservice.dto.CartDto;
 import com.ordersmicroservice.orders_microservice.dto.CartProductDto;
 import com.ordersmicroservice.orders_microservice.dto.Status;
@@ -18,7 +20,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.web.client.RestClient;
-
+import java.math.BigInteger;
 import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.Collections;
@@ -39,10 +41,12 @@ class OrderServiceTest {
     OrderServiceImpl orderService;
     @Mock
     CartServiceImpl cartService;
+    @Mock
+    RestClient restClient;
     private Order order1;
     private Order order2;
     private List<Order> orders;
-    private RestClient restClient;
+
 
     @BeforeEach
     public void setup() {
@@ -66,7 +70,6 @@ class OrderServiceTest {
     }
 
     @Test
-
     @DisplayName("Testing get all Orders from Repository Method")
     void testGetAllOrders() {
         when(orderRepository.findAll()).thenReturn(orders);
@@ -93,6 +96,12 @@ class OrderServiceTest {
     void testAddOrder() {
         String[] addresses = {"123 Main St", "456 Elm St", "789 Oak St", "101 Maple Ave", "222 Pine St", "333 Cedar Rd"};
 
+
+        CreditCardDto creditCard = new CreditCardDto();
+        creditCard.setCardNumber(new BigInteger("1234567812345678"));
+        creditCard.setExpirationDate("12/25");
+        creditCard.setCVCCode(123);
+
         // Mock the CartDto
         Long cartId = 1L;
         Long user_id = 1L;
@@ -115,14 +124,14 @@ class OrderServiceTest {
         when(orderRepository.save(any(Order.class))).thenAnswer(invocation -> invocation.getArgument(0));
 
         // Call the service method
-        Order savedOrder = orderService.addOrder(cartId);
+        Order savedOrder = orderService.addOrder(cartId,creditCard);
 
         // Verify the results
         assertNotNull(savedOrder);
         assertEquals(cartId, savedOrder.getCartId());
         assertEquals(totalPrice, savedOrder.getTotalPrice());
         assertTrue(Arrays.asList(addresses).contains(savedOrder.getFromAddress()));
-        assertEquals(Status.UNPAID, savedOrder.getStatus());
+        assertEquals(Status.PAID, savedOrder.getStatus());
         assertNotNull(savedOrder.getDateOrdered());
         assertNull(savedOrder.getDateDelivered());
 
@@ -216,6 +225,41 @@ class OrderServiceTest {
 
         verify(orderRepository).findById(orderId);
         verify(orderRepository).deleteById(orderId);
+    }
+    @Test
+    @DisplayName("Testing patching an order with RETURNED status")
+    void testPatchOrderReturned() {
+        RestClient.RequestBodyUriSpec requestBodyUriSpec = mock(RestClient.RequestBodyUriSpec.class);
+        RestClient.ResponseSpec responseSpec = mock(RestClient.ResponseSpec.class);
+
+        Order initialOrder = new Order();
+        OrderedProduct product1 = new OrderedProduct();
+        OrderedProduct product2 = new OrderedProduct();
+        product1.setProductId(1L);
+        product2.setProductId(2L);
+        product1.setQuantity(5);
+        product2.setQuantity(3);
+        initialOrder.setId(1L);
+        initialOrder.setStatus(IN_DELIVERY);
+        initialOrder.setOrderedProducts(Arrays.asList(
+                product1,
+                product2
+        ));
+
+        when(restClient.patch()).thenReturn(requestBodyUriSpec);
+        when(requestBodyUriSpec.uri(anyString())).thenReturn(requestBodyUriSpec);
+        when(requestBodyUriSpec.retrieve()).thenReturn(responseSpec);
+
+        when(orderRepository.findById(1L)).thenReturn(Optional.of(initialOrder));
+        when(orderRepository.save(initialOrder)).thenReturn(initialOrder);
+
+        Order patchedOrder = orderService.patchOrder(1L, Status.RETURNED);
+
+        assertNotNull(patchedOrder);
+        assertEquals(Status.RETURNED, patchedOrder.getStatus());
+
+        // Verify that the REST client was called for each product in the order
+        verify(restClient, times(initialOrder.getOrderedProducts().size())).patch();
     }
 
     @Test
