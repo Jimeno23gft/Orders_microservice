@@ -1,9 +1,7 @@
 package com.ordersmicroservice.orders_microservice.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import com.ordersmicroservice.orders_microservice.models.OrderedProduct;
+import lombok.*;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 
@@ -25,5 +23,6 @@ public class CartDto {
         private Long cartId;
         private List<CartProductDto> cartProducts = new ArrayList<>();
         private BigDecimal totalPrice;
+
 
 }

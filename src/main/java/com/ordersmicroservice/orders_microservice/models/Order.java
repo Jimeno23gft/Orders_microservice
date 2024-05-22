@@ -1,6 +1,7 @@
 package com.ordersmicroservice.orders_microservice.models;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.ordersmicroservice.orders_microservice.dto.CartProductDto;
 import com.ordersmicroservice.orders_microservice.dto.Status;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -49,8 +50,7 @@ public class Order {
     @Column(name = "total_price")
     private BigDecimal totalPrice;
 
-    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference
     private List<OrderedProduct> orderedProducts;
-
 }

@@ -10,7 +10,6 @@ import org.springframework.web.client.RestClient;
 @Configuration
 @Generated
 public class AppConfig {
-
     @Bean
     public RestClient restClient() {
         return RestClient.create();

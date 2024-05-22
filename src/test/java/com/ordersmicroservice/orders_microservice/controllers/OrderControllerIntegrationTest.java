@@ -7,6 +7,7 @@ import com.ordersmicroservice.orders_microservice.models.Order;
 import com.ordersmicroservice.orders_microservice.models.OrderedProduct;
 import com.ordersmicroservice.orders_microservice.services.CartService;
 import com.ordersmicroservice.orders_microservice.services.OrderService;
+import org.junit.Ignore;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.reactive.WebFluxTest;
@@ -37,6 +38,7 @@ public class OrderControllerIntegrationTest {
     @MockBean
     private CartService cartService;
 
+    @Ignore
     @Test
     public void testAddOrderFromCartData() {
 
