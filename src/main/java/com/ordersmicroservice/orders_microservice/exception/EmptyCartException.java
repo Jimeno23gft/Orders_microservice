@@ -3,8 +3,8 @@ package com.ordersmicroservice.orders_microservice.exception;
 import lombok.Generated;
 
 @Generated
-public class ResourceNotFoundException extends RuntimeException {
-    public ResourceNotFoundException(String message) {
+public class EmptyCartException extends RuntimeException {
+    public EmptyCartException(String message) {
         super(message);
     }
 }

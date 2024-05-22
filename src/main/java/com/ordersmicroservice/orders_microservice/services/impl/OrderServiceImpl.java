@@ -3,8 +3,8 @@ package com.ordersmicroservice.orders_microservice.services.impl;
 import com.ordersmicroservice.orders_microservice.dto.CartDto;
 import com.ordersmicroservice.orders_microservice.dto.CartProductDto;
 import com.ordersmicroservice.orders_microservice.dto.Status;
+import com.ordersmicroservice.orders_microservice.exception.EmptyCartException;
 import com.ordersmicroservice.orders_microservice.exception.NotFoundException;
-import com.ordersmicroservice.orders_microservice.exception.ResourceNotFoundException;
 import com.ordersmicroservice.orders_microservice.models.Order;
 import com.ordersmicroservice.orders_microservice.models.OrderedProduct;
 import com.ordersmicroservice.orders_microservice.repositories.OrderRepository;
@@ -55,7 +55,7 @@ public class OrderServiceImpl implements OrderService {
         }
 
         if(cart.getCartProducts().isEmpty()){
-            throw new ResourceNotFoundException("Empty cart, order not made");
+            throw new EmptyCartException("Empty cart, order not made");
         }
 
         Order order = new Order();
