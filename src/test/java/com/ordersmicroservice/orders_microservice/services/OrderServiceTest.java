@@ -1,5 +1,6 @@
 package com.ordersmicroservice.orders_microservice.services;
 
+import com.ordersmicroservice.orders_microservice.dto.CreditCardDto;
 import com.ordersmicroservice.orders_microservice.dto.Status;
 import com.ordersmicroservice.orders_microservice.dto.StatusUpdateDto;
 import com.ordersmicroservice.orders_microservice.exception.NotFoundException;
@@ -14,6 +15,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.math.BigInteger;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -84,13 +86,18 @@ class OrderServiceTest {
     void testAddOrder() {
         String[] addresses = {"123 Main St", "456 Elm St", "789 Oak St", "101 Maple Ave", "222 Pine St", "333 Cedar Rd"};
 
+        CreditCardDto creditCardDto = new CreditCardDto();
+        creditCardDto.setCardNumber(new BigInteger("1234567812345678"));
+        creditCardDto.setExpirationDate("12/25");
+        creditCardDto.setCVCCode(123);
+
         when(orderRepository.save(any(Order.class))).thenAnswer(invocation -> invocation.getArgument(0));
-        Order savedOrder = orderService.addOrder(1L);
+        Order savedOrder = orderService.addOrder(1L, creditCardDto);
 
         assertNotNull(savedOrder);
         assertEquals(1L, savedOrder.getCartId());
         assertTrue(Arrays.asList(addresses).contains(savedOrder.getFromAddress()));
-        assertEquals(Status.UNPAID, savedOrder.getStatus());
+        assertEquals(Status.PAID, savedOrder.getStatus());
         assertNotNull(savedOrder.getDateOrdered());
         assertNull(savedOrder.getDateDelivered());
     }

@@ -1,5 +1,6 @@
 package com.ordersmicroservice.orders_microservice.services.impl;
 
+import com.ordersmicroservice.orders_microservice.dto.CreditCardDto;
 import com.ordersmicroservice.orders_microservice.dto.Status;
 import com.ordersmicroservice.orders_microservice.exception.NotFoundException;
 import com.ordersmicroservice.orders_microservice.models.Order;
@@ -36,13 +37,15 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public Order addOrder(Long id) {
+    public Order addOrder(Long id, CreditCardDto creditCard) {
+        //log.info("Sending credit card info to payment Server...")
+        //log.info("Payment with the credit card " + creditCard.getNumber() + " has been made successfully" )
         return orderRepository.save(
                 Order.builder()
                         .userId(1L)
                         .cartId(id)
                         .fromAddress(randomAddress())
-                        .status(Status.UNPAID)
+                        .status(Status.PAID)
                         .dateOrdered(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")))
                         .build()
         );
