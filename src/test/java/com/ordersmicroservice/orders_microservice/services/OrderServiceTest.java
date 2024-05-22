@@ -95,6 +95,7 @@ class OrderServiceTest {
 
         // Mock the CartDto
         Long cartId = 1L;
+        Long user_id = 1L;
         BigDecimal totalPrice = new BigDecimal("100.00");
         List<CartProductDto> cartProducts = List.of(
                 new CartProductDto(1L, "Product1", "Category1", "Description1", 2,new BigDecimal("20.00")),
@@ -102,6 +103,7 @@ class OrderServiceTest {
         );
         CartDto cartDto = CartDto.builder()
                 .cartId(cartId)
+                .userId(user_id)
                 .cartProducts(cartProducts)
                 .totalPrice(totalPrice)
                 .build();
