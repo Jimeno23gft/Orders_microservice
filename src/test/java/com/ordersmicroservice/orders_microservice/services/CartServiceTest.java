@@ -86,11 +86,9 @@ class CartServiceTest {
                 .setBody("Cart not found")
                 .addHeader("Content-Type", "text/plain"));
 
-        Exception exception = assertThrows(RestClientResponseException.class, () -> {
-            cartServiceImpl.getCartById(1L);
-        });
+        RestClientResponseException exception = assertThrows(RestClientResponseException.class, () -> cartServiceImpl.getCartById(1L));
 
-        assertEquals(HttpStatus.NOT_FOUND, ((RestClientResponseException) exception).getStatusCode());
+        assertEquals(HttpStatus.NOT_FOUND, exception.getStatusCode());
     }
 
 
@@ -104,11 +102,9 @@ class CartServiceTest {
                 .addHeader("Content-Type", "text/plain"));
 
 
-        Exception exception = assertThrows(RestClientResponseException.class, () -> {
-            cartServiceImpl.getCartById(1L);
-        });
+        RestClientResponseException exception = assertThrows(RestClientResponseException.class, () -> cartServiceImpl.getCartById(1L));
 
-        assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, ((RestClientResponseException) exception).getStatusCode());
+        assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, exception.getStatusCode());
     }
 
     @Test

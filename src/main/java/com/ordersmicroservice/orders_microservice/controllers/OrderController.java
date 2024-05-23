@@ -22,7 +22,6 @@ import static org.springframework.http.HttpStatus.*;
 @RestController
 @RequestMapping("/orders")
 public class OrderController {
-
     OrderService orderService;
 
     public OrderController(OrderService orderService) {

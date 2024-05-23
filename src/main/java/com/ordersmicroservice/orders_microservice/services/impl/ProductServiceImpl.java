@@ -26,5 +26,4 @@ public class ProductServiceImpl {
                 .retrieve()
                 .body(ProductDto.class);
     }
-
 }
