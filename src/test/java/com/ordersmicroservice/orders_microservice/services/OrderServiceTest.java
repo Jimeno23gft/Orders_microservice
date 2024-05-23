@@ -49,7 +49,6 @@ class OrderServiceTest {
     private Order order2;
     private List<Order> orders;
 
-
     @BeforeEach
     public void setup() {
         order1 = Order.builder()

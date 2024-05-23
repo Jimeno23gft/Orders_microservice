@@ -100,5 +100,4 @@ class UserServiceTest {
     void tearDown() throws IOException {
         mockWebServer.shutdown();
     }
-
 }

@@ -20,4 +20,4 @@ spring:
             mode: always
 cart:
     service:
-        url: http://localhost:8081
+        url: https://catalog-workshop-yequy5sv5a-uc.a.run.app
