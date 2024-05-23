@@ -3,13 +3,18 @@ package com.ordersmicroservice.orders_microservice.services.impl;
 import com.ordersmicroservice.orders_microservice.dto.CartDto;
 import com.ordersmicroservice.orders_microservice.dto.CartProductDto;
 import com.ordersmicroservice.orders_microservice.dto.Status;
+import com.ordersmicroservice.orders_microservice.dto.UserDto;
 import com.ordersmicroservice.orders_microservice.exception.EmptyCartException;
 import com.ordersmicroservice.orders_microservice.exception.NotFoundException;
+import com.ordersmicroservice.orders_microservice.models.Address;
 import com.ordersmicroservice.orders_microservice.models.Order;
 import com.ordersmicroservice.orders_microservice.models.OrderedProduct;
+import com.ordersmicroservice.orders_microservice.repositories.AddressRepository;
 import com.ordersmicroservice.orders_microservice.repositories.OrderRepository;
+import com.ordersmicroservice.orders_microservice.services.AddressService;
 import com.ordersmicroservice.orders_microservice.services.CartService;
 import com.ordersmicroservice.orders_microservice.services.OrderService;
+import com.ordersmicroservice.orders_microservice.services.UserService;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
 
@@ -24,13 +29,17 @@ import java.util.stream.Collectors;
 public class OrderServiceImpl implements OrderService {
 
     OrderRepository orderRepository;
+
+    AddressService addressService;
     Random random;
     private final CartService cartService;
+    private final UserService userService;
 
-    public OrderServiceImpl(OrderRepository orderRepository, CartService cartService) {
-
-        this.cartService = cartService;
+    public OrderServiceImpl(OrderRepository orderRepository, AddressService addressService, CartService cartService, UserService userService) {
         this.orderRepository = orderRepository;
+        this.addressService = addressService;
+        this.cartService = cartService;
+        this.userService = userService;
     }
 
     @Override
@@ -41,13 +50,20 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public Order getOrderById(Long orderId) {
-        return orderRepository.findById(orderId).orElseThrow(() -> new NotFoundException("Order not found with ID: " + orderId));
+        Order order = orderRepository.findById(orderId).orElseThrow(() -> new NotFoundException("Order not found with ID: " + orderId));
+        UserDto user = userService.getUserById(order.getUserId());
+        order.setUser(user);
+
+        return order;
     }
 
     @Override
     public Order addOrder(Long id) {
 
         CartDto cart;
+        UserDto user;
+        Address address;
+
         try {
             cart = cartService.getCartById(id);
         }catch(Exception ex){
@@ -58,23 +74,39 @@ public class OrderServiceImpl implements OrderService {
             throw new EmptyCartException("Empty cart, order not made");
         }
 
-        Order order = new Order();
-
             List<CartProductDto> cartProducts = cartService.getCartById(id).getCartProducts();
 
-            List<OrderedProduct> orderedProducts = cartProducts.stream()
+        Order order = new Order();
+        List<OrderedProduct> orderedProducts = cartProducts.stream()
                     .map(cartProductDto -> convertToOrderedProduct(cartProductDto, order))
                     .collect(Collectors.toList());
 
-            order.setUserId(cart.getUserId());
+
+        try {
+            user = userService.getUserById(cart.getUserId());
+        }catch(Exception ex){
+            throw new NotFoundException("User not found with ID: " + id);
+        }
+
+
+
+            order.setUser(user);
             order.setCartId(id);
+            order.setUserId(cart.getUserId());
             order.setTotalPrice(cart.getTotalPrice());
             order.setOrderedProducts(orderedProducts);
             order.setFromAddress(randomAddress());
             order.setStatus(Status.UNPAID);
             order.setDateOrdered(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")));
 
-            cartService.emptyCartProductsById(id);
+
+            address = user.getAddress();
+            address.setCountryId(user.getCountry().getId());
+            //address.setCountry(user.getCountry());
+            address.setOrder(order);
+            //addressService.saveAddress(address);
+            order.setAddress(address);
+            //cartService.emptyCartProductsById(id);
             return orderRepository.save(order);
 
 

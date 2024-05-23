@@ -10,6 +10,7 @@ import reactor.core.publisher.Mono;
 @Service
 public class CountryServiceImpl implements CountryService {
     private final RestClient restClient;
+    public String cartUri = "http://localhost:8082/users/";
 
     public CountryServiceImpl(RestClient restClient) {
         this.restClient = restClient;

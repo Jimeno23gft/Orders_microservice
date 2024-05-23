@@ -3,6 +3,7 @@ package com.ordersmicroservice.orders_microservice.controllers;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ordersmicroservice.orders_microservice.dto.Status;
 import com.ordersmicroservice.orders_microservice.dto.StatusUpdateDto;
+import com.ordersmicroservice.orders_microservice.dto.UserDto;
 import com.ordersmicroservice.orders_microservice.exception.NotFoundException;
 import com.ordersmicroservice.orders_microservice.models.Order;
 import com.ordersmicroservice.orders_microservice.services.OrderService;
@@ -86,10 +87,11 @@ class OrderControllerTest {
 
         Long cartId = 1L;
 
+        UserDto user = new UserDto();
+
         when(orderService.addOrder(cartId)).thenAnswer(invocation -> Order
                 .builder()
-                .userId(1L)
-                .cartId(1L)
+                .cartId(cartId)
                 .fromAddress("Madrid")
                 .status(Status.DELIVERED)
                 .dateOrdered("2001-01-21")
@@ -100,7 +102,6 @@ class OrderControllerTest {
                 .andExpect(status().isCreated())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.cartId", is(cartId.intValue())))
-                .andExpect(jsonPath("$.userId", is(1)))
                 .andExpect(jsonPath("$.fromAddress", is("Madrid")))
                 .andExpect(jsonPath("$.dateOrdered", is("2001-01-21")));
 

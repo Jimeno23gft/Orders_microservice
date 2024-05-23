@@ -15,9 +15,8 @@ import lombok.NoArgsConstructor;
 @Table(name = "addresses")
 public class Address {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "address_id")
-    private Long addressId;
+    @Column(name = "order_id")
+    private Long orderId;
 
     @JsonBackReference
     @OneToOne
@@ -42,4 +41,5 @@ public class Address {
 
     @Column(name = "country_id")
     private Long countryId;
+
 }

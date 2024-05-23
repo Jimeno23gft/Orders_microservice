@@ -30,6 +30,8 @@ import static com.ordersmicroservice.orders_microservice.dto.Status.IN_DELIVERY;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
+import static com.ordersmicroservice.orders_microservice.Datos.crearOrder001;
+import static com.ordersmicroservice.orders_microservice.Datos.crearOrder002;
 
 @ExtendWith(MockitoExtension.class)
 class OrderServiceTest {
@@ -39,13 +41,17 @@ class OrderServiceTest {
     OrderServiceImpl orderService;
     @Mock
     CartServiceImpl cartService;
-    private Order order1;
-    private Order order2;
+
     private List<Order> orders;
     private RestClient restClient;
 
+    Order order1;
+
     @BeforeEach
     public void setup() {
+
+        Order order1 = crearOrder001().orElseThrow();
+        /*
         order1 = Order.builder()
                 .id(1L)
                 .userId(1L)
@@ -63,7 +69,10 @@ class OrderServiceTest {
                 .dateOrdered("2024-5-11")
                 .dateDelivered("2024-5-12").build();
         orders = List.of(order1, order2);
+         */
     }
+
+
 
     @Test
 

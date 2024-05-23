@@ -12,12 +12,14 @@ import reactor.core.publisher.Mono;
 public class UserServiceImpl implements UserService {
     private final RestClient restClient;
 
+    public String userUri = "http://localhost:8082/users/";
+
     public UserServiceImpl(RestClient restClient) {
         this.restClient = restClient;
     }
     public UserDto getUserById(Long userId) {
         return restClient.get()
-                .uri("/users/{id}", userId)
+                .uri(userUri + "/{id}", userId)
                 .retrieve()
                 .body(UserDto.class);
     }
