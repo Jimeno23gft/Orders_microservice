@@ -1,6 +1,5 @@
 package com.ordersmicroservice.orders_microservice.services.impl;
 
-
 import com.ordersmicroservice.orders_microservice.dto.CreditCardDto;
 import com.ordersmicroservice.orders_microservice.dto.CartDto;
 import com.ordersmicroservice.orders_microservice.dto.CartProductDto;
@@ -48,6 +47,11 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public Order getOrderById(Long orderId) {
         return orderRepository.findById(orderId).orElseThrow(() -> new NotFoundException("Order not found with ID: " + orderId));
+    }
+
+    @Override
+    public List<Order> getAllByUserId(Long userId) {
+        return orderRepository.findAllByUserId(userId);
     }
 
     @Override

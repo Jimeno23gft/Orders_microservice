@@ -92,6 +92,17 @@ class OrderServiceTest {
     }
 
     @Test
+    @DisplayName("Testing get all Orders from Repository Method")
+    void testGetAllByUserId() {
+        Long userId = 1L;
+        when(orderRepository.findAllByUserId(userId)).thenReturn(orders);
+
+        List<Order> savedOrders = orderService.getAllByUserId(userId);
+        assertNotNull(savedOrders);
+        assertNotEquals(Collections.emptyList(), savedOrders);
+        assertEquals(orders, savedOrders);
+    }
+    @Test
     @DisplayName("Testing Adding a new order with just an id")
     void testAddOrder() {
         String[] addresses = {"123 Main St", "456 Elm St", "789 Oak St", "101 Maple Ave", "222 Pine St", "333 Cedar Rd"};

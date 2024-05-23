@@ -83,6 +83,24 @@ class OrderControllerTest {
     }
 
     @Test
+    @DisplayName("Testing method retrieves all orders from the endpoint")
+    void testGetAllByUserId() throws Exception {
+        Long userId = crearOrder001().orElseThrow().getUserId();
+
+        List<Order> mockOrders = Arrays.asList(crearOrder001().orElseThrow(),
+                crearOrder002().orElseThrow());
+        when(orderService.getAllByUserId(userId)).thenReturn(mockOrders);
+
+        mockMvc.perform(get("/orders/user/{$id}", userId).contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$[0].id").value(1L))
+                .andExpect(jsonPath("$[0].status").value("PAID"))
+                .andExpect(content().json(objectMapper.writeValueAsString(mockOrders)));
+
+        verify(orderService).getAllByUserId(userId);
+    }
+    @Test
     @DisplayName("Testing method posts a new order to the endpoint")
     void testPostNewOrder() throws Exception {
 
