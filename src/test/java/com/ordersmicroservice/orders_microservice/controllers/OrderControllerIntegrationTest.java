@@ -1,7 +1,5 @@
 package com.ordersmicroservice.orders_microservice.controllers;
 
-import com.ordersmicroservice.orders_microservice.dto.CartDto;
-import com.ordersmicroservice.orders_microservice.dto.CartProductDto;
 import com.ordersmicroservice.orders_microservice.dto.Status;
 import com.ordersmicroservice.orders_microservice.models.Order;
 import com.ordersmicroservice.orders_microservice.models.OrderedProduct;
@@ -12,7 +10,6 @@ import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.core.AutoConfigureCache;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.reactive.server.WebTestClient;
@@ -23,9 +20,6 @@ import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.DEFINED_PORT;
 
 @SpringBootTest(webEnvironment = DEFINED_PORT)
@@ -76,7 +70,7 @@ import static org.springframework.boot.test.context.SpringBootTest.WebEnvironmen
                 .build();
     }
 
-    @Disabled
+    @Disabled("Test requires cart microservice to be executed")
     @DisplayName("Integration test that proves the correct creation of an order with cartId an the Products from cart_microservice")
     @Test
     void addOrderIntegrationTest() {
@@ -98,7 +92,7 @@ import static org.springframework.boot.test.context.SpringBootTest.WebEnvironmen
                     assertThat(responseOrder.getOrderedProducts().get(1).getName()).isEqualTo("Logitech Mouse");
                 });
 
-        webTestClient.get().uri("http://localhost:8081/carts/{id}", cartId)
+        webTestClient.get().uri("http://localhost:8080/catalog/{id}", cartId)
                 .exchange()
                 .expectStatus().isOk()
                 .expectBody()

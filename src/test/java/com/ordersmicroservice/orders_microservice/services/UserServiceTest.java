@@ -9,7 +9,6 @@ import org.junit.jupiter.api.AfterEach;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.client.RestClient;
 import org.springframework.web.client.RestClientResponseException;
-import reactor.test.StepVerifier;
 import okhttp3.mockwebserver.MockWebServer;
 import okhttp3.mockwebserver.MockResponse;
 import java.io.IOException;
@@ -17,7 +16,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class UserServiceTest {
-
     private MockWebServer mockWebServer;
     private UserServiceImpl userServiceImpl;
 
@@ -81,11 +79,9 @@ class UserServiceTest {
                 .setResponseCode(404)
                 .setBody("User not found")
                 .addHeader("Content-Type", "text/plain"));
-        Exception exception = assertThrows(RestClientResponseException.class, () -> {
-            userServiceImpl.getUserById(1L);
-        });
+        RestClientResponseException exception = assertThrows(RestClientResponseException.class, () -> userServiceImpl.getUserById(1L));
 
-        assertEquals(HttpStatus.NOT_FOUND, ((RestClientResponseException) exception).getStatusCode());
+        assertEquals(HttpStatus.NOT_FOUND, exception.getStatusCode());
     }
 
     @Test
@@ -95,16 +91,13 @@ class UserServiceTest {
                 .setResponseCode(500)
                 .setBody("Internal Server Error")
                 .addHeader("Content-Type", "text/plain"));
-        Exception exception = assertThrows(RestClientResponseException.class, () -> {
-            userServiceImpl.getUserById(1L);
-        });
+        RestClientResponseException exception = assertThrows(RestClientResponseException.class, () -> userServiceImpl.getUserById(1L));
 
-        assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, ((RestClientResponseException) exception).getStatusCode());
+        assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, exception.getStatusCode());
     }
 
     @AfterEach
     void tearDown() throws IOException {
         mockWebServer.shutdown();
     }
-
 }

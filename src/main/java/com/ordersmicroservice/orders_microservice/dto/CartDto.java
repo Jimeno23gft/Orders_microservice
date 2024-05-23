@@ -1,10 +1,7 @@
 package com.ordersmicroservice.orders_microservice.dto;
 
-import com.ordersmicroservice.orders_microservice.models.OrderedProduct;
 import lombok.*;
 import com.fasterxml.jackson.annotation.JsonProperty;
-
-
 
 import java.math.BigDecimal;
 import java.util.ArrayList;

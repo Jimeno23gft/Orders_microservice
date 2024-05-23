@@ -8,5 +8,5 @@ import java.math.BigInteger;
 public class CreditCardDto {
     private BigInteger cardNumber;
     private String expirationDate;
-    private int CVCCode;
+    private int cvcCode;
 }

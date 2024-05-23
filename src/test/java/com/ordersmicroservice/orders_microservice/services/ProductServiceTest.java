@@ -5,22 +5,14 @@ import com.ordersmicroservice.orders_microservice.services.impl.ProductServiceIm
 import okhttp3.mockwebserver.MockWebServer;
 import org.junit.jupiter.api.BeforeEach;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.AfterEach;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.client.RestClient;
 import org.springframework.web.client.RestClientResponseException;
-import org.springframework.web.reactive.function.client.WebClient;
-import org.springframework.web.reactive.function.client.WebClientResponseException;
-import reactor.core.publisher.Mono;
-import reactor.test.StepVerifier;
-import okhttp3.mockwebserver.MockWebServer;
 import okhttp3.mockwebserver.MockResponse;
 
 import java.io.IOException;
-import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -76,9 +68,7 @@ class ProductServiceTest {
                 .setBody("Not found")
                 .addHeader("Content-Type", "application/json"));
 
-        RestClientResponseException exception = assertThrows(RestClientResponseException.class, () -> {
-            productService.patchProductStock(1L, -5);
-        });
+        RestClientResponseException exception = assertThrows(RestClientResponseException.class, () -> productService.patchProductStock(1L, -5));
 
         assertEquals(HttpStatus.NOT_FOUND, exception.getStatusCode());
     }
@@ -91,9 +81,7 @@ class ProductServiceTest {
                 .setBody("Internal Server Error")
                 .addHeader("Content-Type", "application/json"));
 
-        RestClientResponseException exception = assertThrows(RestClientResponseException.class, () -> {
-            productService.patchProductStock(1L, -5);
-        });
+        RestClientResponseException exception = assertThrows(RestClientResponseException.class, () -> productService.patchProductStock(1L, -5));
 
         assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, exception.getStatusCode());
     }
@@ -124,7 +112,7 @@ class ProductServiceTest {
         assertNotNull(productDto);
         assertEquals(1L, productDto.getId());
         assertEquals("Ball", productDto.getName());
-        assertEquals(15, productDto.getCurrentStock());;
+        assertEquals(15, productDto.getCurrentStock());
     }
 
     @Test
@@ -135,11 +123,9 @@ class ProductServiceTest {
                 .setBody("Not found")
                 .addHeader("Content-Type", "application/json"));
 
-        Exception exception = assertThrows(RestClientResponseException.class, () -> {
-            productService.getProductById(1L);
-        });
+        RestClientResponseException exception = assertThrows(RestClientResponseException.class, () -> productService.getProductById(1L));
 
-        assertEquals(HttpStatus.NOT_FOUND, ((RestClientResponseException) exception).getStatusCode());
+        assertEquals(HttpStatus.NOT_FOUND, exception.getStatusCode());
     }
 
     @Test
@@ -150,11 +136,9 @@ class ProductServiceTest {
                 .setBody("Internal Server Error")
                 .addHeader("Content-Type", "application/json"));
 
-        Exception exception = assertThrows(RestClientResponseException.class, () -> {
-            productService.getProductById(1L);
-        });
+        RestClientResponseException exception = assertThrows(RestClientResponseException.class, () -> productService.getProductById(1L));
 
-        assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, ((RestClientResponseException) exception).getStatusCode());
+        assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, exception.getStatusCode());
     }
 
 }

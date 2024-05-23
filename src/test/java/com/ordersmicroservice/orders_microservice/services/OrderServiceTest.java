@@ -6,6 +6,7 @@ import com.ordersmicroservice.orders_microservice.dto.CartDto;
 import com.ordersmicroservice.orders_microservice.dto.CartProductDto;
 import com.ordersmicroservice.orders_microservice.dto.Status;
 import com.ordersmicroservice.orders_microservice.dto.StatusUpdateDto;
+import com.ordersmicroservice.orders_microservice.exception.EmptyCartException;
 import com.ordersmicroservice.orders_microservice.exception.NotFoundException;
 import com.ordersmicroservice.orders_microservice.models.Order;
 import com.ordersmicroservice.orders_microservice.models.OrderedProduct;
@@ -16,6 +17,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.api.function.Executable;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -46,7 +48,6 @@ class OrderServiceTest {
     private Order order1;
     private Order order2;
     private List<Order> orders;
-
 
     @BeforeEach
     public void setup() {
@@ -111,7 +112,7 @@ class OrderServiceTest {
         CreditCardDto creditCard = new CreditCardDto();
         creditCard.setCardNumber(new BigInteger("1234567812345678"));
         creditCard.setExpirationDate("12/25");
-        creditCard.setCVCCode(123);
+        creditCard.setCvcCode(123);
 
         // Mock the CartDto
         Long cartId = 1L;
@@ -129,7 +130,7 @@ class OrderServiceTest {
                 .build();
 
         // Mock the cartService to return the CartDto
-        when(cartService.getCartById(cartId)).thenReturn(cartDto);
+        when(cartService.getCartById(cartId)).thenReturn(Optional.ofNullable(cartDto));
 
         // Mock the orderRepository to return the Order when saved
         when(orderRepository.save(any(Order.class))).thenAnswer(invocation -> invocation.getArgument(0));
@@ -164,6 +165,31 @@ class OrderServiceTest {
         }
     }
 
+    @Test
+    @DisplayName("Test addOrder when cart is not found")
+    void testAddOrderCartNotFound() {
+        Long cartId = 1L;
+        when(cartService.getCartById(cartId)).thenReturn(Optional.empty());
+
+        Executable addOrderExecutable = () -> orderService.addOrder(cartId, new CreditCardDto());
+        assertThrows(NotFoundException.class, addOrderExecutable);
+
+        verify(cartService, times(1)).getCartById(cartId);
+    }
+
+    @Test
+    @DisplayName("Test addOrder when cart is empty")
+    void testAddOrderEmptyCart() {
+        Long cartId = 1L;
+        CartDto emptyCart = new CartDto();
+        emptyCart.setCartProducts(Collections.emptyList()); // Ensure the cart is indeed empty
+        when(cartService.getCartById(cartId)).thenReturn(Optional.of(emptyCart));
+
+        Executable addOrderExecutable = () -> orderService.addOrder(cartId, new CreditCardDto());
+        assertThrows(EmptyCartException.class, addOrderExecutable);
+
+        verify(cartService, times(1)).getCartById(cartId);
+    }
 
     @Test
     @DisplayName("Testing the update of an order")
