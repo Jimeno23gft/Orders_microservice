@@ -55,39 +55,34 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public Order addOrder(Long id, CreditCardDto creditCard) {
+    public Order addOrder(Long cartId, CreditCardDto creditCard) {
         //log.info("Sending credit card info to payment Server...")
         //log.info("Payment with the credit card " + creditCard.getNumber() + " has been made successfully" )
+        CartDto cart = cartService.getCartById(cartId)
+                .orElseThrow(() -> new NotFoundException("Cart not found with ID: " + cartId));
 
-        CartDto cart;
-        try {
-            cart = cartService.getCartById(id);
-        }catch(Exception ex){
-            throw new NotFoundException("Cart not found with ID: " + id);
-        }
-
-        if(cart.getCartProducts().isEmpty()){
-            throw new EmptyCartException("Empty cart, order not made");
-        }
+        cart = Optional.of(cart)
+                .filter(c -> !c.getCartProducts().isEmpty())
+                .orElseThrow(() -> new EmptyCartException("Empty cart, order not made"));
 
         Order order = new Order();
 
-            List<CartProductDto> cartProducts = cartService.getCartById(id).getCartProducts();
+        List<CartProductDto> cartProducts = cart.getCartProducts();
 
-            List<OrderedProduct> orderedProducts = cartProducts.stream()
-                    .map(cartProductDto -> convertToOrderedProduct(cartProductDto, order))
-                    .toList();
+        List<OrderedProduct> orderedProducts = cartProducts.stream()
+                .map(cartProductDto -> convertToOrderedProduct(cartProductDto, order))
+                .toList();
 
-            order.setUserId(cart.getUserId());
-            order.setCartId(id);
-            order.setTotalPrice(cart.getTotalPrice());
-            order.setOrderedProducts(orderedProducts);
-            order.setFromAddress(randomAddress());
-            order.setStatus(Status.PAID);
-            order.setDateOrdered(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")));
+        order.setUserId(cart.getUserId());
+        order.setCartId(cartId);
+        order.setTotalPrice(cart.getTotalPrice());
+        order.setOrderedProducts(orderedProducts);
+        order.setFromAddress(randomAddress());
+        order.setStatus(Status.PAID);
+        order.setDateOrdered(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")));
 
-            cartService.emptyCartProductsById(id);
-            return orderRepository.save(order);
+        cartService.emptyCartProductsById(cartId);
+        return orderRepository.save(order);
     }
     private OrderedProduct convertToOrderedProduct(CartProductDto cartProductDto, Order order) {
         return OrderedProduct.builder()

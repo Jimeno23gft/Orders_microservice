@@ -43,7 +43,7 @@ class CartServiceTest {
     @DisplayName("When fetching a cart by ID, then the correct cart details are returned")
     void testGetCartById() {
 
-            cartServiceImpl.cartUri = "/carts";
+        cartServiceImpl.setCartUri("/carts");
         String cartJson = """
                 {
                     "id": 1,
@@ -68,7 +68,7 @@ class CartServiceTest {
                 .setBody(cartJson)
                 .addHeader("Content-Type", "application/json"));
 
-        CartDto cartDto = cartServiceImpl.getCartById(1L);
+        CartDto cartDto = cartServiceImpl.getCartById(1L).orElseThrow();
 
         assertEquals(1L, (long) cartDto.getId());
         assertEquals(101, cartDto.getCartId());
@@ -80,7 +80,7 @@ class CartServiceTest {
     @Test
     @DisplayName("When fetching a non-existent cart by ID, then a 404 error is returned")
     void testGetCartByIdNotFound() {
-        cartServiceImpl.cartUri = "/carts";
+        cartServiceImpl.setCartUri("/carts");
         mockWebServer.enqueue(new MockResponse()
                 .setResponseCode(404)
                 .setBody("Cart not found")
@@ -97,7 +97,7 @@ class CartServiceTest {
     @Test
     @DisplayName("When fetching a Cart by ID and an internal server error occurs, then a 500 error is returned")
     void testGetCartByIdServerError() {
-        cartServiceImpl.cartUri = "/carts";
+        cartServiceImpl.setCartUri("/carts");
         mockWebServer.enqueue(new MockResponse()
                 .setResponseCode(500)
                 .setBody("Internal Server Error")
@@ -115,7 +115,7 @@ class CartServiceTest {
     @DisplayName("When deleting the products in a Cart, the cart must get empty")
     void testEmptyCart() throws InterruptedException {
 
-        cartServiceImpl.cartUri = "/carts";
+        cartServiceImpl.setCartUri("/carts");
         Long cartId = 1L;
 
         mockWebServer.enqueue(new MockResponse()

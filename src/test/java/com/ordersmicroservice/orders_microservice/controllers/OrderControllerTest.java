@@ -110,7 +110,7 @@ class OrderControllerTest {
         CreditCardDto creditCardDto = new CreditCardDto();
         creditCardDto.setCardNumber(new BigInteger("1234567812345678"));
         creditCardDto.setExpirationDate("12/25");
-        creditCardDto.setCVCCode(123);
+        creditCardDto.setCvcCode(123);
 
         String creditCardJson = objectMapper.writeValueAsString(creditCardDto);
 
