@@ -1,6 +1,7 @@
 package com.ordersmicroservice.orders_microservice.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.ordersmicroservice.orders_microservice.models.Address;
 import lombok.Data;
 

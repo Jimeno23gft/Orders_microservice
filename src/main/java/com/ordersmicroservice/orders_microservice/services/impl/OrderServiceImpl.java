@@ -1,9 +1,6 @@
 package com.ordersmicroservice.orders_microservice.services.impl;
 
-import com.ordersmicroservice.orders_microservice.dto.CartDto;
-import com.ordersmicroservice.orders_microservice.dto.CartProductDto;
-import com.ordersmicroservice.orders_microservice.dto.Status;
-import com.ordersmicroservice.orders_microservice.dto.UserDto;
+import com.ordersmicroservice.orders_microservice.dto.*;
 import com.ordersmicroservice.orders_microservice.exception.EmptyCartException;
 import com.ordersmicroservice.orders_microservice.exception.NotFoundException;
 import com.ordersmicroservice.orders_microservice.models.Address;
@@ -11,10 +8,7 @@ import com.ordersmicroservice.orders_microservice.models.Order;
 import com.ordersmicroservice.orders_microservice.models.OrderedProduct;
 import com.ordersmicroservice.orders_microservice.repositories.AddressRepository;
 import com.ordersmicroservice.orders_microservice.repositories.OrderRepository;
-import com.ordersmicroservice.orders_microservice.services.AddressService;
-import com.ordersmicroservice.orders_microservice.services.CartService;
-import com.ordersmicroservice.orders_microservice.services.OrderService;
-import com.ordersmicroservice.orders_microservice.services.UserService;
+import com.ordersmicroservice.orders_microservice.services.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
 
@@ -30,16 +24,19 @@ public class OrderServiceImpl implements OrderService {
 
     OrderRepository orderRepository;
 
-    AddressService addressService;
     Random random;
     private final CartService cartService;
     private final UserService userService;
+    AddressService addressService;
+    CountryService countryService;
 
-    public OrderServiceImpl(OrderRepository orderRepository, AddressService addressService, CartService cartService, UserService userService) {
+
+    public OrderServiceImpl(OrderRepository orderRepository, CartService cartService, UserService userService, AddressService addressService, CountryService countryService) {
         this.orderRepository = orderRepository;
-        this.addressService = addressService;
         this.cartService = cartService;
         this.userService = userService;
+        this.addressService = addressService;
+        this.countryService = countryService;
     }
 
     @Override
@@ -52,7 +49,8 @@ public class OrderServiceImpl implements OrderService {
     public Order getOrderById(Long orderId) {
         Order order = orderRepository.findById(orderId).orElseThrow(() -> new NotFoundException("Order not found with ID: " + orderId));
         UserDto user = userService.getUserById(order.getUserId());
-        order.setUser(user);
+        UserResponseDto userResponde = UserResponseDto.fromUserDto(user);
+        order.setUser(userResponde);
 
         return order;
     }
@@ -63,6 +61,8 @@ public class OrderServiceImpl implements OrderService {
         CartDto cart;
         UserDto user;
         Address address;
+        CountryDto country;
+        UserResponseDto userResponse = new UserResponseDto();
 
         try {
             cart = cartService.getCartById(id);
@@ -88,9 +88,14 @@ public class OrderServiceImpl implements OrderService {
             throw new NotFoundException("User not found with ID: " + id);
         }
 
+        userResponse.setId(user.getId());
+        userResponse.setName(user.getName());
+        userResponse.setPhone(user.getPhone());
+        userResponse.setEmail(user.getEmail());
+        userResponse.setLastName(user.getLastName());
 
 
-            order.setUser(user);
+            order.setUser(userResponse);
             order.setCartId(id);
             order.setUserId(cart.getUserId());
             order.setTotalPrice(cart.getTotalPrice());
@@ -99,14 +104,23 @@ public class OrderServiceImpl implements OrderService {
             order.setStatus(Status.UNPAID);
             order.setDateOrdered(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")));
 
+            try{
+                country = countryService.getCountryById(user.getCountry().getId());
+            }catch(NotFoundException ex){
+                throw new NotFoundException("Country not found with ID: "+ user.getCountry().getId());
+            }
+
+
 
             address = user.getAddress();
             address.setCountryId(user.getCountry().getId());
-            //address.setCountry(user.getCountry());
+            order.setCountry(country);
             address.setOrder(order);
             //addressService.saveAddress(address);
             order.setAddress(address);
             //cartService.emptyCartProductsById(id);
+
+
             return orderRepository.save(order);
 
 

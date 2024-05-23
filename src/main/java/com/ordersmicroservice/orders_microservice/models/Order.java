@@ -1,9 +1,8 @@
 package com.ordersmicroservice.orders_microservice.models;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-import com.ordersmicroservice.orders_microservice.dto.CartProductDto;
-import com.ordersmicroservice.orders_microservice.dto.Status;
-import com.ordersmicroservice.orders_microservice.dto.UserDto;
+import com.ordersmicroservice.orders_microservice.dto.*;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -45,11 +44,14 @@ public class Order {
     private String dateDelivered;
 
     @Transient
-    private UserDto user;
+    private UserResponseDto user;
 
     @OneToOne(mappedBy = "order", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JsonManagedReference
     private Address address;
+
+    @Transient
+    private CountryDto country;
 
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference

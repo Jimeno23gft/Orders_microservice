@@ -1,7 +1,9 @@
 package com.ordersmicroservice.orders_microservice;
 
 import com.ordersmicroservice.orders_microservice.dto.CartProductDto;
+import com.ordersmicroservice.orders_microservice.dto.CountryDto;
 import com.ordersmicroservice.orders_microservice.dto.UserDto;
+import com.ordersmicroservice.orders_microservice.dto.UserResponseDto;
 import com.ordersmicroservice.orders_microservice.models.Address;
 import com.ordersmicroservice.orders_microservice.models.Order;
 import com.ordersmicroservice.orders_microservice.models.OrderedProduct;
@@ -21,13 +23,15 @@ public class Datos {
     static List<OrderedProduct> productList = new ArrayList<>();
     static Address address = new Address();
     static Order order = new Order();
-    static UserDto user = new UserDto();
+    static UserResponseDto user = new UserResponseDto();
+
+    static CountryDto country = new CountryDto();
 
     public static Optional<Order> crearOrder001(){
-        return Optional.of(new Order(1L, 1L,"Valencia",PAID, "2001-21-21","2002-21-21" , user ,productList,new BigDecimal("15")));
+        return Optional.of(new Order(1L,1L, 1L,"Valencia",PAID, "2001-21-21","2002-21-21" , user ,crearAddress001().orElseThrow(),country,productList,new BigDecimal("15")));
     }
     public static Optional<Order> crearOrder002() {
-        return Optional.of(new Order(2L, 2L, "Barcelona", UNPAID, "2001-21-21","2002-21-21" ,user,productList,new BigDecimal("15")));
+        return Optional.of(new Order(2L, 2L, 2L, "Barcelona", UNPAID, "2001-21-21","2002-21-21" ,user, crearAddress002().orElseThrow(), country,productList,new BigDecimal("15")));
     }
     public static Optional<Address> crearAddress001() {
         return Optional.of(new Address(1L, order, "C/ Colon", 10, "5A", "Valencia", "46001", 1L));

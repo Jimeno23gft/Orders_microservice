@@ -1,6 +1,7 @@
 package com.ordersmicroservice.orders_microservice.models;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.ordersmicroservice.orders_microservice.dto.CountryDto;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

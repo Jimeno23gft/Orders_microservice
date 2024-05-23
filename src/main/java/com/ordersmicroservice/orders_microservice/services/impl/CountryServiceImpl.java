@@ -10,14 +10,14 @@ import reactor.core.publisher.Mono;
 @Service
 public class CountryServiceImpl implements CountryService {
     private final RestClient restClient;
-    public String cartUri = "http://localhost:8082/users/";
+    public String cartUri = "http://localhost:8082/country";
 
     public CountryServiceImpl(RestClient restClient) {
         this.restClient = restClient;
     }
     public CountryDto getCountryById(Long countryId) {
         return restClient.get()
-                .uri("/country/{id}", countryId)
+                .uri(cartUri + "/{id}", countryId)
                 .retrieve()
                 .body(CountryDto.class);
     }
