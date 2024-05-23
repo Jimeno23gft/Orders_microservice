@@ -52,6 +52,14 @@ public class OrderController {
             return ResponseEntity.ok(order);
     }
 
+    @GetMapping("/user/{userId}")
+    @ResponseStatus(OK)
+    @Operation(summary = "List all Orders pertaining to a user", description = "This endpoint retrieves example data from the server.")
+    public ResponseEntity<List<Order>> getAllByUserId(@PathVariable Long userId) {
+        List<Order> orders = orderService.getAllByUserId(userId);
+        return ResponseEntity.ok(orders);
+    }
+
     @PostMapping("/{id}")
     @ResponseStatus(CREATED)
     @Operation(summary = "Create a new order", description = "This endpoint retrieves example data from the server.")
