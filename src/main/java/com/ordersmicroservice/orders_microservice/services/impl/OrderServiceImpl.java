@@ -13,6 +13,7 @@ import com.ordersmicroservice.orders_microservice.repositories.OrderRepository;
 import com.ordersmicroservice.orders_microservice.services.CartService;
 import com.ordersmicroservice.orders_microservice.services.OrderService;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.client.RestClient;
 
@@ -55,15 +56,14 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
+    @Transactional
     public Order addOrder(Long cartId, CreditCardDto creditCard) {
-        //log.info("Sending credit card info to payment Server...")
-        //log.info("Payment with the credit card " + creditCard.getNumber() + " has been made successfully" )
         CartDto cart = cartService.getCartById(cartId)
                 .orElseThrow(() -> new NotFoundException("Cart not found with ID: " + cartId));
 
-        cart = Optional.of(cart)
-                .filter(c -> !c.getCartProducts().isEmpty())
-                .orElseThrow(() -> new EmptyCartException("Empty cart, order not made"));
+        if (cart.getCartProducts().isEmpty()) {
+            throw new EmptyCartException("Empty cart, order not made");
+        }
 
         Order order = new Order();
 
@@ -130,8 +130,10 @@ public class OrderServiceImpl implements OrderService {
                 .map(product -> new UpdateStockRequest(product.getProductId(), product.getQuantity()))
                 .toList();
 
-        String url = "https://catalog-workshop-yequy5sv5a-uc.a.run.app/catalog/products/";
-        updateStockRequests.forEach(request -> restClient.patch().uri(url + request.getProductId() +"/stock?newStock=" + request.getQuantity()).retrieve().body(UpdateStockRequest.class));
+        //String url = "https://catalog-workshop-yequy5sv5a-uc.a.run.app/catalog/products/";
+        String url = "http://localhost:8083/catalog/products/";
+        updateStockRequests.forEach(request -> restClient.patch()
+                .uri(url + request.getProductId() +"/stock?newStock=" + request.getQuantity()).retrieve().body(UpdateStockRequest.class));
     }
 
     @Override
