@@ -132,6 +132,7 @@ public class OrderServiceImpl implements OrderService {
 
         //String url = "https://catalog-workshop-yequy5sv5a-uc.a.run.app/catalog/products/";
         String url = "http://localhost:8083/catalog/products/";
+
         updateStockRequests.forEach(request -> restClient.patch()
                 .uri(url + request.getProductId() +"/stock?newStock=" + request.getQuantity()).retrieve().body(UpdateStockRequest.class));
     }

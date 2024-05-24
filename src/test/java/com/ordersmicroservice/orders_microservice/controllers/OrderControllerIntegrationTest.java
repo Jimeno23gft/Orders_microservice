@@ -92,7 +92,7 @@ import static org.springframework.boot.test.context.SpringBootTest.WebEnvironmen
                     assertThat(responseOrder.getOrderedProducts().get(1).getName()).isEqualTo("Logitech Mouse");
                 });
 
-        webTestClient.get().uri("https://catalog-workshop-yequy5sv5a-uc.a.run.app/catalog/{id}", cartId)
+        webTestClient.get().uri("http://localhost:8080/catalog/{id}", cartId)
                 .exchange()
                 .expectStatus().isOk()
                 .expectBody()

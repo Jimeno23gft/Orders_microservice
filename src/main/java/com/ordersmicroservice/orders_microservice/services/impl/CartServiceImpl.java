@@ -16,7 +16,7 @@ public class CartServiceImpl implements CartService {
 
     @Getter
     @Setter
-    private String cartUri = "/carts";
+    private String cartUri = "http://localhost:8081/carts/";
 
     private final RestClient restClient;
 
