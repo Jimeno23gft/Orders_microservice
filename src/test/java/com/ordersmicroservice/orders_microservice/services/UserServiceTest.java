@@ -35,6 +35,9 @@ class UserServiceTest {
     @DisplayName("When fetching a user by ID, " +
             "then the correct user details are returned")
     void testGetUserById() {
+
+        userServiceImpl.userUri = "/users";
+
         String userJson = """
                 {
                     "id": 100,
@@ -77,6 +80,10 @@ class UserServiceTest {
     @Test
     @DisplayName("When fetching a non-existent user by ID, then a 404 error is returned")
     void testGetUserByIdNotFound() {
+
+        userServiceImpl.userUri = "/users";
+
+
         mockWebServer.enqueue(new MockResponse()
                 .setResponseCode(404)
                 .setBody("User not found")
@@ -91,6 +98,9 @@ class UserServiceTest {
     @Test
     @DisplayName("When fetching a User by ID and an internal server error occurs, then a 500 error is returned")
     void testGetProductByIdServerError() {
+
+        userServiceImpl.userUri = "/users";
+
         mockWebServer.enqueue(new MockResponse()
                 .setResponseCode(500)
                 .setBody("Internal Server Error")
