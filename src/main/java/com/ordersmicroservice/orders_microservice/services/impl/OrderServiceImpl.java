@@ -33,7 +33,6 @@ public class OrderServiceImpl implements OrderService {
     private final RestClient restClient;
 
     public OrderServiceImpl(OrderRepository orderRepository, CartService cartService, RestClient restClient) {
-
         this.cartService = cartService;
         this.orderRepository = orderRepository;
         this.restClient = restClient;
@@ -95,6 +94,7 @@ public class OrderServiceImpl implements OrderService {
                 .quantity(cartProductDto.getQuantity())
                 .build();
     }
+
     private String randomAddress() {
         String[] addresses = {"123 Main St", "456 Elm St", "789 Oak St", "101 Maple Ave", "222 Pine St", "333 Cedar Rd"};
         this.random = new Random();
@@ -102,6 +102,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
+    @Transactional
     public Order patchOrder(Long id, @RequestBody Status updatedStatus) {
         Order existingOrder = orderRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Order not found with ID: " + id));
@@ -110,12 +111,12 @@ public class OrderServiceImpl implements OrderService {
         Map<Status, Consumer<Order>> statusActions = Map.of(
                 Status.DELIVERED, this::handleDeliveredStatus,
                 Status.RETURNED, this::handleReturnedStatus
-                //Aqui podemos controlar mas status si hiciera falta y hacer un metodo para cada uno
+                //TODO: Aqui podemos controlar mas status si hiciera falta y hacer un metodo para cada uno
         );
 
         statusActions.getOrDefault(updatedStatus, order -> {
 
-            //Aqui si en un futuro queremos, podemos hacer que si el status que nos mandan no coincide con ninguno de los del map lance una excepcion
+            //TODO: Aqui si en un futuro queremos, podemos hacer que si el status que nos mandan no coincide con ninguno de los del map lance una excepcion
         }).accept(existingOrder);
 
         return orderRepository.save(existingOrder);
@@ -130,8 +131,8 @@ public class OrderServiceImpl implements OrderService {
                 .map(product -> new UpdateStockRequest(product.getProductId(), product.getQuantity()))
                 .toList();
 
-        //String url = "https://catalog-workshop-yequy5sv5a-uc.a.run.app/catalog/products/";
-        String url = "http://localhost:8083/catalog/products/";
+        //URL catalog google cloud: https://catalog-workshop-yequy5sv5a-uc.a.run.app/catalog/products/"
+        String url = "http://localhost:8081/catalog/products/";
 
         updateStockRequests.forEach(request -> restClient.patch()
                 .uri(url + request.getProductId() +"/stock?newStock=" + request.getQuantity()).retrieve().body(UpdateStockRequest.class));

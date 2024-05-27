@@ -31,6 +31,7 @@ import java.util.Optional;
 
 import static com.ordersmicroservice.orders_microservice.dto.Status.DELIVERED;
 import static com.ordersmicroservice.orders_microservice.dto.Status.IN_DELIVERY;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -76,9 +77,10 @@ class OrderServiceTest {
         when(orderRepository.findAll()).thenReturn(orders);
 
         List<Order> savedOrders = orderService.getAllOrders();
-        assertNotNull(savedOrders);
-        assertNotEquals(Collections.emptyList(), savedOrders);
-        assertEquals(orders, savedOrders);
+        assertThat(savedOrders)
+                .isNotNull()
+                .isNotEqualTo(Collections.emptyList())
+                .isEqualTo(orders);
     }
 
     @Test
@@ -88,8 +90,9 @@ class OrderServiceTest {
         when(orderRepository.findById(1L)).thenReturn(Optional.of(order1));
 
         Order savedOrder = orderService.getOrderById(order1.getId());
-        assertNotNull(savedOrder);
-        assertEquals(order1, savedOrder);
+        assertThat(savedOrder)
+                .isNotNull()
+                .isEqualTo(order1);
     }
 
     @Test
@@ -99,9 +102,10 @@ class OrderServiceTest {
         when(orderRepository.findAllByUserId(userId)).thenReturn(orders);
 
         List<Order> savedOrders = orderService.getAllByUserId(userId);
-        assertNotNull(savedOrders);
-        assertNotEquals(Collections.emptyList(), savedOrders);
-        assertEquals(orders, savedOrders);
+        assertThat(savedOrders)
+                .isNotNull()
+                .isNotEqualTo(Collections.emptyList())
+                .isEqualTo(orders);
     }
     @Test
     @DisplayName("Testing Adding a new order with just an id")
@@ -139,29 +143,29 @@ class OrderServiceTest {
         Order savedOrder = orderService.addOrder(cartId,creditCard);
 
         // Verify the results
-        assertNotNull(savedOrder);
-        assertEquals(cartId, savedOrder.getCartId());
-        assertEquals(totalPrice, savedOrder.getTotalPrice());
-        assertTrue(Arrays.asList(addresses).contains(savedOrder.getFromAddress()));
-        assertEquals(Status.PAID, savedOrder.getStatus());
-        assertNotNull(savedOrder.getDateOrdered());
-        assertNull(savedOrder.getDateDelivered());
+        assertThat(savedOrder).isNotNull();
+        assertThat(savedOrder.getCartId()).isEqualTo(cartId);
+        assertThat(savedOrder.getTotalPrice()).isEqualTo(totalPrice);
+        assertThat(Arrays.asList(addresses)).contains(savedOrder.getFromAddress());
+        assertThat(savedOrder.getStatus()).isEqualTo(Status.PAID);
+        assertThat(savedOrder.getDateOrdered()).isNotNull();
+        assertThat(savedOrder.getDateDelivered()).isNull();
 
         // Verify ordered products
         List<OrderedProduct> orderedProducts = savedOrder.getOrderedProducts();
-        assertNotNull(orderedProducts);
-        assertEquals(cartProducts.size(), orderedProducts.size());
+        assertThat(orderedProducts).isNotNull().hasSameSizeAs(cartProducts);
 
         for (int i = 0; i < cartProducts.size(); i++) {
             CartProductDto cartProduct = cartProducts.get(i);
             OrderedProduct orderedProduct = orderedProducts.get(i);
 
-            assertEquals(cartProduct.getId(), orderedProduct.getProductId());
-            assertEquals(cartProduct.getProductName(), orderedProduct.getName());
-            assertEquals(cartProduct.getProductCategory(), orderedProduct.getCategory());
-            assertEquals(cartProduct.getProductDescription(), orderedProduct.getDescription());
-            assertEquals(cartProduct.getPrice(), orderedProduct.getPrice());
-            assertEquals(cartProduct.getQuantity(), orderedProduct.getQuantity());
+
+            assertThat(orderedProduct.getProductId()).isEqualTo(cartProduct.getId());
+            assertThat(orderedProduct.getName()).isEqualTo(cartProduct.getProductName());
+            assertThat(orderedProduct.getCategory()).isEqualTo(cartProduct.getProductCategory());
+            assertThat(orderedProduct.getDescription()).isEqualTo(cartProduct.getProductDescription());
+            assertThat(orderedProduct.getPrice()).isEqualTo(cartProduct.getPrice());
+            assertThat(orderedProduct.getQuantity()).isEqualTo(cartProduct.getQuantity());
         }
     }
 
@@ -171,8 +175,8 @@ class OrderServiceTest {
         Long cartId = 1L;
         when(cartService.getCartById(cartId)).thenReturn(Optional.empty());
 
-        Executable addOrderExecutable = () -> orderService.addOrder(cartId, new CreditCardDto());
-        assertThrows(NotFoundException.class, addOrderExecutable);
+        assertThatThrownBy(() -> orderService.addOrder(cartId, new CreditCardDto()))
+                .isInstanceOf(NotFoundException.class);
 
         verify(cartService, times(1)).getCartById(cartId);
     }
@@ -182,11 +186,11 @@ class OrderServiceTest {
     void testAddOrderEmptyCart() {
         Long cartId = 1L;
         CartDto emptyCart = new CartDto();
-        emptyCart.setCartProducts(Collections.emptyList()); // Ensure the cart is indeed empty
+        emptyCart.setCartProducts(Collections.emptyList());
         when(cartService.getCartById(cartId)).thenReturn(Optional.of(emptyCart));
 
-        Executable addOrderExecutable = () -> orderService.addOrder(cartId, new CreditCardDto());
-        assertThrows(EmptyCartException.class, addOrderExecutable);
+        assertThatThrownBy(() -> orderService.addOrder(cartId, new CreditCardDto()))
+                .isInstanceOf(EmptyCartException.class);
 
         verify(cartService, times(1)).getCartById(cartId);
     }
@@ -207,7 +211,7 @@ class OrderServiceTest {
 
         Order patchedOrder = orderService.patchOrder(order1.getId(), statusUpdateDto.getStatus());
 
-        assertEquals(Status.CANCELLED, patchedOrder.getStatus());
+        assertThat(patchedOrder.getStatus()).isEqualTo(Status.CANCELLED);
 
         verify(orderRepository, times(1)).findById(order1.getId());
         verify(orderRepository, times(1)).save(existingOrder);
@@ -225,9 +229,9 @@ class OrderServiceTest {
 
         Order patchedOrder = orderService.patchOrder(1L, Status.DELIVERED);
 
-        assertNotNull(patchedOrder);
-        assertEquals(Status.DELIVERED, patchedOrder.getStatus());
-        assertNotNull(patchedOrder.getDateDelivered());
+        assertThat(patchedOrder).isNotNull();
+        assertThat(patchedOrder.getStatus()).isEqualTo(Status.DELIVERED);
+        assertThat(patchedOrder.getDateDelivered()).isNotNull();
     }
 
     @Test
@@ -243,26 +247,14 @@ class OrderServiceTest {
         Status status = statusUpdateDto.getStatus();
         Long order1Id = order1.getId();
 
-        Exception e = assertThrows(RuntimeException.class, () -> orderService.patchOrder(order1Id, status));
-        assertTrue(e.getMessage().contains(message));
+        assertThatThrownBy(() -> orderService.patchOrder(order1Id, status))
+                .isInstanceOf(RuntimeException.class)
+                .hasMessageContaining(message);
 
         verify(orderRepository, times(1)).findById(order1.getId());
         verify(orderRepository, times(0)).save(any(Order.class));
     }
 
-
-    @Test
-    @DisplayName("Testing the deleting of an order")
-    void testDeleteById() {
-        Long orderId = 1L;
-
-        when(orderRepository.findById(orderId)).thenReturn(Optional.of(new Order()));
-
-        orderService.deleteById(orderId);
-
-        verify(orderRepository).findById(orderId);
-        verify(orderRepository).deleteById(orderId);
-    }
     @Test
     @DisplayName("Testing patching an order with RETURNED status")
     void testPatchOrderReturned() {
@@ -292,11 +284,24 @@ class OrderServiceTest {
 
         Order patchedOrder = orderService.patchOrder(1L, Status.RETURNED);
 
-        assertNotNull(patchedOrder);
-        assertEquals(Status.RETURNED, patchedOrder.getStatus());
+        assertThat(patchedOrder).isNotNull();
+        assertThat(patchedOrder.getStatus()).isEqualTo(Status.RETURNED);
 
         // Verify that the REST client was called for each product in the order
         verify(restClient, times(initialOrder.getOrderedProducts().size())).patch();
+    }
+
+    @Test
+    @DisplayName("Testing the deleting of an order")
+    void testDeleteById() {
+        Long orderId = 1L;
+
+        when(orderRepository.findById(orderId)).thenReturn(Optional.of(new Order()));
+
+        orderService.deleteById(orderId);
+
+        verify(orderRepository).findById(orderId);
+        verify(orderRepository).deleteById(orderId);
     }
 
     @Test

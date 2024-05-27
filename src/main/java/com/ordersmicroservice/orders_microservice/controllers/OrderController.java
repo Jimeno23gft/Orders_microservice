@@ -49,7 +49,7 @@ public class OrderController {
 
     @GetMapping("/user/{userId}")
     @ResponseStatus(OK)
-    @Operation(summary = "List all Orders pertaining to a user", description = "This endpoint retrieves example data from the server.")
+    @Operation(summary = "List all Orders pertaining to a user", description = "This endpoint retrieves example data by User ID.")
     public ResponseEntity<List<Order>> getAllByUserId(@PathVariable Long userId) {
         List<Order> orders = orderService.getAllByUserId(userId);
         return ResponseEntity.ok(orders);
