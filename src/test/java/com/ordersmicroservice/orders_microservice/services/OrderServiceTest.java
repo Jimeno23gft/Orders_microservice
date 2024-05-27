@@ -1,6 +1,11 @@
 package com.ordersmicroservice.orders_microservice.services;
-
 import com.ordersmicroservice.orders_microservice.dto.*;
+import com.ordersmicroservice.orders_microservice.dto.CreditCardDto;
+import com.ordersmicroservice.orders_microservice.dto.CartDto;
+import com.ordersmicroservice.orders_microservice.dto.CartProductDto;
+import com.ordersmicroservice.orders_microservice.dto.Status;
+import com.ordersmicroservice.orders_microservice.dto.StatusUpdateDto;
+import com.ordersmicroservice.orders_microservice.exception.EmptyCartException;
 import com.ordersmicroservice.orders_microservice.exception.NotFoundException;
 import com.ordersmicroservice.orders_microservice.models.Address;
 import com.ordersmicroservice.orders_microservice.models.Order;
@@ -11,18 +16,17 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.api.function.Executable;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.web.client.RestClient;
-
+import java.math.BigInteger;
 import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
-
-import static com.ordersmicroservice.orders_microservice.dto.Status.DELIVERED;
 import static com.ordersmicroservice.orders_microservice.dto.Status.IN_DELIVERY;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.*;
@@ -41,16 +45,14 @@ class OrderServiceTest {
     @Mock
     UserServiceImpl userService;
     @Mock
-    AddressServiceImpl addressService;
-    @Mock
     CountryServiceImpl countryService;
-
+    @Mock
+    RestClient restClient;
+    @Mock
+    AddressServiceImpl addressService;
+    private Order order1;
+    private Order order2;
     private List<Order> orders;
-    private RestClient restClient;
-
-    Order order1;
-    Order order2;
-
     UserDto user1;
 
 
@@ -86,7 +88,6 @@ class OrderServiceTest {
 
 
     @Test
-
     @DisplayName("Testing get all Orders from Repository Method")
     void testGetAllOrders() {
         when(orderRepository.findAll()).thenReturn(orders);
@@ -118,9 +119,25 @@ class OrderServiceTest {
     }
 
     @Test
+    @DisplayName("Testing get all Orders from Repository Method")
+    void testGetAllByUserId() {
+        Long userId = 1L;
+        when(orderRepository.findAllByUserId(userId)).thenReturn(orders);
+
+        List<Order> savedOrders = orderService.getAllByUserId(userId);
+        assertNotNull(savedOrders);
+        assertNotEquals(Collections.emptyList(), savedOrders);
+        assertEquals(orders, savedOrders);
+    }
+    @Test
     @DisplayName("Testing Adding a new order with just an id")
     void testAddOrder() {
         String[] addresses = {"123 Main St", "456 Elm St", "789 Oak St", "101 Maple Ave", "222 Pine St", "333 Cedar Rd"};
+
+        CreditCardDto creditCard = new CreditCardDto();
+        creditCard.setCardNumber(new BigInteger("1234567812345678"));
+        creditCard.setExpirationDate("12/25");
+        creditCard.setCvcCode(123);
 
         Long cartId = 1L;
         Long user_id = 1L;
@@ -165,7 +182,7 @@ class OrderServiceTest {
                 .build();
 
 
-        when(cartService.getCartById(cartId)).thenReturn(cartDto);
+        when(cartService.getCartById(cartId)).thenReturn(Optional.ofNullable(cartDto));
 
         when(orderRepository.save(any(Order.class))).thenAnswer(invocation -> invocation.getArgument(0));
 
@@ -173,13 +190,13 @@ class OrderServiceTest {
 
         when(countryService.getCountryById(address.getCountryId())).thenReturn(country);
 
-        Order savedOrder = orderService.addOrder(cartId);
+        Order savedOrder = orderService.addOrder(cartId,creditCard);
 
         assertNotNull(savedOrder);
         assertEquals(cartId, savedOrder.getCartId());
         assertEquals(totalPrice, savedOrder.getTotalPrice());
         assertTrue(Arrays.asList(addresses).contains(savedOrder.getFromAddress()));
-        assertEquals(Status.UNPAID, savedOrder.getStatus());
+        assertEquals(Status.PAID, savedOrder.getStatus());
         assertNotNull(savedOrder.getDateOrdered());
         assertNull(savedOrder.getDateDelivered());
 
@@ -193,13 +210,37 @@ class OrderServiceTest {
 
             assertEquals(cartProduct.getId(), orderedProduct.getProductId());
             assertEquals(cartProduct.getProductName(), orderedProduct.getName());
-            assertEquals(cartProduct.getProductCategory(), orderedProduct.getCategory());
             assertEquals(cartProduct.getProductDescription(), orderedProduct.getDescription());
             assertEquals(cartProduct.getPrice(), orderedProduct.getPrice());
             assertEquals(cartProduct.getQuantity(), orderedProduct.getQuantity());
         }
     }
 
+    @Test
+    @DisplayName("Test addOrder when cart is not found")
+    void testAddOrderCartNotFound() {
+        Long cartId = 1L;
+        when(cartService.getCartById(cartId)).thenReturn(Optional.empty());
+
+        Executable addOrderExecutable = () -> orderService.addOrder(cartId, new CreditCardDto());
+        assertThrows(NotFoundException.class, addOrderExecutable);
+
+        verify(cartService, times(1)).getCartById(cartId);
+    }
+
+    @Test
+    @DisplayName("Test addOrder when cart is empty")
+    void testAddOrderEmptyCart() {
+        Long cartId = 1L;
+        CartDto emptyCart = new CartDto();
+        emptyCart.setCartProducts(Collections.emptyList()); // Ensure the cart is indeed empty
+        when(cartService.getCartById(cartId)).thenReturn(Optional.of(emptyCart));
+
+        Executable addOrderExecutable = () -> orderService.addOrder(cartId, new CreditCardDto());
+        assertThrows(EmptyCartException.class, addOrderExecutable);
+
+        verify(cartService, times(1)).getCartById(cartId);
+    }
 
     @Test
     @DisplayName("Testing the update of an order")
@@ -272,6 +313,40 @@ class OrderServiceTest {
 
         verify(orderRepository).findById(orderId);
         verify(orderRepository).deleteById(orderId);
+    }
+    @Test
+    @DisplayName("Testing patching an order with RETURNED status")
+    void testPatchOrderReturned() {
+        RestClient.RequestBodyUriSpec requestBodyUriSpec = mock(RestClient.RequestBodyUriSpec.class);
+        RestClient.ResponseSpec responseSpec = mock(RestClient.ResponseSpec.class);
+
+        Order initialOrder = new Order();
+        OrderedProduct product1 = new OrderedProduct();
+        OrderedProduct product2 = new OrderedProduct();
+        product1.setProductId(1L);
+        product2.setProductId(2L);
+        product1.setQuantity(5);
+        product2.setQuantity(3);
+        initialOrder.setId(1L);
+        initialOrder.setStatus(IN_DELIVERY);
+        initialOrder.setOrderedProducts(Arrays.asList(
+                product1,
+                product2
+        ));
+
+        when(restClient.patch()).thenReturn(requestBodyUriSpec);
+        when(requestBodyUriSpec.uri(anyString())).thenReturn(requestBodyUriSpec);
+        when(requestBodyUriSpec.retrieve()).thenReturn(responseSpec);
+
+        when(orderRepository.findById(1L)).thenReturn(Optional.of(initialOrder));
+        when(orderRepository.save(initialOrder)).thenReturn(initialOrder);
+
+        Order patchedOrder = orderService.patchOrder(1L, Status.RETURNED);
+
+        assertNotNull(patchedOrder);
+        assertEquals(Status.RETURNED, patchedOrder.getStatus());
+
+        verify(restClient, times(initialOrder.getOrderedProducts().size())).patch();
     }
 
     @Test

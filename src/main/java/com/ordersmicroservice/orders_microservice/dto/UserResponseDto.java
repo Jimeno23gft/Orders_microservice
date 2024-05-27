@@ -19,5 +19,16 @@ public class UserResponseDto {
         userResponseDto.setEmail(userDto.getEmail());
         return userResponseDto;
     }
+
+    @Override
+    public String toString() {
+        return "UserResponseDto{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", email='" + email + '\'' +
+                ", phone='" + phone + '\'' +
+                '}';
+    }
 }
 

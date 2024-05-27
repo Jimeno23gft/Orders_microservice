@@ -13,5 +13,5 @@ import java.io.Serializable;
 @NoArgsConstructor
 public class OrderedProductId implements Serializable {
     private Long orderId; //NOSONAR Necessary for SQL
-    private Long productId; //NOSONAR Necessary for SQL
+    private Long productId; //NOSONAR Necessary for SQL;
 }

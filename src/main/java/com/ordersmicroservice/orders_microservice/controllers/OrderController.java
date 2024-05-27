@@ -1,5 +1,6 @@
 package com.ordersmicroservice.orders_microservice.controllers;
 
+import com.ordersmicroservice.orders_microservice.dto.CreditCardDto;
 import com.ordersmicroservice.orders_microservice.dto.StatusUpdateDto;
 import com.ordersmicroservice.orders_microservice.models.Order;
 import com.ordersmicroservice.orders_microservice.services.OrderService;
@@ -21,7 +22,6 @@ import static org.springframework.http.HttpStatus.*;
 @RestController
 @RequestMapping("/orders")
 public class OrderController {
-
     OrderService orderService;
 
     public OrderController(OrderService orderService) {
@@ -47,6 +47,14 @@ public class OrderController {
             return ResponseEntity.ok(order);
     }
 
+    @GetMapping("/user/{userId}")
+    @ResponseStatus(OK)
+    @Operation(summary = "List all Orders pertaining to a user", description = "This endpoint retrieves example data from the server.")
+    public ResponseEntity<List<Order>> getAllByUserId(@PathVariable Long userId) {
+        List<Order> orders = orderService.getAllByUserId(userId);
+        return ResponseEntity.ok(orders);
+    }
+
     @PostMapping("/{id}")
     @ResponseStatus(CREATED)
     @Operation(summary = "Create a new order", description = "This endpoint retrieves example data from the server.")
@@ -54,8 +62,8 @@ public class OrderController {
             @ApiResponse(responseCode = "201", description = "Order Created", content = @Content(mediaType = "application/json")),
             @ApiResponse(responseCode = "500", description = "Internal server error", content = @Content(mediaType = "application/json"))
     })
-    public ResponseEntity<Order> postOrder(@PathVariable @Positive Long id){
-        Order order = orderService.addOrder(id);
+    public ResponseEntity<Order> postOrder(@PathVariable @Positive Long id, @RequestBody CreditCardDto creditCart){
+        Order order = orderService.addOrder(id,creditCart);
         return ResponseEntity.status(HttpStatus.CREATED).body(order);
     }
 

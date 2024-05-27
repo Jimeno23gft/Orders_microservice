@@ -1,6 +1,4 @@
 package com.ordersmicroservice.orders_microservice.models;
-
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.ordersmicroservice.orders_microservice.dto.*;
 import jakarta.persistence.*;
@@ -60,4 +58,21 @@ public class Order {
     @Column(name = "total_price")
     private BigDecimal totalPrice;
 
+    @Override
+    public String toString() {
+        return "Order{" +
+                "id=" + id +
+                ", cartId=" + cartId +
+                ", userId=" + userId +
+                ", fromAddress='" + fromAddress + '\'' +
+                ", status=" + status +
+                ", dateOrdered='" + dateOrdered + '\'' +
+                ", dateDelivered='" + dateDelivered + '\'' +
+                ", user=" + user +
+                ", address=" + address +
+                ", country=" + country +
+                ", orderedProducts=" + orderedProducts +
+                ", totalPrice=" + totalPrice +
+                '}';
+    }
 }

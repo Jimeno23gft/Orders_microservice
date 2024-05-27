@@ -22,4 +22,18 @@ public class UserDto {
     private String phone;
     private Address address;
     private CountryDto country;
+
+    @Override
+    public String toString() {
+        return "UserDto{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", email='" + email + '\'' +
+                ", fidelityPoints=" + fidelityPoints +
+                ", phone='" + phone + '\'' +
+                ", address=" + address +
+                ", country=" + country +
+                '}';
+    }
 }

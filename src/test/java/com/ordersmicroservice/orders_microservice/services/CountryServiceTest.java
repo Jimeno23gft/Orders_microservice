@@ -66,11 +66,9 @@ class CountryServiceTest {
                 .setResponseCode(404)
                 .setBody("User not found")
                 .addHeader("Content-Type", "text/plain"));
-        Exception exception = assertThrows(RestClientResponseException.class, () -> {
-            countryServiceImpl.getCountryById(1L);
-        });
+        RestClientResponseException exception = assertThrows(RestClientResponseException.class, () -> countryServiceImpl.getCountryById(1L));
 
-        assertEquals(HttpStatus.NOT_FOUND, ((RestClientResponseException) exception).getStatusCode());
+        assertEquals(HttpStatus.NOT_FOUND, exception.getStatusCode());
     }
 
     @Test
@@ -83,11 +81,9 @@ class CountryServiceTest {
                 .setResponseCode(500)
                 .setBody("Internal Server Error")
                 .addHeader("Content-Type", "text/plain"));
-        Exception exception = assertThrows(RestClientResponseException.class, () -> {
-            countryServiceImpl.getCountryById(1L);
-        });
+        RestClientResponseException exception = assertThrows(RestClientResponseException.class, () -> countryServiceImpl.getCountryById(1L));
 
-        assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, ((RestClientResponseException) exception).getStatusCode());
+        assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, exception.getStatusCode());
 
     }
 

@@ -4,7 +4,7 @@ CREATE TABLE IF NOT EXISTS orders (
     user_id BIGINT,
     cart_id BIGINT,
     from_address VARCHAR(150),
-    status ENUM('UNPAID','PAID','SENT','IN_DELIVERY','CANCELLED','DELIVERED','UNKNOWN'),
+    status ENUM('UNPAID','PAID','SENT','IN_DELIVERY','CANCELLED','DELIVERED','UNKNOWN', 'RETURNED'),
     date_ordered DATETIME,
     date_delivered DATETIME,
     total_price DOUBLE
@@ -59,13 +59,13 @@ INSERT INTO addresses (order_id, street, number, door, city_name, zip_code, coun
 
 
 INSERT INTO ordered_products (order_id, product_id, name, category, description, price, quantity)
-VALUES (1, 1001, 'Product1', 'Category1', 'Description1', 50, 2);
+VALUES (1, 1, 'Product1', 'Category1', 'Description1', 50, 2);
 
 INSERT INTO ordered_products (order_id, product_id, name, category, description, price, quantity)
-VALUES (1, 1002, 'Product2', 'Category2', 'Description2', 30, 1);
+VALUES (1, 2, 'Product2', 'Category2', 'Description2', 30, 1);
 
 INSERT INTO ordered_products (order_id, product_id, name, category, description, price, quantity)
-VALUES (1, 1003, 'Product3', 'Category3', 'Description3', 40, 3);
+VALUES (1, 3, 'Product3', 'Category3', 'Description3', 40, 3);
 
 INSERT INTO ordered_products (order_id, product_id, name, category, description, price, quantity)
 VALUES (2, 1004, 'Product4', 'Category4', 'Description4', 60, 2);
