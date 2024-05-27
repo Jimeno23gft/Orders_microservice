@@ -1,15 +1,14 @@
 package com.ordersmicroservice.orders_microservice.services;
 
-import com.ordersmicroservice.orders_microservice.dto.CartDto;
-import com.ordersmicroservice.orders_microservice.dto.CartProductDto;
-import com.ordersmicroservice.orders_microservice.dto.Status;
-import com.ordersmicroservice.orders_microservice.dto.StatusUpdateDto;
+import com.ordersmicroservice.orders_microservice.dto.*;
 import com.ordersmicroservice.orders_microservice.exception.NotFoundException;
 import com.ordersmicroservice.orders_microservice.models.Order;
 import com.ordersmicroservice.orders_microservice.models.OrderedProduct;
 import com.ordersmicroservice.orders_microservice.repositories.OrderRepository;
+import com.ordersmicroservice.orders_microservice.services.impl.AddressServiceImpl;
 import com.ordersmicroservice.orders_microservice.services.impl.CartServiceImpl;
 import com.ordersmicroservice.orders_microservice.services.impl.OrderServiceImpl;
+import com.ordersmicroservice.orders_microservice.services.impl.UserServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -41,6 +40,10 @@ class OrderServiceTest {
     OrderServiceImpl orderService;
     @Mock
     CartServiceImpl cartService;
+    @Mock
+    UserServiceImpl userService;
+    @Mock
+    AddressServiceImpl addressService;
 
     private List<Order> orders;
     private RestClient restClient;
@@ -117,11 +120,25 @@ class OrderServiceTest {
                 .totalPrice(totalPrice)
                 .build();
 
+        AddressDto
+
+        UserDto userDto = UserDto.builder()
+                .id(1L)
+                .name("Lorenzo")
+                .lastName("Perez")
+                .email("perez@gmail.com")
+                .phone("123123123")
+                .address()
+                .build();
+
+
         // Mock the cartService to return the CartDto
         when(cartService.getCartById(cartId)).thenReturn(cartDto);
 
         // Mock the orderRepository to return the Order when saved
         when(orderRepository.save(any(Order.class))).thenAnswer(invocation -> invocation.getArgument(0));
+
+        when(userService.getUserById(cartDto.getUserId())).thenReturn(userDto);
 
         // Call the service method
         Order savedOrder = orderService.addOrder(cartId);
