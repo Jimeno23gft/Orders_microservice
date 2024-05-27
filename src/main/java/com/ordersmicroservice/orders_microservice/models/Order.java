@@ -64,14 +64,9 @@ public class Order {
                 "id=" + id +
                 ", cartId=" + cartId +
                 ", userId=" + userId +
-                ", fromAddress='" + fromAddress + '\'' +
                 ", status=" + status +
                 ", dateOrdered='" + dateOrdered + '\'' +
                 ", dateDelivered='" + dateDelivered + '\'' +
-                ", user=" + user +
-                ", address=" + address +
-                ", country=" + country +
-                ", orderedProducts=" + orderedProducts +
                 ", totalPrice=" + totalPrice +
                 '}';
     }

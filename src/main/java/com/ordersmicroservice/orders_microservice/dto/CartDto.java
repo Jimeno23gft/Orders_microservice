@@ -19,14 +19,4 @@ public class CartDto {
         private Long userId;
         private List<CartProductDto> cartProducts = new ArrayList<>();
         private BigDecimal totalPrice;
-
-        @Override
-        public String toString() {
-                return "CartDto{" +
-                        "id=" + id +
-                        ", userId=" + userId +
-                        ", cartProducts=" + cartProducts +
-                        ", totalPrice=" + totalPrice +
-                        '}';
-        }
 }

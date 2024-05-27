@@ -41,17 +41,5 @@ public class OrderedProduct {
     @Column(name = "quantity")
     Integer quantity;
 
-    @Override
-    public String toString() {
-        return "OrderedProduct{" +
-                "productId=" + productId +
-                ", order=" + order +
-                ", name='" + name + '\'' +
-                ", category='" + category + '\'' +
-                ", description='" + description + '\'' +
-                ", price=" + price +
-                ", quantity=" + quantity +
-                '}';
-    }
 }
 

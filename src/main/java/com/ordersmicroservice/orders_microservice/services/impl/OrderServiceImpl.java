@@ -14,10 +14,8 @@ import com.ordersmicroservice.orders_microservice.models.OrderedProduct;
 import com.ordersmicroservice.orders_microservice.repositories.OrderRepository;
 import com.ordersmicroservice.orders_microservice.services.*;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.client.RestClient;
-
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -25,7 +23,6 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Random;
 import java.util.function.Consumer;
-import java.util.stream.Collectors;
 
 @Service
 public class OrderServiceImpl implements OrderService {
@@ -37,13 +34,12 @@ public class OrderServiceImpl implements OrderService {
     CountryService countryService;
     RestClient restClient;
 
-    public OrderServiceImpl(OrderRepository orderRepository, CartService cartService, UserService userService, AddressService addressService, CountryService countryService, RestClient restClient) {
+    public OrderServiceImpl(OrderRepository orderRepository, CartService cartService, UserService userService, AddressService addressService, CountryService countryService) {
         this.orderRepository = orderRepository;
         this.cartService = cartService;
         this.userService = userService;
         this.addressService = addressService;
         this.countryService = countryService;
-        this.restClient = restClient;
     }
 
     @Override
@@ -93,13 +89,7 @@ public class OrderServiceImpl implements OrderService {
         Order order = new Order();
         List<OrderedProduct> orderedProducts = cartProducts.stream()
                 .map(cartProductDto -> convertToOrderedProduct(cartProductDto, order))
-                .collect(Collectors.toList());
-
-
-        System.out.println(cart.getId());
-        System.out.println(cart.getUserId());
-        System.out.println(cart.getTotalPrice());
-        System.out.println(cart);
+                .toList();
 
         try {
             user = userService.getUserById(cart.getUserId());
@@ -107,7 +97,6 @@ public class OrderServiceImpl implements OrderService {
             throw new NotFoundException("User not found with ID: " + cartId);
         }
 
-        System.out.println(user);
 
         userResponse.setId(user.getId());
         userResponse.setName(user.getName());
@@ -115,25 +104,15 @@ public class OrderServiceImpl implements OrderService {
         userResponse.setEmail(user.getEmail());
         userResponse.setLastName(user.getLastName());
 
-        System.out.println(userResponse);
-
         order.setCartId(cart.getId());
-        System.out.println(cart.getId());
         order.setUserId(cart.getUserId());
-        System.out.println(cart.getUserId());
         order.setFromAddress(randomAddress());
-        System.out.println(order.getFromAddress());
         order.setStatus(Status.PAID);
-        System.out.println(order.getStatus());
         order.setDateOrdered(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")));
-        System.out.println(order.getDateOrdered());
         order.setUser(userResponse);
-        System.out.println(order.getUser());
         order.setOrderedProducts(orderedProducts);
-        System.out.println(order.getOrderedProducts());
         order.setTotalPrice(cart.getTotalPrice());
-        System.out.println(order.getTotalPrice());
-        System.out.println(order);
+
         try {
             country = countryService.getCountryById(user.getCountry().getId());
         } catch (NotFoundException ex) {
@@ -146,9 +125,7 @@ public class OrderServiceImpl implements OrderService {
         address.setOrder(order);
         addressService.saveAddress(address);
         order.setAddress(address);
-        cartService.emptyCartProductsById(cartId);
-
-        System.out.println(order);
+        //cartService.emptyCartProductsById(cartId);
 
         return orderRepository.save(order);
     }
