@@ -29,7 +29,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles("test")
- class OrderControllerIntegrationTest {
+class OrderControllerIntegrationTest {
 
 
     @Autowired
@@ -77,7 +77,6 @@ import static org.assertj.core.api.Assertions.assertThat;
         CartProductDto cartProductDto1 = CartProductDto.builder()
                 .id(1L)
                 .productName("Apple MacBook Pro")
-                .productCategory("Electronics")
                 .productDescription("Latest model of Apple MacBook Pro 16 inch.")
                 .quantity(1)
                 .price(new BigDecimal("2399.99"))
@@ -85,7 +84,6 @@ import static org.assertj.core.api.Assertions.assertThat;
         CartProductDto cartProductDto2 = CartProductDto.builder()
                 .id(2L)
                 .productName("Logitech Mouse")
-                .productCategory("Electronics")
                 .productDescription("Wireless Logitech Mouse M235")
                 .price(new BigDecimal("29.99"))
                 .quantity(2)
@@ -95,12 +93,12 @@ import static org.assertj.core.api.Assertions.assertThat;
         cartProductDtoList.add(cartProductDto2);
 
         CartDto cartDto = CartDto.builder()
-                        .id(1L)
-                        .userId(101L)
-                        .cartId(1L)
-                        .totalPrice(new BigDecimal("323.3"))
-                        .cartProducts(cartProductDtoList)
-                        .build();
+                .id(1L)
+                .userId(101L)
+                //.cartId(1L)
+                .totalPrice(new BigDecimal("323.3"))
+                .cartProducts(cartProductDtoList)
+                .build();
 
         ObjectMapper objectMapper = new ObjectMapper();
         String cartJson = objectMapper.writeValueAsString(cartDto);

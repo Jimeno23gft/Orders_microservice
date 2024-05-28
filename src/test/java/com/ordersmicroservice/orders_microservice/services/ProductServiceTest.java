@@ -1,31 +1,25 @@
 package com.ordersmicroservice.orders_microservice.services;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ordersmicroservice.orders_microservice.dto.ProductDto;
 import com.ordersmicroservice.orders_microservice.services.impl.ProductServiceImpl;
 import okhttp3.mockwebserver.MockWebServer;
 import org.junit.jupiter.api.BeforeEach;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.AfterEach;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.client.RestClient;
 import org.springframework.web.client.RestClientResponseException;
-import org.springframework.web.reactive.function.client.WebClient;
-import org.springframework.web.reactive.function.client.WebClientResponseException;
-import reactor.core.publisher.Mono;
-import reactor.test.StepVerifier;
-import okhttp3.mockwebserver.MockWebServer;
 import okhttp3.mockwebserver.MockResponse;
 
 import java.io.IOException;
-import java.util.Optional;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.*;
 
 class ProductServiceTest {
-
     private MockWebServer mockWebServer;
     private ProductServiceImpl productService;
 
@@ -41,120 +35,138 @@ class ProductServiceTest {
 
     @Test
     @DisplayName("Testing method updates the stock of a given product")
-    void testPatchProductStock() {
-        String productJson = """
-        {
-            "id": 1,
-            "name": "Ball",
-            "description": "Red Ball",
-            "price": 15,
-            "category_Id": 0,
-            "weight": 0,
-            "current_stock": 15,
-            "min_stock": 0
-        }
-        """;
+    void testPatchProductStock() throws Exception {
+
+        productService.catalogUri = "/products";
+
+        ProductDto productDto = new ProductDto();
+        productDto.setId(1L);
+        productDto.setName("Ball");
+        productDto.setDescription("Red Ball");
+        productDto.setPrice(15D);
+        productDto.setCategoryId(0L);
+        productDto.setWeight(0D);
+        productDto.setCurrentStock(15);
+        productDto.setMinStock(0);
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        String productJson = objectMapper.writeValueAsString(productDto);
 
         mockWebServer.enqueue(new MockResponse()
                 .setResponseCode(HttpStatus.OK.value())
                 .setBody(productJson)
                 .addHeader("Content-Type", "application/json"));
 
-        ProductDto productDto = productService.patchProductStock(1L, -5);
+        ProductDto updatedProductDto = productService.patchProductStock(1L, -5);
 
-        assertNotNull(productDto);
-        assertEquals(1L, productDto.getId());
-        assertEquals("Ball", productDto.getName());
-        assertEquals(15, productDto.getCurrentStock());
+        assertThat(updatedProductDto).isNotNull();
+        assertThat(updatedProductDto.getId()).isEqualTo(1L);
+        assertThat(updatedProductDto.getName()).isEqualTo("Ball");
+        assertThat(updatedProductDto.getCurrentStock()).isEqualTo(15);
     }
 
     @Test
     @DisplayName("Testing method fails to find the order with id given to be updated")
     void testPatchIdNotFound() {
+
+        productService.catalogUri = "/products";
+
         mockWebServer.enqueue(new MockResponse()
                 .setResponseCode(HttpStatus.NOT_FOUND.value())
                 .setBody("Not found")
                 .addHeader("Content-Type", "application/json"));
 
-        RestClientResponseException exception = assertThrows(RestClientResponseException.class, () -> {
-            productService.patchProductStock(1L, -5);
-        });
-
-        assertEquals(HttpStatus.NOT_FOUND, exception.getStatusCode());
+        assertThatThrownBy(() -> productService.patchProductStock(1L, -5))
+                .isInstanceOf(RestClientResponseException.class)
+                .hasMessageContaining("Not found")
+                .extracting(ex -> ((RestClientResponseException) ex).getStatusCode())
+                .isEqualTo(HttpStatus.NOT_FOUND);
     }
 
     @Test
     @DisplayName("Testing method gives an Internal Server Error")
     void testPatchServerError() {
+
+        productService.catalogUri = "/products";
+
         mockWebServer.enqueue(new MockResponse()
                 .setResponseCode(HttpStatus.INTERNAL_SERVER_ERROR.value())
                 .setBody("Internal Server Error")
                 .addHeader("Content-Type", "application/json"));
 
-        RestClientResponseException exception = assertThrows(RestClientResponseException.class, () -> {
-            productService.patchProductStock(1L, -5);
-        });
-
-        assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, exception.getStatusCode());
+        assertThatThrownBy(() -> productService.patchProductStock(1L, -5))
+                .isInstanceOf(RestClientResponseException.class)
+                .hasMessageContaining("Internal Server Error")
+                .extracting(ex -> ((RestClientResponseException) ex).getStatusCode())
+                .isEqualTo(HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     @Test
     @DisplayName("Testing method retrieves the product with given id")
-    void testGetProductById() {
-        String productJson = """
-        {
-            "id": 1,
-            "name": "Ball",
-            "description": "Red Ball",
-            "price": 15,
-            "category_Id": 0,
-            "weight": 0,
-            "current_stock": 15,
-            "min_stock": 0
-        }
-        """;
+    void testGetProductById() throws Exception {
+
+        productService.catalogUri = "/products";
+
+        ProductDto productDto = new ProductDto();
+        productDto.setId(1L);
+        productDto.setName("Ball");
+        productDto.setDescription("Red Ball");
+        productDto.setPrice(15D);
+        productDto.setCategoryId(0L);
+        productDto.setWeight(0D);
+        productDto.setCurrentStock(15);
+        productDto.setMinStock(0);
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        String productJson = objectMapper.writeValueAsString(productDto);
 
         mockWebServer.enqueue(new MockResponse()
                 .setResponseCode(HttpStatus.OK.value())
                 .setBody(productJson)
                 .addHeader("Content-Type", "application/json"));
 
-        ProductDto productDto = productService.getProductById(1L);
+        ProductDto updatedProductDto = productService.getProductById(1L);
 
-        assertNotNull(productDto);
-        assertEquals(1L, productDto.getId());
-        assertEquals("Ball", productDto.getName());
-        assertEquals(15, productDto.getCurrentStock());;
+        assertThat(updatedProductDto).isNotNull();
+        assertThat(updatedProductDto.getId()).isEqualTo(1L);
+        assertThat(updatedProductDto.getName()).isEqualTo("Ball");
+        assertThat(updatedProductDto.getCurrentStock()).isEqualTo(15);
     }
 
     @Test
     @DisplayName("Testing method fails to find the product with id given to be retrieved")
     void testGetProductByIdNotFound() {
+
+        productService.catalogUri = "/products";
+
         mockWebServer.enqueue(new MockResponse()
                 .setResponseCode(HttpStatus.NOT_FOUND.value())
                 .setBody("Not found")
                 .addHeader("Content-Type", "application/json"));
 
-        Exception exception = assertThrows(RestClientResponseException.class, () -> {
-            productService.getProductById(1L);
-        });
-
-        assertEquals(HttpStatus.NOT_FOUND, ((RestClientResponseException) exception).getStatusCode());
+        assertThatThrownBy(() -> productService.getProductById(1L))
+                .isInstanceOf(RestClientResponseException.class)
+                .hasMessageContaining("Not found")
+                .extracting(ex -> ((RestClientResponseException) ex).getStatusCode())
+                .isEqualTo(HttpStatus.NOT_FOUND);
     }
 
     @Test
     @DisplayName("Testing method gives an error whenever product with id given is called for")
     void testGetProductByIdError() {
+
+        productService.catalogUri = "/products";
+
         mockWebServer.enqueue(new MockResponse()
                 .setResponseCode(HttpStatus.INTERNAL_SERVER_ERROR.value())
                 .setBody("Internal Server Error")
                 .addHeader("Content-Type", "application/json"));
 
-        Exception exception = assertThrows(RestClientResponseException.class, () -> {
-            productService.getProductById(1L);
-        });
-
-        assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, ((RestClientResponseException) exception).getStatusCode());
+        assertThatThrownBy(() -> productService.getProductById(1L))
+                .isInstanceOf(RestClientResponseException.class)
+                .hasMessageContaining("Internal Server Error")
+                .extracting(ex -> ((RestClientResponseException) ex).getStatusCode())
+                .isEqualTo(HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
 }

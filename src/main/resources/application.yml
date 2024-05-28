@@ -9,6 +9,8 @@ spring:
     h2:
         console:
             enabled: true
+            settings:
+                web-allow-others: true
     jpa:
         database-platform: org.hibernate.dialect.H2Dialect
         defer-datasource-initialization: true
@@ -18,5 +20,10 @@ spring:
     sql:
         init:
             mode: always
+server:
+    servlet:
+        context-path: /
+    port: ${PORT:8080}
 cart:
-     url: http://localhost:8081
+    url: http://localhost:8081
+

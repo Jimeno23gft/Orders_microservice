@@ -8,10 +8,6 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
-import jakarta.validation.Valid;
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,7 +22,6 @@ import static org.springframework.http.HttpStatus.*;
 @RestController
 @RequestMapping("/orders")
 public class OrderController {
-
     OrderService orderService;
 
     public OrderController(OrderService orderService) {
@@ -50,6 +45,14 @@ public class OrderController {
     public ResponseEntity<Order> getOrderById(@PathVariable @Positive Long id) {
             Order order = orderService.getOrderById(id);
             return ResponseEntity.ok(order);
+    }
+
+    @GetMapping("/user/{userId}")
+    @ResponseStatus(OK)
+    @Operation(summary = "List all Orders pertaining to a user", description = "This endpoint retrieves example data by User ID.")
+    public ResponseEntity<List<Order>> getAllByUserId(@PathVariable Long userId) {
+        List<Order> orders = orderService.getAllByUserId(userId);
+        return ResponseEntity.ok(orders);
     }
 
     @PostMapping("/{id}")

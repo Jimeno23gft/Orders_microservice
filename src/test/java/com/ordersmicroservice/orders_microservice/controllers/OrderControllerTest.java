@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ordersmicroservice.orders_microservice.dto.CreditCardDto;
 import com.ordersmicroservice.orders_microservice.dto.Status;
 import com.ordersmicroservice.orders_microservice.dto.StatusUpdateDto;
+import com.ordersmicroservice.orders_microservice.dto.UserDto;
 import com.ordersmicroservice.orders_microservice.exception.NotFoundException;
 import com.ordersmicroservice.orders_microservice.models.Order;
 import com.ordersmicroservice.orders_microservice.services.OrderService;
@@ -83,23 +84,38 @@ class OrderControllerTest {
     }
 
     @Test
+    @DisplayName("Testing method retrieves all orders from the endpoint")
+    void testGetAllByUserId() throws Exception {
+        Long userId = crearOrder001().orElseThrow().getUserId();
+
+        List<Order> mockOrders = Arrays.asList(crearOrder001().orElseThrow(),
+                crearOrder002().orElseThrow());
+        when(orderService.getAllByUserId(userId)).thenReturn(mockOrders);
+
+        mockMvc.perform(get("/orders/user/{$id}", userId).contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$[0].id").value(1L))
+                .andExpect(jsonPath("$[0].status").value("PAID"))
+                .andExpect(content().json(objectMapper.writeValueAsString(mockOrders)));
+
+        verify(orderService).getAllByUserId(userId);
+    }
+    @Test
     @DisplayName("Testing method posts a new order to the endpoint")
     void testPostNewOrder() throws Exception {
 
         Long cartId = 1L;
 
-
         CreditCardDto creditCardDto = new CreditCardDto();
         creditCardDto.setCardNumber(new BigInteger("1234567812345678"));
         creditCardDto.setExpirationDate("12/25");
-        creditCardDto.setCVCCode(123);
-
+        creditCardDto.setCvcCode(123);
         String creditCardJson = objectMapper.writeValueAsString(creditCardDto);
 
         when(orderService.addOrder(cartId,creditCardDto)).thenAnswer(invocation -> Order
                 .builder()
-                .userId(1L)
-                .cartId(1L)
+                .cartId(cartId)
                 .fromAddress("Madrid")
                 .status(Status.DELIVERED)
                 .dateOrdered("2001-01-21")
@@ -112,7 +128,6 @@ class OrderControllerTest {
                 .andExpect(status().isCreated())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.cartId", is(cartId.intValue())))
-                .andExpect(jsonPath("$.userId", is(1)))
                 .andExpect(jsonPath("$.fromAddress", is("Madrid")))
                 .andExpect(jsonPath("$.dateOrdered", is("2001-01-21")));
 
