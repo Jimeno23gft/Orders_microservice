@@ -1,9 +1,11 @@
 package com.ordersmicroservice.orders_microservice.services;
 
 import com.ordersmicroservice.orders_microservice.dto.CartDto;
-import reactor.core.publisher.Mono;
+
+import java.util.Optional;
 
 public interface CartService {
 
-    Mono<CartDto> getCartById(Long id);
+    Optional<CartDto> getCartById(Long id);
+    void emptyCartProductsById(Long id);
 }

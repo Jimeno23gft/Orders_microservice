@@ -1,8 +1,17 @@
 package com.ordersmicroservice.orders_microservice.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.ordersmicroservice.orders_microservice.models.Address;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class UserDto {
     private Long id;
     private String name;
@@ -10,6 +19,7 @@ public class UserDto {
     private String email;
     private String password;
     private Integer fidelityPoints;
-    private String birthDate;
     private String phone;
+    private Address address;
+    private CountryDto country;
 }

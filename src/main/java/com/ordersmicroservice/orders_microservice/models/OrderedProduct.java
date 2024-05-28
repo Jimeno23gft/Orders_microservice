@@ -7,41 +7,36 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
+
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
 @Table(name = "orderedProducts")
-@IdClass(OrderedProductId.class)
 public class OrderedProduct {
 
     @Id
-    @Column(name = "order_id")
-    Long orderId;
+    @Column(name = "product_id")
+    Long productId;
 
     @ManyToOne
     @JoinColumn(name = "order_id")
     @JsonBackReference
     private Order order;
 
-    @Id
-    @Column(name = "product_id")
-    Long productId;
-
     @Column(name = "name")
     String name;
-
-    @Column(name = "category")
-    String category;
 
     @Column(name = "description")
     String description;
 
     @Column(name = "price")
-    Long price;
+    BigDecimal price;
 
     @Column(name = "quantity")
     Integer quantity;
+
 }
 

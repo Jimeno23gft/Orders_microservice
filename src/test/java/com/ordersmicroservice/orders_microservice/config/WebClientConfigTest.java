@@ -1,13 +1,15 @@
 package com.ordersmicroservice.orders_microservice.config;
 
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.web.reactive.function.client.WebClient;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-public class WebClientConfigTest {
+class WebClientConfigTest {
     @Test
+    @DisplayName("Setup for integration tests")
     void testWebClient() {
 
         WebClient.Builder builder = Mockito.mock(WebClient.Builder.class);

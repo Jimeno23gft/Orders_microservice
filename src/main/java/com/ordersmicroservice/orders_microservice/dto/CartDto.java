@@ -1,12 +1,7 @@
 package com.ordersmicroservice.orders_microservice.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import com.fasterxml.jackson.annotation.JsonProperty;
-
-
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -18,10 +13,10 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class CartDto {
+        @JsonProperty("id")
         private Long id;
-        @JsonProperty("cart_id")
-        private Long cartId;
+        @JsonProperty("userId")
+        private Long userId;
         private List<CartProductDto> cartProducts = new ArrayList<>();
         private BigDecimal totalPrice;
-
 }

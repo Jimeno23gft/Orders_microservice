@@ -4,6 +4,7 @@ import com.ordersmicroservice.orders_microservice.models.OrderedProduct;
 import com.ordersmicroservice.orders_microservice.repositories.OrderedProductRepository;
 import com.ordersmicroservice.orders_microservice.services.impl.OrderedProductServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -17,7 +18,7 @@ import static org.assertj.core.api.Assertions.*;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-public class OrderedProductServiceTest {
+class OrderedProductServiceTest {
     @Mock
     OrderedProductRepository orderedProductRepository;
     @InjectMocks
@@ -29,12 +30,10 @@ public class OrderedProductServiceTest {
     void setup(){
         orderId = 1L;
         OrderedProduct orderedProduct1 = OrderedProduct.builder()
-                .orderId(orderId)
                 .productId(1L)
                 .quantity(3)
                 .build();
         OrderedProduct orderedProduct2 = OrderedProduct.builder()
-                .orderId(orderId)
                 .productId(2L)
                 .quantity(5)
                 .build();
@@ -42,6 +41,7 @@ public class OrderedProductServiceTest {
     }
 
     @Test
+    @DisplayName("Testing method retrieves all products from an order with given id")
     void testGetAllProductsFromOrder(){
         when(orderedProductRepository.findByOrderId(orderId)).thenReturn(orderedProducts);
 

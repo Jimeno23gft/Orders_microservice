@@ -1,11 +1,9 @@
 package com.ordersmicroservice.orders_microservice.models;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.ordersmicroservice.orders_microservice.dto.CountryDto;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Data
 @Builder
@@ -15,14 +13,14 @@ import lombok.NoArgsConstructor;
 @Table(name = "addresses")
 public class Address {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "address_id")
-    private Long addressId;
+    @Column(name = "order_id")
+    private Long orderId;
 
     @JsonBackReference
     @OneToOne
     @MapsId
     @JoinColumn(name = "order_id")
+    @EqualsAndHashCode.Exclude
     private Order order;
 
     @Column(name = "street")
@@ -42,4 +40,5 @@ public class Address {
 
     @Column(name = "country_id")
     private Long countryId;
+
 }
