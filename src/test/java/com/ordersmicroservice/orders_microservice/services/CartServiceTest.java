@@ -23,10 +23,10 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 @ActiveProfiles("test")
 class CartServiceTest {
 
-    private static MockWebServer mockWebServer;
     @Autowired
-
     private CartService cartService;
+
+    private static MockWebServer mockWebServer;
 
 
     @BeforeAll
@@ -116,6 +116,7 @@ class CartServiceTest {
     @DisplayName("When deleting the products in a Cart, the cart must get empty")
     void testEmptyCart() throws InterruptedException {
 
+        //cartServiceImpl.cartUri = "/carts";
         Long cartId = 1L;
 
         mockWebServer.enqueue(new MockResponse()

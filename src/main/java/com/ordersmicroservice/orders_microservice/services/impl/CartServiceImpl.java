@@ -18,7 +18,7 @@ public class CartServiceImpl implements CartService {
         this.restClient = restClient.build();
     }
 
-    public static CartDto getCartById(Long id){
+    public CartDto getCartById(Long id){
 
         return restClient.get()
                 .uri(cartUri + id)
@@ -26,7 +26,7 @@ public class CartServiceImpl implements CartService {
                 .body(CartDto.class);
     }
 
-    public static void emptyCartProductsById(Long id){
+    public void emptyCartProductsById(Long id){
 
         restClient.delete()
                 .uri(cartUri + "/{id}", id)
