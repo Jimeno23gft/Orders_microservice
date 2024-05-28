@@ -33,6 +33,9 @@ class CountryServiceTest {
     @Test
     @DisplayName("Testing method retrieves country with given id")
     void testGetCountryById() {
+
+        countryServiceImpl.cartUri = "/country";
+
         String countryJson = """
                 {
                         "id": 1,
@@ -56,6 +59,9 @@ class CountryServiceTest {
     @Test
     @DisplayName("When fetching a non-existent country by ID, then a 404 error is returned")
     void testGetUserByIdNotFound() {
+
+        countryServiceImpl.cartUri = "/country";
+
         mockWebServer.enqueue(new MockResponse()
                 .setResponseCode(404)
                 .setBody("User not found")
@@ -68,6 +74,9 @@ class CountryServiceTest {
     @Test
     @DisplayName("When fetching a Country by ID and an internal server error occurs, then a 500 error is returned")
     void testGetCountryByIdServerError() {
+
+        countryServiceImpl.cartUri = "/country";
+
         mockWebServer.enqueue(new MockResponse()
                 .setResponseCode(500)
                 .setBody("Internal Server Error")

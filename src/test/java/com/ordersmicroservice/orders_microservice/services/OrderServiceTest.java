@@ -1,6 +1,5 @@
 package com.ordersmicroservice.orders_microservice.services;
-
-
+import com.ordersmicroservice.orders_microservice.dto.*;
 import com.ordersmicroservice.orders_microservice.dto.CreditCardDto;
 import com.ordersmicroservice.orders_microservice.dto.CartDto;
 import com.ordersmicroservice.orders_microservice.dto.CartProductDto;
@@ -8,11 +7,11 @@ import com.ordersmicroservice.orders_microservice.dto.Status;
 import com.ordersmicroservice.orders_microservice.dto.StatusUpdateDto;
 import com.ordersmicroservice.orders_microservice.exception.EmptyCartException;
 import com.ordersmicroservice.orders_microservice.exception.NotFoundException;
+import com.ordersmicroservice.orders_microservice.models.Address;
 import com.ordersmicroservice.orders_microservice.models.Order;
 import com.ordersmicroservice.orders_microservice.models.OrderedProduct;
 import com.ordersmicroservice.orders_microservice.repositories.OrderRepository;
-import com.ordersmicroservice.orders_microservice.services.impl.CartServiceImpl;
-import com.ordersmicroservice.orders_microservice.services.impl.OrderServiceImpl;
+import com.ordersmicroservice.orders_microservice.services.impl.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -28,12 +27,12 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
-
-import static com.ordersmicroservice.orders_microservice.dto.Status.DELIVERED;
 import static com.ordersmicroservice.orders_microservice.dto.Status.IN_DELIVERY;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
+import static com.ordersmicroservice.orders_microservice.Datos.crearOrder001;
+import static com.ordersmicroservice.orders_microservice.Datos.crearOrder002;
 
 @ExtendWith(MockitoExtension.class)
 class OrderServiceTest {
@@ -44,13 +43,25 @@ class OrderServiceTest {
     @Mock
     CartServiceImpl cartService;
     @Mock
+    UserServiceImpl userService;
+    @Mock
+    CountryServiceImpl countryService;
+    @Mock
     RestClient restClient;
+    @Mock
+    AddressServiceImpl addressService;
     private Order order1;
     private Order order2;
     private List<Order> orders;
+    UserDto user1;
+
 
     @BeforeEach
     public void setup() {
+
+        this.order1 = crearOrder001().orElseThrow();
+        this.order2 = crearOrder002().orElseThrow();
+        /*
         order1 = Order.builder()
                 .id(1L)
                 .userId(1L)
@@ -67,8 +78,14 @@ class OrderServiceTest {
                 .status(IN_DELIVERY)
                 .dateOrdered("2024-5-11")
                 .dateDelivered("2024-5-12").build();
+
+         */
+
+
         orders = List.of(order1, order2);
     }
+
+
 
     @Test
     @DisplayName("Testing get all Orders from Repository Method")
@@ -85,7 +102,16 @@ class OrderServiceTest {
     @DisplayName("Testing get an order by id from repository")
     void testGetOrderById() {
 
+         this.user1 = UserDto.builder()
+                .id(1L)
+                .name("Lorenzo")
+                .lastName("Perez")
+                .email("perez@gmail.com")
+                .phone("123123123")
+                .build();
+
         when(orderRepository.findById(1L)).thenReturn(Optional.of(order1));
+        when(userService.getUserById(1L)).thenReturn(user1);
 
         Order savedOrder = orderService.getOrderById(order1.getId());
         assertNotNull(savedOrder);
@@ -108,46 +134,70 @@ class OrderServiceTest {
     void testAddOrder() {
         String[] addresses = {"123 Main St", "456 Elm St", "789 Oak St", "101 Maple Ave", "222 Pine St", "333 Cedar Rd"};
 
-
         CreditCardDto creditCard = new CreditCardDto();
         creditCard.setCardNumber(new BigInteger("1234567812345678"));
         creditCard.setExpirationDate("12/25");
         creditCard.setCvcCode(123);
 
-        // Mock the CartDto
         Long cartId = 1L;
         Long user_id = 1L;
         BigDecimal totalPrice = new BigDecimal("100.00");
         List<CartProductDto> cartProducts = List.of(
-                new CartProductDto(1L, "Product1", "Category1", "Description1", 2,new BigDecimal("20.00")),
-                new CartProductDto(2L, "Product2", "Category2", "Description2", 1,new BigDecimal("30.00"))
+                new CartProductDto(1L, "Product1", "Description1", 2,new BigDecimal("20.00")),
+                new CartProductDto(2L, "Product2", "Description2", 1,new BigDecimal("30.00"))
         );
         CartDto cartDto = CartDto.builder()
-                .cartId(cartId)
                 .userId(user_id)
                 .cartProducts(cartProducts)
                 .totalPrice(totalPrice)
                 .build();
 
-        // Mock the cartService to return the CartDto
+        Address address = Address.builder()
+                .orderId(1L)
+                .cityName("Barranquilla")
+                .zipCode("46134")
+                .street("Calle 69")
+                .number(43)
+                .door("2")
+                .countryId(1L)
+                .build();
+
+        CountryDto country = CountryDto.builder()
+                .id(1L)
+                .name("Colombia")
+                .tax(21F)
+                .prefix("+57")
+                .timeZone("Timezone")
+                .build();
+
+        UserDto userDto = UserDto.builder()
+                .id(1L)
+                .name("Lorenzo")
+                .lastName("Perez")
+                .email("perez@gmail.com")
+                .phone("123123123")
+                .address(address)
+                .country(country)
+                .build();
+
+
         when(cartService.getCartById(cartId)).thenReturn(Optional.ofNullable(cartDto));
 
-        // Mock the orderRepository to return the Order when saved
         when(orderRepository.save(any(Order.class))).thenAnswer(invocation -> invocation.getArgument(0));
 
-        // Call the service method
+        when(userService.getUserById(cartDto.getUserId())).thenReturn(userDto);
+
+        when(countryService.getCountryById(address.getCountryId())).thenReturn(country);
+
         Order savedOrder = orderService.addOrder(cartId,creditCard);
 
-        // Verify the results
         assertNotNull(savedOrder);
-        assertEquals(cartId, savedOrder.getCartId());
         assertEquals(totalPrice, savedOrder.getTotalPrice());
         assertTrue(Arrays.asList(addresses).contains(savedOrder.getFromAddress()));
         assertEquals(Status.PAID, savedOrder.getStatus());
         assertNotNull(savedOrder.getDateOrdered());
         assertNull(savedOrder.getDateDelivered());
 
-        // Verify ordered products
         List<OrderedProduct> orderedProducts = savedOrder.getOrderedProducts();
         assertNotNull(orderedProducts);
         assertEquals(cartProducts.size(), orderedProducts.size());
@@ -158,7 +208,6 @@ class OrderServiceTest {
 
             assertEquals(cartProduct.getId(), orderedProduct.getProductId());
             assertEquals(cartProduct.getProductName(), orderedProduct.getName());
-            assertEquals(cartProduct.getProductCategory(), orderedProduct.getCategory());
             assertEquals(cartProduct.getProductDescription(), orderedProduct.getDescription());
             assertEquals(cartProduct.getPrice(), orderedProduct.getPrice());
             assertEquals(cartProduct.getQuantity(), orderedProduct.getQuantity());
@@ -295,7 +344,6 @@ class OrderServiceTest {
         assertNotNull(patchedOrder);
         assertEquals(Status.RETURNED, patchedOrder.getStatus());
 
-        // Verify that the REST client was called for each product in the order
         verify(restClient, times(initialOrder.getOrderedProducts().size())).patch();
     }
 

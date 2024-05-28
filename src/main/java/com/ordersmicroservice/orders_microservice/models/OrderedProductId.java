@@ -7,10 +7,11 @@ import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 
-@Generated
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Generated
 public class OrderedProductId implements Serializable {
     private Long orderId; //NOSONAR Necessary for SQL
     private Long productId; //NOSONAR Necessary for SQL;

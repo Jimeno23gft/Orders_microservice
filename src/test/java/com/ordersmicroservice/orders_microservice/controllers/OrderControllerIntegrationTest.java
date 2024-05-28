@@ -53,7 +53,6 @@ import static org.springframework.boot.test.context.SpringBootTest.WebEnvironmen
                         OrderedProduct.builder()
                                 .productId(1L)
                                 .name("Apple MacBook Pro")
-                                .category("Electronics")
                                 .description("Latest model of Apple MacBook Pro 16 inch.")
                                 .price(new BigDecimal("2399.99"))
                                 .quantity(1)
@@ -61,7 +60,6 @@ import static org.springframework.boot.test.context.SpringBootTest.WebEnvironmen
                         OrderedProduct.builder()
                                 .productId(2L)
                                 .name("Logitech Mouse")
-                                .category("Electronics")
                                 .description("Wireless Logitech Mouse M235")
                                 .price(new BigDecimal("29.99"))
                                 .quantity(2)
@@ -92,7 +90,7 @@ import static org.springframework.boot.test.context.SpringBootTest.WebEnvironmen
                     assertThat(responseOrder.getOrderedProducts().get(1).getName()).isEqualTo("Logitech Mouse");
                 });
 
-        webTestClient.get().uri("http://localhost:8080/catalog/{id}", cartId)
+        webTestClient.get().uri("http://localhost:8083/catalog/{id}", cartId)
                 .exchange()
                 .expectStatus().isOk()
                 .expectBody()
