@@ -13,6 +13,7 @@ import com.ordersmicroservice.orders_microservice.models.Order;
 import com.ordersmicroservice.orders_microservice.models.OrderedProduct;
 import com.ordersmicroservice.orders_microservice.repositories.OrderRepository;
 import com.ordersmicroservice.orders_microservice.services.*;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.client.RestClient;
@@ -30,6 +31,7 @@ public class OrderServiceImpl implements OrderService {
     AddressService addressService;
     CountryService countryService;
     RestClient restClient;
+
 
     public OrderServiceImpl(OrderRepository orderRepository, CartService cartService, UserService userService, AddressService addressService, CountryService countryService, RestClient restClient) {
         this.orderRepository = orderRepository;
@@ -147,6 +149,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
+    @Transactional
     public Order patchOrder(Long id, @RequestBody Status updatedStatus) {
         Order existingOrder = orderRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Order not found with ID: " + id));
@@ -155,12 +158,12 @@ public class OrderServiceImpl implements OrderService {
         Map<Status, Consumer<Order>> statusActions = Map.of(
                 Status.DELIVERED, this::handleDeliveredStatus,
                 Status.RETURNED, this::handleReturnedStatus
-                //Aqui podemos controlar mas status si hiciera falta y hacer un metodo para cada uno
+                //TODO: Aqui podemos controlar mas status si hiciera falta y hacer un metodo para cada uno
         );
 
         statusActions.getOrDefault(updatedStatus, order -> {
 
-            //Aqui si en un futuro queremos, podemos hacer que si el status que nos mandan no coincide con ninguno de los del map lance una excepcion
+            //TODO: Aqui si en un futuro queremos, podemos hacer que si el status que nos mandan no coincide con ninguno de los del map lance una excepcion
         }).accept(existingOrder);
 
         return orderRepository.save(existingOrder);

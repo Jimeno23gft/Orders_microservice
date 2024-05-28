@@ -1,6 +1,7 @@
 package com.ordersmicroservice.orders_microservice.services;
 
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ordersmicroservice.orders_microservice.dto.CountryDto;
 import com.ordersmicroservice.orders_microservice.services.impl.CountryServiceImpl;
 import okhttp3.mockwebserver.MockResponse;
@@ -13,7 +14,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.client.RestClient;
 import org.springframework.web.client.RestClientResponseException;
 import java.io.IOException;
-import static org.junit.jupiter.api.Assertions.*;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class CountryServiceTest {
 
@@ -32,28 +35,29 @@ class CountryServiceTest {
 
     @Test
     @DisplayName("Testing method retrieves country with given id")
-    void testGetCountryById() {
+    void testGetCountryById() throws Exception {
+        CountryDto countryDto = new CountryDto();
+        countryDto.setId(1L);
+        countryDto.setName("España");
+        countryDto.setTax(21F);
+        countryDto.setPrefix("+34");
+        countryDto.setTimeZone("Europe/Madrid");
 
-        countryServiceImpl.cartUri = "/country";
+        ObjectMapper objectMapper = new ObjectMapper();
+        String countryJson = objectMapper.writeValueAsString(countryDto);
 
-        String countryJson = """
-                {
-                        "id": 1,
-                        "name": "España",
-                        "tax": 21,
-                        "prefix": "+34",
-                        "timeZone": "Europe/Madrid"
-                }
-                """;
         mockWebServer.enqueue(new MockResponse()
                 .setBody(countryJson)
                 .addHeader("Content-Type", "application/json"));
 
-        CountryDto countryDto = countryServiceImpl.getCountryById(1L);
+        CountryDto retrievedCountryDto = countryServiceImpl.getCountryById(1L);
 
-        assertNotNull(countryDto);
-        assertEquals(1L, countryDto.getId());
-        assertEquals("España", countryDto.getName());
+        assertThat(retrievedCountryDto).isNotNull();
+        assertThat(retrievedCountryDto.getId()).isEqualTo(1L);
+        assertThat(retrievedCountryDto.getName()).isEqualTo("España");
+        assertThat(retrievedCountryDto.getTax()).isEqualTo(21);
+        assertThat(retrievedCountryDto.getPrefix()).isEqualTo("+34");
+        assertThat(retrievedCountryDto.getTimeZone()).isEqualTo("Europe/Madrid");
     }
 
     @Test
@@ -66,9 +70,12 @@ class CountryServiceTest {
                 .setResponseCode(404)
                 .setBody("User not found")
                 .addHeader("Content-Type", "text/plain"));
-        RestClientResponseException exception = assertThrows(RestClientResponseException.class, () -> countryServiceImpl.getCountryById(1L));
 
-        assertEquals(HttpStatus.NOT_FOUND, exception.getStatusCode());
+        assertThatThrownBy(() -> countryServiceImpl.getCountryById(1L))
+                .isInstanceOf(RestClientResponseException.class)
+                .hasMessageContaining("User not found")
+                .extracting(ex -> ((RestClientResponseException) ex).getStatusCode())
+                .isEqualTo(HttpStatus.NOT_FOUND);
     }
 
     @Test
@@ -81,15 +88,16 @@ class CountryServiceTest {
                 .setResponseCode(500)
                 .setBody("Internal Server Error")
                 .addHeader("Content-Type", "text/plain"));
-        RestClientResponseException exception = assertThrows(RestClientResponseException.class, () -> countryServiceImpl.getCountryById(1L));
 
-        assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, exception.getStatusCode());
-
+        assertThatThrownBy(() -> countryServiceImpl.getCountryById(1L))
+                .isInstanceOf(RestClientResponseException.class)
+                .hasMessageContaining("Internal Server Error")
+                .extracting(ex -> ((RestClientResponseException) ex).getStatusCode())
+                .isEqualTo(HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     @AfterEach
     void tearDown() throws IOException {
         mockWebServer.shutdown();
     }
-
 }

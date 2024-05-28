@@ -1,6 +1,10 @@
 package com.ordersmicroservice.orders_microservice.services;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.ordersmicroservice.orders_microservice.dto.CountryDto;
 import com.ordersmicroservice.orders_microservice.dto.UserDto;
+import com.ordersmicroservice.orders_microservice.models.Address;
 import com.ordersmicroservice.orders_microservice.services.impl.UserServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -12,8 +16,9 @@ import org.springframework.web.client.RestClientResponseException;
 import okhttp3.mockwebserver.MockWebServer;
 import okhttp3.mockwebserver.MockResponse;
 import java.io.IOException;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class UserServiceTest {
     private MockWebServer mockWebServer;
@@ -30,49 +35,62 @@ class UserServiceTest {
     }
 
     @Test
-    @DisplayName("When fetching a user by ID, " +
-            "then the correct user details are returned")
-    void testGetUserById() {
-
-        userServiceImpl.userUri = "/users";
-
-        String userJson = """
-                {
-                    "id": 100,
-                    "name": "John",
-                    "lastName": "Doe",
-                    "email": "john.doe@example.com",
-                    "password": "password123",
-                    "fidelityPoints": 1000,
-                    "birthDate": "1990/01/01",
-                    "phone": "1234567890",
-                    "address": {\s
-                        "id": 1,\s
-                        "cityName": "Madrid",\s
-                        "zipCode": "47562",\s
-                        "street": "C/ La Coma",
-                        "number": 32,
-                        "door": "1A"
-                    },\s
-                    "country": {
-                        "id": 1,\s
-                        "name": "España",\s
-                        "tax": 21,\s
-                        "prefix": "+34",\s
-                        "timeZone": "Europe/Madrid"\s
-                    }
-                }
-                """;
+    @DisplayName("When fetching a user by ID, then the correct user details are returned")
+    void testGetUserById() throws Exception {
+        String userJson = buildUser();
         mockWebServer.enqueue(new MockResponse()
                 .setBody(userJson)
                 .addHeader("Content-Type", "application/json"));
 
-        UserDto userDto = userServiceImpl.getUserById(100L);
+        UserDto retrievedUserDto = userServiceImpl.getUserById(100L);
 
-        assertEquals(100L,(long) userDto.getId());
-        assertEquals("1234567890",userDto.getPhone());
-        assertEquals(21,userDto.getCountry().getTax());
-        assertEquals("Madrid",userDto.getAddress().getCityName());
+        assertThat(retrievedUserDto).isNotNull();
+        assertThat(retrievedUserDto.getId()).isEqualTo(100L);
+        assertThat(retrievedUserDto.getName()).isEqualTo("John");
+        assertThat(retrievedUserDto.getLastName()).isEqualTo("Doe");
+        assertThat(retrievedUserDto.getEmail()).isEqualTo("john.doe@example.com");
+        assertThat(retrievedUserDto.getPhone()).isEqualTo("1234567890");
+        assertThat(retrievedUserDto.getFidelityPoints()).isEqualTo(1000);
+        assertThat(retrievedUserDto.getAddress().getCityName()).isEqualTo("Madrid");
+        assertThat(retrievedUserDto.getAddress().getZipCode()).isEqualTo("47562");
+        assertThat(retrievedUserDto.getAddress().getStreet()).isEqualTo("C/ La Coma");
+        assertThat(retrievedUserDto.getAddress().getNumber()).isEqualTo(32);
+        assertThat(retrievedUserDto.getAddress().getDoor()).isEqualTo("1A");
+        assertThat(retrievedUserDto.getCountry().getId()).isEqualTo(1L);
+        assertThat(retrievedUserDto.getCountry().getName()).isEqualTo("España");
+        assertThat(retrievedUserDto.getCountry().getTax()).isEqualTo(21);
+        assertThat(retrievedUserDto.getCountry().getPrefix()).isEqualTo("+34");
+        assertThat(retrievedUserDto.getCountry().getTimeZone()).isEqualTo("Europe/Madrid");
+    }
+
+    private static String buildUser() throws JsonProcessingException {
+        Address address = new Address();
+        address.setCityName("Madrid");
+        address.setZipCode("47562");
+        address.setStreet("C/ La Coma");
+        address.setNumber(32);
+        address.setDoor("1A");
+
+        CountryDto countryDto = new CountryDto();
+        countryDto.setId(1L);
+        countryDto.setName("España");
+        countryDto.setTax(21F);
+        countryDto.setPrefix("+34");
+        countryDto.setTimeZone("Europe/Madrid");
+
+        UserDto userDto = new UserDto();
+        userDto.setId(100L);
+        userDto.setName("John");
+        userDto.setLastName("Doe");
+        userDto.setEmail("john.doe@example.com");
+        userDto.setPassword("password123");
+        userDto.setFidelityPoints(1000);
+        userDto.setPhone("1234567890");
+        userDto.setAddress(address);
+        userDto.setCountry(countryDto);
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        return objectMapper.writeValueAsString(userDto);
     }
 
     @Test
@@ -86,9 +104,12 @@ class UserServiceTest {
                 .setResponseCode(404)
                 .setBody("User not found")
                 .addHeader("Content-Type", "text/plain"));
-        RestClientResponseException exception = assertThrows(RestClientResponseException.class, () -> userServiceImpl.getUserById(1L));
 
-        assertEquals(HttpStatus.NOT_FOUND, exception.getStatusCode());
+        assertThatThrownBy(() -> userServiceImpl.getUserById(1L))
+                .isInstanceOf(RestClientResponseException.class)
+                .hasMessageContaining("User not found")
+                .extracting(ex -> ((RestClientResponseException) ex).getStatusCode())
+                .isEqualTo(HttpStatus.NOT_FOUND);
     }
 
     @Test
@@ -101,9 +122,12 @@ class UserServiceTest {
                 .setResponseCode(500)
                 .setBody("Internal Server Error")
                 .addHeader("Content-Type", "text/plain"));
-        RestClientResponseException exception = assertThrows(RestClientResponseException.class, () -> userServiceImpl.getUserById(1L));
 
-        assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, exception.getStatusCode());
+        assertThatThrownBy(() -> userServiceImpl.getUserById(1L))
+                .isInstanceOf(RestClientResponseException.class)
+                .hasMessageContaining("Internal Server Error")
+                .extracting(ex -> ((RestClientResponseException) ex).getStatusCode())
+                .isEqualTo(HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     @AfterEach
