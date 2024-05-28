@@ -81,6 +81,16 @@ public class OrderServiceImpl implements OrderService {
         order.setStatus(Status.PAID);
         order.setDateOrdered(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")));
 
+        List<UpdateStockRequest> updateStockRequests = order.getOrderedProducts().stream()
+                .map(product -> new UpdateStockRequest(product.getProductId(), product.getQuantity()))
+                .toList();
+
+        //String url = "https://catalog-workshop-yequy5sv5a-uc.a.run.app/catalog/products/"
+        String url = "http://localhost:8083/catalog/products/";
+
+        updateStockRequests.forEach(request -> restClient.patch()
+                .uri(url + request.getProductId() +"/stock?newStock=-" + request.getQuantity()).retrieve().body(UpdateStockRequest.class));
+
         cartService.emptyCartProductsById(cartId);
         return orderRepository.save(order);
     }
@@ -130,7 +140,7 @@ public class OrderServiceImpl implements OrderService {
                 .map(product -> new UpdateStockRequest(product.getProductId(), product.getQuantity()))
                 .toList();
 
-        //String url = "https://catalog-workshop-yequy5sv5a-uc.a.run.app/catalog/products/";
+        //String url = "https://catalog-workshop-yequy5sv5a-uc.a.run.app/catalog/products/"
         String url = "http://localhost:8083/catalog/products/";
 
         updateStockRequests.forEach(request -> restClient.patch()
