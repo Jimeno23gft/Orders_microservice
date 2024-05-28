@@ -60,7 +60,6 @@ class CartServiceTest {
 
         assertThat(retrievedCartDto).isNotNull();
         assertThat(retrievedCartDto.getId()).isEqualTo(1L);
-        assertThat(retrievedCartDto.getCartId()).isEqualTo(101);
         assertThat(retrievedCartDto.getCartProducts().get(0).getProductName()).isEqualTo("Apple MacBook Pro");
         assertThat(retrievedCartDto.getCartProducts().get(0).getPrice()).isEqualTo(new BigDecimal("2399.99"));
         assertThat(retrievedCartDto.getTotalPrice()).isEqualTo(new BigDecimal("2399.99"));
@@ -71,7 +70,6 @@ class CartServiceTest {
         CartProductDto cartProductDto = new CartProductDto();
         cartProductDto.setId(1L);
         cartProductDto.setProductName("Apple MacBook Pro");
-        cartProductDto.setProductCategory("Electronics");
         cartProductDto.setProductDescription("Latest model of Apple MacBook Pro 16 inch.");
         cartProductDto.setQuantity(1);
         cartProductDto.setPrice(new BigDecimal("2399.99"));
@@ -79,7 +77,6 @@ class CartServiceTest {
         CartDto cartDto = new CartDto();
         cartDto.setId(1L);
         cartDto.setUserId(1L);
-        cartDto.setCartId(101L);
         cartDto.setCartProducts(List.of(cartProductDto));
         cartDto.setTotalPrice(new BigDecimal("2399.99"));
         return cartDto;

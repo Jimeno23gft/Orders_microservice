@@ -2,9 +2,9 @@ package com.ordersmicroservice.orders_microservice.services;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.ordersmicroservice.orders_microservice.dto.AddressDto;
 import com.ordersmicroservice.orders_microservice.dto.CountryDto;
 import com.ordersmicroservice.orders_microservice.dto.UserDto;
+import com.ordersmicroservice.orders_microservice.models.Address;
 import com.ordersmicroservice.orders_microservice.services.impl.UserServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -38,7 +38,6 @@ class UserServiceTest {
     @DisplayName("When fetching a user by ID, then the correct user details are returned")
     void testGetUserById() throws Exception {
         String userJson = buildUser();
-
         mockWebServer.enqueue(new MockResponse()
                 .setBody(userJson)
                 .addHeader("Content-Type", "application/json"));
@@ -52,7 +51,6 @@ class UserServiceTest {
         assertThat(retrievedUserDto.getEmail()).isEqualTo("john.doe@example.com");
         assertThat(retrievedUserDto.getPhone()).isEqualTo("1234567890");
         assertThat(retrievedUserDto.getFidelityPoints()).isEqualTo(1000);
-        assertThat(retrievedUserDto.getBirthDate()).isEqualTo("1990/01/01");
         assertThat(retrievedUserDto.getAddress().getCityName()).isEqualTo("Madrid");
         assertThat(retrievedUserDto.getAddress().getZipCode()).isEqualTo("47562");
         assertThat(retrievedUserDto.getAddress().getStreet()).isEqualTo("C/ La Coma");
@@ -66,13 +64,12 @@ class UserServiceTest {
     }
 
     private static String buildUser() throws JsonProcessingException {
-        AddressDto addressDto = new AddressDto();
-        addressDto.setId(1L);
-        addressDto.setCityName("Madrid");
-        addressDto.setZipCode("47562");
-        addressDto.setStreet("C/ La Coma");
-        addressDto.setNumber(32);
-        addressDto.setDoor("1A");
+        Address address = new Address();
+        address.setCityName("Madrid");
+        address.setZipCode("47562");
+        address.setStreet("C/ La Coma");
+        address.setNumber(32);
+        address.setDoor("1A");
 
         CountryDto countryDto = new CountryDto();
         countryDto.setId(1L);
@@ -88,9 +85,8 @@ class UserServiceTest {
         userDto.setEmail("john.doe@example.com");
         userDto.setPassword("password123");
         userDto.setFidelityPoints(1000);
-        userDto.setBirthDate("1990/01/01");
         userDto.setPhone("1234567890");
-        userDto.setAddress(addressDto);
+        userDto.setAddress(address);
         userDto.setCountry(countryDto);
 
         ObjectMapper objectMapper = new ObjectMapper();
@@ -100,6 +96,10 @@ class UserServiceTest {
     @Test
     @DisplayName("When fetching a non-existent user by ID, then a 404 error is returned")
     void testGetUserByIdNotFound() {
+
+        userServiceImpl.userUri = "/users";
+
+
         mockWebServer.enqueue(new MockResponse()
                 .setResponseCode(404)
                 .setBody("User not found")
@@ -115,6 +115,9 @@ class UserServiceTest {
     @Test
     @DisplayName("When fetching a User by ID and an internal server error occurs, then a 500 error is returned")
     void testGetProductByIdServerError() {
+
+        userServiceImpl.userUri = "/users";
+
         mockWebServer.enqueue(new MockResponse()
                 .setResponseCode(500)
                 .setBody("Internal Server Error")

@@ -6,4 +6,5 @@ import java.util.List;
 
 public interface OrderedProductService {
     List<OrderedProduct> getAllProductsFromOrder(Long orderId);
+
 }

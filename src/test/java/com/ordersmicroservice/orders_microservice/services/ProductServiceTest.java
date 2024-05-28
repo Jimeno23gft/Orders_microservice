@@ -65,6 +65,9 @@ class ProductServiceTest {
     @Test
     @DisplayName("Testing method fails to find the order with id given to be updated")
     void testPatchIdNotFound() {
+
+        productService.catalogUri = "/products";
+
         mockWebServer.enqueue(new MockResponse()
                 .setResponseCode(HttpStatus.NOT_FOUND.value())
                 .setBody("Not found")
@@ -80,6 +83,9 @@ class ProductServiceTest {
     @Test
     @DisplayName("Testing method gives an Internal Server Error")
     void testPatchServerError() {
+
+        productService.catalogUri = "/products";
+
         mockWebServer.enqueue(new MockResponse()
                 .setResponseCode(HttpStatus.INTERNAL_SERVER_ERROR.value())
                 .setBody("Internal Server Error")
@@ -124,6 +130,9 @@ class ProductServiceTest {
     @Test
     @DisplayName("Testing method fails to find the product with id given to be retrieved")
     void testGetProductByIdNotFound() {
+
+        productService.catalogUri = "/products";
+
         mockWebServer.enqueue(new MockResponse()
                 .setResponseCode(HttpStatus.NOT_FOUND.value())
                 .setBody("Not found")
@@ -139,6 +148,9 @@ class ProductServiceTest {
     @Test
     @DisplayName("Testing method gives an error whenever product with id given is called for")
     void testGetProductByIdError() {
+
+        productService.catalogUri = "/products";
+
         mockWebServer.enqueue(new MockResponse()
                 .setResponseCode(HttpStatus.INTERNAL_SERVER_ERROR.value())
                 .setBody("Internal Server Error")

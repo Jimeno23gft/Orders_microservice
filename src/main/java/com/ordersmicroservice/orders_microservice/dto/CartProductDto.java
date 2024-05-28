@@ -20,7 +20,6 @@ public class CartProductDto {
     @Id
     private Long id;
     private String productName;
-    private String productCategory;
     private String productDescription;
     private Integer quantity;
     private BigDecimal price;

@@ -29,9 +29,6 @@ public class OrderedProduct {
     @Column(name = "name")
     String name;
 
-    @Column(name = "category")
-    String category;
-
     @Column(name = "description")
     String description;
 
@@ -40,5 +37,6 @@ public class OrderedProduct {
 
     @Column(name = "quantity")
     Integer quantity;
+
 }
 

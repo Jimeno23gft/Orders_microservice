@@ -9,20 +9,22 @@ public class ProductServiceImpl {
 
     private final RestClient restClient;
 
+    public String catalogUri = "http://localhost:8083/catalog/products/";
+
     public ProductServiceImpl(RestClient restClient) {
         this.restClient = restClient;
     }
 
     public ProductDto patchProductStock(Long productId, int quantity) {
         return restClient.patch()
-                .uri("/products/{id}/{quantity}", productId, quantity)
+                .uri(catalogUri+"/{id}/{quantity}", productId, quantity)
                 .retrieve()
                 .body(ProductDto.class);
     }
 
     public ProductDto getProductById(Long productId) {
         return restClient.get()
-                .uri("/products/{id}", productId)
+                .uri(catalogUri+"/{id}", productId)
                 .retrieve()
                 .body(ProductDto.class);
     }

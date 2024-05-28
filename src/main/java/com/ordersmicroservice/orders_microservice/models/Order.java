@@ -1,12 +1,8 @@
 package com.ordersmicroservice.orders_microservice.models;
-
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-import com.ordersmicroservice.orders_microservice.dto.Status;
+import com.ordersmicroservice.orders_microservice.dto.*;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -23,11 +19,14 @@ public class Order {
     @Column(name="id")
     private Long id;
 
+    @Column(name = "cart_id")
+    private Long cartId;
+
     @Column(name = "user_id")
     private Long userId;
 
-    @Column(name = "cart_id")
-    private Long cartId;
+    @Column(name = "country_id")
+    private Long countryId;
 
     @Column(name="from_address")
     private String fromAddress;
@@ -42,14 +41,21 @@ public class Order {
     @Column(name = "date_delivered")
     private String dateDelivered;
 
+    @Transient
+    private UserResponseDto user;
+
     @OneToOne(mappedBy = "order", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JsonManagedReference
+    @EqualsAndHashCode.Exclude
     private Address address;
 
-    @Column(name = "total_price")
-    private BigDecimal totalPrice;
+    @Transient
+    private CountryDto country;
 
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference
     private List<OrderedProduct> orderedProducts;
+
+    @Column(name = "total_price")
+    private BigDecimal totalPrice;
 }
