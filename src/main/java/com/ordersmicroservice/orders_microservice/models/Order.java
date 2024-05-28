@@ -25,6 +25,9 @@ public class Order {
     @Column(name = "user_id")
     private Long userId;
 
+    @Column(name = "country_id")
+    private Long countryId;
+
     @Column(name="from_address")
     private String fromAddress;
 

@@ -51,6 +51,8 @@ public class OrderServiceImpl implements OrderService {
         Order order = orderRepository.findById(orderId).orElseThrow(() -> new NotFoundException("Order not found with ID: " + orderId));
         UserDto user = userService.getUserById(order.getUserId());
         UserResponseDto userResponde = UserResponseDto.fromUserDto(user);
+        CountryDto countryDto = countryService.getCountryById(order.getCountryId());
+        order.setCountry(countryDto);
         order.setUser(userResponde);
 
         return order;
@@ -118,6 +120,7 @@ public class OrderServiceImpl implements OrderService {
         address = user.getAddress();
         address.setCountryId(user.getCountry().getId());
         address.setOrder(order);
+        order.setCountryId(user.getCountry().getId());
         order.setCountry(country);
         order.setAddress(address);
         addressService.saveAddress(address);

@@ -26,10 +26,10 @@ public class Datos {
 
 
     public static Optional<Order> crearOrder001(){
-        return Optional.of(new Order(1L,1L, 1L,"Valencia",PAID, "2001-21-21","2002-21-21" , user ,crearAddress001().orElseThrow(),country,productList,new BigDecimal("15")));
+        return Optional.of(new Order(1L,1L, 1L,1L,"Valencia",PAID, "2001-21-21","2002-21-21" , user ,crearAddress001().orElseThrow(),country,productList,new BigDecimal("15")));
     }
     public static Optional<Order> crearOrder002() {
-        return Optional.of(new Order(2L, 2L, 2L, "Barcelona", UNPAID, "2001-21-21","2002-21-21" ,user, crearAddress002().orElseThrow(), country,productList,new BigDecimal("15")));
+        return Optional.of(new Order(2L, 2L, 2L,1L, "Barcelona", UNPAID, "2001-21-21","2002-21-21" ,user, crearAddress002().orElseThrow(), country,productList,new BigDecimal("15")));
     }
     public static Optional<Address> crearAddress001() {
         return Optional.of(new Address(1L, order, "C/ Colon", 10, "5A", "Valencia", "46001", 1L));

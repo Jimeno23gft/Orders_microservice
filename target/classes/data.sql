@@ -3,6 +3,7 @@ CREATE TABLE IF NOT EXISTS orders (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
     user_id BIGINT,
     cart_id BIGINT,
+    country_id BIGINT,
     from_address VARCHAR(150),
     status ENUM('UNPAID','PAID','SENT','IN_DELIVERY','CANCELLED','DELIVERED','UNKNOWN', 'RETURNED'),
     date_ordered DATETIME,
@@ -10,23 +11,24 @@ CREATE TABLE IF NOT EXISTS orders (
     total_price DOUBLE
 );
 
-INSERT INTO orders (cart_id, user_id, from_address, status, date_ordered, date_delivered,total_price)
-VALUES (1001, 1, '123 Main St', 'PAID', '2024-05-07 08:00:00', '2024-05-10 15:00:00',18);
+INSERT INTO orders (cart_id, user_id, country_id, from_address, status, date_ordered, date_delivered, total_price)
+VALUES (1001, 1, 1, '123 Main St', 'PAID', '2024-05-07 08:00:00', '2024-05-10 15:00:00', 18);
 
-INSERT INTO orders (cart_id, user_id, from_address, status, date_ordered, date_delivered,total_price)
-VALUES (1002, 2, '456 Elm St', 'UNPAID', '2024-05-08 09:00:00', '2024-05-10 16:00:00',18);
+INSERT INTO orders (cart_id, user_id, country_id, from_address, status, date_ordered, date_delivered, total_price)
+VALUES (1002, 2, 1, '456 Elm St', 'UNPAID', '2024-05-08 09:00:00', '2024-05-10 16:00:00', 18);
 
-INSERT INTO orders (cart_id, user_id, from_address, status, date_ordered, date_delivered,total_price)
-VALUES (1003, 3, '789 Oak St', 'IN_DELIVERY', '2024-05-09 10:00:00', '2024-05-11 17:00:00',17);
+INSERT INTO orders (cart_id, user_id, country_id, from_address, status, date_ordered, date_delivered, total_price)
+VALUES (1003, 2, 1, '789 Oak St', 'IN_DELIVERY', '2024-05-09 10:00:00', '2024-05-11 17:00:00', 17);
 
-INSERT INTO orders (cart_id, user_id, from_address, status, date_ordered, date_delivered,total_price)
-VALUES (1004, 1, '101 Maple Ave', 'DELIVERED', '2024-05-10 11:00:00', '2024-05-12 18:00:00',17);
+INSERT INTO orders (cart_id, user_id, country_id, from_address, status, date_ordered, date_delivered, total_price)
+VALUES (1004, 1, 1, '101 Maple Ave', 'DELIVERED', '2024-05-10 11:00:00', '2024-05-12 18:00:00', 17);
 
-INSERT INTO orders (cart_id, user_id, from_address, status, date_ordered, date_delivered,total_price)
-VALUES (1005, 2, '222 Pine St5', 'UNKNOWN', '2024-05-11 12:00:00', '2024-05-10 14:00:00',16);
+INSERT INTO orders (cart_id, user_id, country_id, from_address, status, date_ordered, date_delivered, total_price)
+VALUES (1005, 2, 1, '222 Pine St', 'UNKNOWN', '2024-05-11 12:00:00', '2024-05-10 14:00:00', 16);
 
-INSERT INTO orders (cart_id, user_id, from_address, status, date_ordered, date_delivered,total_price)
-VALUES (1006, 3, '333 Cedar Rd', 'PAID', '2024-05-12 13:00:00', '2024-05-14 19:00:00',18);
+INSERT INTO orders (cart_id, user_id, country_id, from_address, status, date_ordered, date_delivered, total_price)
+VALUES (1006, 2, 1, '333 Cedar Rd', 'PAID', '2024-05-12 13:00:00', '2024-05-14 19:00:00', 18);
+
 
 
 CREATE TABLE IF NOT EXISTS ordered_products (
