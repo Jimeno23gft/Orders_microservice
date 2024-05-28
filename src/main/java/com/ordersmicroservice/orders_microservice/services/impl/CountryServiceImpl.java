@@ -8,7 +8,7 @@ import org.springframework.web.client.RestClient;
 @Service
 public class CountryServiceImpl implements CountryService {
     private final RestClient restClient;
-    public String cartUri = "http://localhost:8082/country";
+    public String cartUri = "http://localhost:8082/country/";
 
     public CountryServiceImpl(RestClient restClient) {
         this.restClient = restClient;

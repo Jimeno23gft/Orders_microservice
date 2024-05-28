@@ -71,7 +71,6 @@ class CartServiceTest {
         CartDto cartDto = cartServiceImpl.getCartById(1L).orElseThrow();
 
         assertEquals(1L, (long) cartDto.getId());
-        assertEquals(101, cartDto.getCartId());
         assertEquals("Apple MacBook Pro", cartDto.getCartProducts().get(0).getProductName());
         assertEquals(new BigDecimal("2399.99"), cartDto.getCartProducts().get(0).getPrice());
         assertEquals(new BigDecimal("2399.99"), cartDto.getTotalPrice());

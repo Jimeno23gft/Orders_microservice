@@ -3,10 +3,7 @@ package com.ordersmicroservice.orders_microservice.models;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.ordersmicroservice.orders_microservice.dto.CountryDto;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Data
 @Builder
@@ -23,6 +20,7 @@ public class Address {
     @OneToOne
     @MapsId
     @JoinColumn(name = "order_id")
+    @EqualsAndHashCode.Exclude
     private Order order;
 
     @Column(name = "street")

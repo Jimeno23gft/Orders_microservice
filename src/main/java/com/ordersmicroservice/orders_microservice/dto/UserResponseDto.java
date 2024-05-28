@@ -12,12 +12,14 @@ public class UserResponseDto {
     private String email;
     private String phone;
 
-    public static UserResponseDto fromUserDto(UserDto userDto) {
-        UserResponseDto userResponseDto = new UserResponseDto();
-        userResponseDto.setId(userDto.getId());
-        userResponseDto.setName(userDto.getName());
-        userResponseDto.setEmail(userDto.getEmail());
-        return userResponseDto;
+    public static UserResponseDto fromUserDto(UserDto user) {
+        UserResponseDto userResponse = new UserResponseDto();
+        userResponse.setId(user.getId());
+        userResponse.setName(user.getName());
+        userResponse.setLastName(user.getLastName());
+        userResponse.setEmail(user.getEmail());
+        userResponse.setPhone(user.getPhone());
+        return userResponse;
     }
 }
 

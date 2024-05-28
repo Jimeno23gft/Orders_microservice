@@ -6,6 +6,6 @@ import java.util.Optional;
 
 public interface CartService {
 
-    CartDto getCartById(Long id);
+    Optional<CartDto> getCartById(Long id);
     void emptyCartProductsById(Long id);
 }

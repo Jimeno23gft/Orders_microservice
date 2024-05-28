@@ -18,10 +18,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.client.RestClient;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Random;
+import java.util.*;
 import java.util.function.Consumer;
 
 @Service
@@ -34,12 +31,13 @@ public class OrderServiceImpl implements OrderService {
     CountryService countryService;
     RestClient restClient;
 
-    public OrderServiceImpl(OrderRepository orderRepository, CartService cartService, UserService userService, AddressService addressService, CountryService countryService) {
+    public OrderServiceImpl(OrderRepository orderRepository, CartService cartService, UserService userService, AddressService addressService, CountryService countryService, RestClient restClient) {
         this.orderRepository = orderRepository;
         this.cartService = cartService;
         this.userService = userService;
         this.addressService = addressService;
         this.countryService = countryService;
+        this.restClient = restClient;
     }
 
     @Override
@@ -72,24 +70,20 @@ public class OrderServiceImpl implements OrderService {
         Address address;
         CountryDto country;
         UserResponseDto userResponse = new UserResponseDto();
-        CartDto cart;
 
-        try {
-            cart = cartService.getCartById(cartId);
-        } catch (Exception ex) {
-            throw new NotFoundException("Cart not found with ID: " + cartId);
-        }
+        CartDto cart = cartService.getCartById(cartId)
+                .orElseThrow(() -> new NotFoundException("Cart not found with ID: " + cartId));
 
         if (cart.getCartProducts().isEmpty()) {
             throw new EmptyCartException("Empty cart, order not made");
         }
 
-        List<CartProductDto> cartProducts = cartService.getCartById(cartId).getCartProducts();
+        List<CartProductDto> cartProducts = cart.getCartProducts();
 
         Order order = new Order();
-        List<OrderedProduct> orderedProducts = cartProducts.stream()
+        List<OrderedProduct> orderedProducts = new ArrayList<>(cartProducts.stream()
                 .map(cartProductDto -> convertToOrderedProduct(cartProductDto, order))
-                .toList();
+                .toList());
 
         try {
             user = userService.getUserById(cart.getUserId());
@@ -100,9 +94,9 @@ public class OrderServiceImpl implements OrderService {
 
         userResponse.setId(user.getId());
         userResponse.setName(user.getName());
-        userResponse.setPhone(user.getPhone());
-        userResponse.setEmail(user.getEmail());
         userResponse.setLastName(user.getLastName());
+        userResponse.setEmail(user.getEmail());
+        userResponse.setPhone(user.getPhone());
 
         order.setCartId(cart.getId());
         order.setUserId(cart.getUserId());
@@ -119,13 +113,15 @@ public class OrderServiceImpl implements OrderService {
             throw new NotFoundException("Country not found with ID: " + user.getCountry().getId());
         }
 
+        System.out.println(country);
+
         address = user.getAddress();
         address.setCountryId(user.getCountry().getId());
-        order.setCountry(country);
         address.setOrder(order);
-        addressService.saveAddress(address);
+        order.setCountry(country);
         order.setAddress(address);
-        //cartService.emptyCartProductsById(cartId);
+        addressService.saveAddress(address);
+        cartService.emptyCartProductsById(cartId);
 
         return orderRepository.save(order);
     }

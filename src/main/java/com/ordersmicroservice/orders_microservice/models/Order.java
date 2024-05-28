@@ -2,10 +2,7 @@ package com.ordersmicroservice.orders_microservice.models;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.ordersmicroservice.orders_microservice.dto.*;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -46,6 +43,7 @@ public class Order {
 
     @OneToOne(mappedBy = "order", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JsonManagedReference
+    @EqualsAndHashCode.Exclude
     private Address address;
 
     @Transient
@@ -57,17 +55,4 @@ public class Order {
 
     @Column(name = "total_price")
     private BigDecimal totalPrice;
-
-    @Override
-    public String toString() {
-        return "Order{" +
-                "id=" + id +
-                ", cartId=" + cartId +
-                ", userId=" + userId +
-                ", status=" + status +
-                ", dateOrdered='" + dateOrdered + '\'' +
-                ", dateDelivered='" + dateDelivered + '\'' +
-                ", totalPrice=" + totalPrice +
-                '}';
-    }
 }

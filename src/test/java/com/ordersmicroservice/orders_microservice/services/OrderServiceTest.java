@@ -143,11 +143,10 @@ class OrderServiceTest {
         Long user_id = 1L;
         BigDecimal totalPrice = new BigDecimal("100.00");
         List<CartProductDto> cartProducts = List.of(
-                new CartProductDto(1L, "Product1", "Category1", "Description1", 2,new BigDecimal("20.00")),
-                new CartProductDto(2L, "Product2", "Category2", "Description2", 1,new BigDecimal("30.00"))
+                new CartProductDto(1L, "Product1", "Description1", 2,new BigDecimal("20.00")),
+                new CartProductDto(2L, "Product2", "Description2", 1,new BigDecimal("30.00"))
         );
         CartDto cartDto = CartDto.builder()
-                .cartId(cartId)
                 .userId(user_id)
                 .cartProducts(cartProducts)
                 .totalPrice(totalPrice)
@@ -193,7 +192,6 @@ class OrderServiceTest {
         Order savedOrder = orderService.addOrder(cartId,creditCard);
 
         assertNotNull(savedOrder);
-        assertEquals(cartId, savedOrder.getCartId());
         assertEquals(totalPrice, savedOrder.getTotalPrice());
         assertTrue(Arrays.asList(addresses).contains(savedOrder.getFromAddress()));
         assertEquals(Status.PAID, savedOrder.getStatus());

@@ -17,7 +17,6 @@ public class UserDto {
     private String name;
     private String lastName;
     private String email;
-    @JsonIgnore
     private Integer fidelityPoints;
     private String phone;
     private Address address;
