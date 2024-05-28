@@ -37,6 +37,9 @@ class UserServiceTest {
     @Test
     @DisplayName("When fetching a user by ID, then the correct user details are returned")
     void testGetUserById() throws Exception {
+
+        userServiceImpl.userUri = "/users";
+
         String userJson = buildUser();
         mockWebServer.enqueue(new MockResponse()
                 .setBody(userJson)

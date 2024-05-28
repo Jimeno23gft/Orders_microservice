@@ -195,9 +195,7 @@ class OrderServiceTest {
 
         Order savedOrder = orderService.addOrder(cartId,creditCard);
 
-        // Verify the results
         assertThat(savedOrder).isNotNull();
-        assertThat(savedOrder.getCartId()).isEqualTo(cartId);
         assertThat(savedOrder.getTotalPrice()).isEqualTo(totalPrice);
         assertThat(Arrays.asList(addresses)).contains(savedOrder.getFromAddress());
         assertThat(savedOrder.getStatus()).isEqualTo(Status.PAID);

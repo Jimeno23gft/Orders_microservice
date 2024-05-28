@@ -36,6 +36,9 @@ class ProductServiceTest {
     @Test
     @DisplayName("Testing method updates the stock of a given product")
     void testPatchProductStock() throws Exception {
+
+        productService.catalogUri = "/products";
+
         ProductDto productDto = new ProductDto();
         productDto.setId(1L);
         productDto.setName("Ball");
@@ -101,6 +104,9 @@ class ProductServiceTest {
     @Test
     @DisplayName("Testing method retrieves the product with given id")
     void testGetProductById() throws Exception {
+
+        productService.catalogUri = "/products";
+
         ProductDto productDto = new ProductDto();
         productDto.setId(1L);
         productDto.setName("Ball");

@@ -36,6 +36,9 @@ class CountryServiceTest {
     @Test
     @DisplayName("Testing method retrieves country with given id")
     void testGetCountryById() throws Exception {
+
+        countryServiceImpl.countrytUri = "/country";
+
         CountryDto countryDto = new CountryDto();
         countryDto.setId(1L);
         countryDto.setName("España");
@@ -64,7 +67,7 @@ class CountryServiceTest {
     @DisplayName("When fetching a non-existent country by ID, then a 404 error is returned")
     void testGetUserByIdNotFound() {
 
-        countryServiceImpl.cartUri = "/country";
+        countryServiceImpl.countrytUri = "/country";
 
         mockWebServer.enqueue(new MockResponse()
                 .setResponseCode(404)
@@ -82,7 +85,7 @@ class CountryServiceTest {
     @DisplayName("When fetching a Country by ID and an internal server error occurs, then a 500 error is returned")
     void testGetCountryByIdServerError() {
 
-        countryServiceImpl.cartUri = "/country";
+        countryServiceImpl.countrytUri = "/country";
 
         mockWebServer.enqueue(new MockResponse()
                 .setResponseCode(500)
