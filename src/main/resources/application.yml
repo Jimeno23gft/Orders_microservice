@@ -22,7 +22,7 @@ spring:
             mode: always
 server:
     servlet:
-        context-path: /orders
+        context-path: /
     port: ${PORT:8080}
 cart:
     service:
