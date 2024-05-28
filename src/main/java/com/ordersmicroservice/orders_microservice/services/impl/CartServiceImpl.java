@@ -10,15 +10,15 @@ import org.springframework.web.client.RestClient;
 @Service
 public class CartServiceImpl implements CartService {
 
-    public String cartUri = "http://localhost:8081/carts/";
+    public String cartUri = "/carts/";
 
     private final RestClient restClient;
 
-    public CartServiceImpl(RestClient restClient) {
-        this.restClient = restClient;
+    public CartServiceImpl(RestClient.Builder restClient) {
+        this.restClient = restClient.build();
     }
 
-    public CartDto getCartById(Long id){
+    public static CartDto getCartById(Long id){
 
         return restClient.get()
                 .uri(cartUri + id)
@@ -26,12 +26,11 @@ public class CartServiceImpl implements CartService {
                 .body(CartDto.class);
     }
 
-    public void emptyCartProductsById(Long id){
+    public static void emptyCartProductsById(Long id){
 
         restClient.delete()
                 .uri(cartUri + "/{id}", id)
-                .retrieve()
-                .body(Void.class);
+                .retrieve();
     }
 }
 

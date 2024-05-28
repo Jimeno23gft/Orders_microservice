@@ -52,8 +52,6 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public Order addOrder(Long id, CreditCardDto creditCard) {
-        //log.info("Sending credit card info to payment Server...")
-        //log.info("Payment with the credit card " + creditCard.getNumber() + " has been made successfully" )
 
         CartDto cart;
         try {
@@ -68,7 +66,7 @@ public class OrderServiceImpl implements OrderService {
 
         Order order = new Order();
 
-            List<CartProductDto> cartProducts = cartService.getCartById(id).getCartProducts();
+            List<CartProductDto> cartProducts = cart.getCartProducts();
 
             List<OrderedProduct> orderedProducts = cartProducts.stream()
                     .map(cartProductDto -> convertToOrderedProduct(cartProductDto, order))
