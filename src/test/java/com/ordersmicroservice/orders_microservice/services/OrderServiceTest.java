@@ -133,6 +133,37 @@ class OrderServiceTest {
     @DisplayName("Testing get all Orders from Repository Method")
     void testGetAllByUserId() {
         Long userId = 1L;
+
+        Address address = Address.builder()
+                .orderId(1L)
+                .cityName("Barranquilla")
+                .zipCode("46134")
+                .street("Calle 69")
+                .number(43)
+                .door("2")
+                .countryId(1L)
+                .build();
+
+        CountryDto country = CountryDto.builder()
+                .id(1L)
+                .name("Colombia")
+                .tax(21F)
+                .prefix("+57")
+                .timeZone("Timezone")
+                .build();
+
+        UserDto userDto = UserDto.builder()
+                .id(1L)
+                .name("Lorenzo")
+                .lastName("Perez")
+                .email("perez@gmail.com")
+                .phone("123123123")
+                .address(address)
+                .country(country)
+                .build();
+
+        when(userService.getUserById(anyLong())).thenReturn(Optional.ofNullable(userDto));
+        when(countryService.getCountryById(address.getCountryId())).thenReturn(Optional.ofNullable(country));
         when(orderRepository.findAllByUserId(userId)).thenReturn(orders);
 
         List<Order> savedOrders = orderService.getAllByUserId(userId);

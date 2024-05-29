@@ -1,13 +1,8 @@
 package com.ordersmicroservice.orders_microservice.services.impl;
 
 import com.ordersmicroservice.orders_microservice.dto.UserDto;
-import com.ordersmicroservice.orders_microservice.exception.RetryFailedConnection;
 import com.ordersmicroservice.orders_microservice.services.UserService;
-import org.springframework.retry.annotation.Backoff;
-import org.springframework.retry.annotation.Recover;
-import org.springframework.retry.annotation.Retryable;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestClient;
 
 import java.util.Optional;
@@ -21,18 +16,11 @@ public class UserServiceImpl implements UserService {
     public UserServiceImpl(RestClient restClient) {
         this.restClient = restClient;
     }
-    @Retryable(retryFor = RetryFailedConnection.class, maxAttempts = 2, backoff = @Backoff(delay = 2000))
     public Optional<UserDto> getUserById(Long userId) {
         return Optional.ofNullable(restClient.get()
                 .uri(userUri + "/{id}", userId)
                 .retrieve()
                 .body(UserDto.class));
-    }
-
-    @Recover
-    public Optional<UserDto> recover(RetryFailedConnection exception, Long userId){
-        System.out.println("Recovery method executed for userId: " + userId);
-        return Optional.empty();
     }
 
     public void patchFidelityPoints(Long userId, int points){
