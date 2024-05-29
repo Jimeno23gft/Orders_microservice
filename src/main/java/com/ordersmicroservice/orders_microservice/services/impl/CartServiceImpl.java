@@ -10,6 +10,7 @@ import org.springframework.retry.annotation.Backoff;
 import org.springframework.retry.annotation.Recover;
 import org.springframework.retry.annotation.Retryable;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestClient;
 
 import java.util.Optional;
@@ -27,7 +28,13 @@ public class CartServiceImpl implements CartService {
     public CartServiceImpl(RestClient restClient) {
         this.restClient = restClient;
     }
-    @Retryable(retryFor = RetryFailedConnection.class, maxAttempts = 2, backoff = @Backoff(delay = 2000))
+
+
+    @Retryable(
+            value = {RetryFailedConnection.class},
+            maxAttempts = 2,
+            backoff = @Backoff(delay = 2000),
+            exclude = HttpClientErrorException.class)
     public Optional<CartDto> getCartById(Long id){
 
         return Optional.ofNullable(restClient.get()
@@ -44,9 +51,9 @@ public class CartServiceImpl implements CartService {
                 .body(Void.class);
     }
     @Recover
-    public String recover(RetryFailedConnection exception){
-        System.out.println("failed connection");
-        return "Server down try later";
+    public Optional<CartDto> recover(RetryFailedConnection exception, Long userId){
+        System.out.println("Recovery method executed for userId: " + userId);
+        return Optional.empty(); // or any other default/fallback logic
     }
 }
 
