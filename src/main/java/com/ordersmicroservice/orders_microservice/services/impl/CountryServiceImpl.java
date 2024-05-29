@@ -5,6 +5,8 @@ import com.ordersmicroservice.orders_microservice.services.CountryService;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClient;
 
+import java.util.Optional;
+
 @Service
 public class CountryServiceImpl implements CountryService {
     private final RestClient restClient;
@@ -14,10 +16,10 @@ public class CountryServiceImpl implements CountryService {
         this.restClient = restClient;
     }
 
-    public CountryDto getCountryById(Long countryId) {
-        return restClient.get()
+    public Optional<CountryDto> getCountryById(Long countryId) {
+        return Optional.ofNullable(restClient.get()
                 .uri(countrytUri + "/{id}", countryId)
                 .retrieve()
-                .body(CountryDto.class);
+                .body(CountryDto.class));
     }
 }

@@ -17,6 +17,7 @@ import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.client.RestClient;
+
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
@@ -51,13 +52,16 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public Order getOrderById(Long orderId) {
         Order order = orderRepository.findById(orderId).orElseThrow(() -> new NotFoundException("Order not found with ID: " + orderId));
-        UserDto user = userService.getUserById(order.getUserId());
-        UserResponseDto userResponde = UserResponseDto.fromUserDto(user);
-        CountryDto countryDto = countryService.getCountryById(order.getCountryId());
-        order.setCountry(countryDto);
-        order.setUser(userResponde);
-
+        setCountryAndUserToOrder(order);
         return order;
+    }
+
+    private void setCountryAndUserToOrder(Order order) {
+        UserDto user = userService.getUserById(order.getUserId()).orElseThrow();
+        UserResponseDto userResponse = UserResponseDto.fromUserDto(user);
+        CountryDto countryDto = countryService.getCountryById(order.getCountryId()).orElseThrow();
+        order.setCountry(countryDto);
+        order.setUser(userResponse);
     }
 
     @Override
@@ -70,37 +74,11 @@ public class OrderServiceImpl implements OrderService {
     public Order addOrder(Long cartId, CreditCardDto creditCard) {
         //log.info("Sending credit card info to payment Server...")
         //log.info("Payment with the credit card " + creditCard.getNumber() + " has been made successfully" )
-        UserDto user;
-        Address address;
-        CountryDto country;
-        UserResponseDto userResponse = new UserResponseDto();
-
-        CartDto cart = cartService.getCartById(cartId)
-                .orElseThrow(() -> new NotFoundException("Cart not found with ID: " + cartId));
-
-        if (cart.getCartProducts().isEmpty()) {
-            throw new EmptyCartException("Empty cart, order not made");
-        }
-
-        List<CartProductDto> cartProducts = cart.getCartProducts();
-
         Order order = new Order();
-        List<OrderedProduct> orderedProducts = new ArrayList<>(cartProducts.stream()
-                .map(cartProductDto -> convertToOrderedProduct(cartProductDto, order))
-                .toList());
-
-        try {
-            user = userService.getUserById(cart.getUserId());
-        } catch (Exception ex) {
-            throw new NotFoundException("User not found with ID: " + cartId);
-        }
-
-
-        userResponse.setId(user.getId());
-        userResponse.setName(user.getName());
-        userResponse.setLastName(user.getLastName());
-        userResponse.setEmail(user.getEmail());
-        userResponse.setPhone(user.getPhone());
+        CartDto cart = checkCartAndCartProducts(cartId);
+        List<OrderedProduct> orderedProducts = getOrderedProductsListFromCart(cart, order);
+        UserDto user = getUserFromCart(cart, cartId);
+        UserResponseDto userResponse = createUserResponse(user);
 
         order.setCartId(cart.getId());
         order.setUserId(cart.getUserId());
@@ -111,24 +89,56 @@ public class OrderServiceImpl implements OrderService {
         order.setOrderedProducts(orderedProducts);
         order.setTotalPrice(cart.getTotalPrice());
 
-        try {
-            country = countryService.getCountryById(user.getCountry().getId());
-        } catch (NotFoundException ex) {
-            throw new NotFoundException("Country not found with ID: " + user.getCountry().getId());
-        }
+        configureCountryAndAddress(order, user);
+        cartService.emptyCartProductsById(cartId);
 
-        System.out.println(country);
+        return orderRepository.save(order);
+    }
 
-        address = user.getAddress();
+    private void configureCountryAndAddress(Order order, UserDto user) {
+
+        CountryDto country = countryService.getCountryById(user.getCountry().getId())
+                .orElseThrow(() -> new NotFoundException("Country not found with ID: " + user.getCountry().getId()));
+
+        Address address = user.getAddress();
         address.setCountryId(user.getCountry().getId());
         address.setOrder(order);
         order.setCountryId(user.getCountry().getId());
         order.setCountry(country);
         order.setAddress(address);
         addressService.saveAddress(address);
-        cartService.emptyCartProductsById(cartId);
+    }
 
-        return orderRepository.save(order);
+    private UserResponseDto createUserResponse(UserDto user) {
+        UserResponseDto userResponse = new UserResponseDto();
+        userResponse.setId(user.getId());
+        userResponse.setName(user.getName());
+        userResponse.setLastName(user.getLastName());
+        userResponse.setEmail(user.getEmail());
+        userResponse.setPhone(user.getPhone());
+        return userResponse;
+    }
+
+    private UserDto getUserFromCart(CartDto cart, Long cartId) {
+        return userService.getUserById(cart.getUserId()).orElseThrow(() -> new NotFoundException("Cart not found with ID: " + cartId));
+    }
+
+    private List<OrderedProduct> getOrderedProductsListFromCart(CartDto cart, Order order) {
+        List<CartProductDto> cartProducts = cart.getCartProducts();
+
+        return new ArrayList<>(cartProducts.stream()
+                .map(cartProductDto -> convertToOrderedProduct(cartProductDto, order))
+                .toList());
+    }
+
+    private CartDto checkCartAndCartProducts(Long cartId) {
+        CartDto cart = cartService.getCartById(cartId)
+                .orElseThrow(() -> new NotFoundException("Cart not found with ID: " + cartId));
+
+        if (cart.getCartProducts().isEmpty()) {
+            throw new EmptyCartException("Empty cart, order not made");
+        }
+        return cart;
     }
 
     private OrderedProduct convertToOrderedProduct(CartProductDto cartProductDto, Order order) {
@@ -166,11 +176,15 @@ public class OrderServiceImpl implements OrderService {
             //TODO: Aqui si en un futuro queremos, podemos hacer que si el status que nos mandan no coincide con ninguno de los del map lance una excepcion
         }).accept(existingOrder);
 
+        setCountryAndUserToOrder(existingOrder);
         return orderRepository.save(existingOrder);
     }
 
     private void handleDeliveredStatus(Order order) {
         order.setDateDelivered(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
+
+        int points = order.getOrderedProducts().size();
+        userService.patchFidelityPoints(order.getUserId(), points);
     }
 
     private void handleReturnedStatus(Order order) {
@@ -183,6 +197,9 @@ public class OrderServiceImpl implements OrderService {
 
         updateStockRequests.forEach(request -> restClient.patch()
                 .uri(url + request.getProductId() + "/stock?newStock=" + request.getQuantity()).retrieve().body(UpdateStockRequest.class));
+
+        int points = order.getOrderedProducts().size();
+        userService.patchFidelityPoints(order.getUserId(), -points);
     }
 
     @Override
