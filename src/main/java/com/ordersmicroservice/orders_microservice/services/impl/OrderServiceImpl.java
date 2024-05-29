@@ -45,8 +45,10 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public List<Order> getAllOrders() {
-        return Optional.of(orderRepository.findAll()).filter(orders -> !orders.isEmpty())
+         List<Order> ordersList = Optional.of(orderRepository.findAll()).filter(orders -> !orders.isEmpty())
                 .orElseThrow(() -> new NotFoundException("No orders were found"));
+        ordersList.forEach(this::setCountryAndUserToOrder);
+        return ordersList;
     }
 
     @Override
