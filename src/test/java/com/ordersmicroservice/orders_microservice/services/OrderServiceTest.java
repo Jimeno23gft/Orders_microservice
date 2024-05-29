@@ -69,7 +69,30 @@ class OrderServiceTest {
     @Test
     @DisplayName("Testing get all Orders from Repository Method")
     void testGetAllOrders() {
+
+        UserDto user1 = crearUser001();
+
+        CountryDto country = CountryDto.builder()
+                .id(1L)
+                .name("Colombia")
+                .tax(21F)
+                .prefix("+57")
+                .timeZone("Timezone")
+                .build();
+
+        Address address = Address.builder()
+                .orderId(1L)
+                .cityName("Barranquilla")
+                .zipCode("46134")
+                .street("Calle 69")
+                .number(43)
+                .door("2")
+                .countryId(1L)
+                .build();
+
         when(orderRepository.findAll()).thenReturn(orders);
+        when(userService.getUserById(anyLong())).thenReturn(Optional.of(user1));
+        when(countryService.getCountryById(address.getCountryId())).thenReturn(Optional.ofNullable(country));
 
         List<Order> savedOrders = orderService.getAllOrders();
         assertThat(savedOrders)
