@@ -1,6 +1,7 @@
 package com.ordersmicroservice.orders_microservice.services.impl;
 
 import com.ordersmicroservice.orders_microservice.dto.CountryDto;
+import com.ordersmicroservice.orders_microservice.dto.UserDto;
 import com.ordersmicroservice.orders_microservice.exception.RetryFailedConnection;
 import com.ordersmicroservice.orders_microservice.services.CountryService;
 import org.springframework.retry.annotation.Backoff;
@@ -16,7 +17,7 @@ public class CountryServiceImpl implements CountryService {
     private final RestClient restClient;
     public String countrytUri = "http://localhost:8082/country/";
 
-    public CountryServiceImpl(RestClient restClient) {
+    public CountryServiceImpl( RestClient restClient) {
         this.restClient = restClient;
     }
     @Retryable(retryFor = RetryFailedConnection.class, maxAttempts = 2, backoff = @Backoff(delay = 2000))
@@ -27,7 +28,8 @@ public class CountryServiceImpl implements CountryService {
                 .body(CountryDto.class));
     }
     @Recover
-    public String recover(RetryFailedConnection exception){
-        return "Server down try later";
+    public Optional<CountryDto> recover(RetryFailedConnection exception, Long userId){
+        System.out.println("Recovery method executed for userId: " + userId);
+        return Optional.empty();
     }
 }

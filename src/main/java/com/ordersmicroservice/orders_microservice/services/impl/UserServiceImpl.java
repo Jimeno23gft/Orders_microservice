@@ -21,16 +21,18 @@ public class UserServiceImpl implements UserService {
     public UserServiceImpl(RestClient restClient) {
         this.restClient = restClient;
     }
-    @Retryable(
-            value = {RetryFailedConnection.class},
-            maxAttempts = 2,
-            backoff = @Backoff(delay = 2000),
-            exclude = HttpClientErrorException.class)
+    @Retryable(retryFor = RetryFailedConnection.class, maxAttempts = 2, backoff = @Backoff(delay = 2000))
     public Optional<UserDto> getUserById(Long userId) {
         return Optional.ofNullable(restClient.get()
                 .uri(userUri + "/{id}", userId)
                 .retrieve()
                 .body(UserDto.class));
+    }
+
+    @Recover
+    public Optional<UserDto> recover(RetryFailedConnection exception, Long userId){
+        System.out.println("Recovery method executed for userId: " + userId);
+        return Optional.empty();
     }
 
     public void patchFidelityPoints(Long userId, int points){
@@ -40,11 +42,5 @@ public class UserServiceImpl implements UserService {
                 .uri(url + "{id}", userId)
                 .body(points)
                 .retrieve();
-    }
-
-    @Recover
-    public Optional<UserDto> recover(RetryFailedConnection exception, Long userId){
-        System.out.println("Recovery method executed for userId: " + userId);
-        return Optional.empty();
     }
 }

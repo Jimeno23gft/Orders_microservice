@@ -19,22 +19,18 @@ import java.util.Optional;
 @Service
 public class CartServiceImpl implements CartService {
 
-    @Getter
-    @Setter
-    private String cartUri = "http://localhost:8081/carts/";
+
+    public String cartUri = "/carts/";
+
 
     private final RestClient restClient;
 
-    public CartServiceImpl(RestClient restClient) {
-        this.restClient = restClient;
+    public CartServiceImpl(RestClient.Builder restClient) {
+        this.restClient = restClient.build();
     }
 
 
-    @Retryable(
-            value = {RetryFailedConnection.class},
-            maxAttempts = 2,
-            backoff = @Backoff(delay = 2000),
-            exclude = HttpClientErrorException.class)
+    @Retryable(retryFor = RetryFailedConnection.class, maxAttempts = 2, backoff = @Backoff(delay = 2000))
     public Optional<CartDto> getCartById(Long id){
 
         return Optional.ofNullable(restClient.get()
@@ -42,18 +38,18 @@ public class CartServiceImpl implements CartService {
                 .retrieve()
                 .body(CartDto.class));
     }
-
-    public void emptyCartProductsById(Long id){
-
-        restClient.delete()
-                .uri(cartUri + "/{id}", id)
-                .retrieve()
-                .body(Void.class);
-    }
     @Recover
     public Optional<CartDto> recover(RetryFailedConnection exception, Long userId){
         System.out.println("Recovery method executed for userId: " + userId);
         return Optional.empty(); // or any other default/fallback logic
+    }
+
+    public void emptyCartProductsById(Long id){
+
+        restClient.delete()
+                .uri(cartUri + id)
+                .retrieve()
+                .body(Void.class);
     }
 }
 

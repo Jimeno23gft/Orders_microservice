@@ -25,5 +25,5 @@ server:
         context-path: /
     port: ${PORT:8080}
 cart:
-    service:
-        url: http://localhost:8081
+    url: http://localhost:8081
+
