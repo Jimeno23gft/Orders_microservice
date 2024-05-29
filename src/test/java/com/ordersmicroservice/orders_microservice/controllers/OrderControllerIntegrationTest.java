@@ -115,9 +115,6 @@ class OrderControllerIntegrationTest {
         CreditCardDto creditCardDto = new CreditCardDto(new BigInteger("1111111111"),"09/25", 222);
 
 
-        System.out.println("MockWebServer is running on port: " + mockWebServer.getPort());
-
-
 
         webTestClient.post().uri("/orders/{id}", cartId )
                 .bodyValue(creditCardDto)
