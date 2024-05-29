@@ -92,7 +92,7 @@ public class OrderServiceImpl implements OrderService {
         try {
             user = userService.getUserById(cart.getUserId());
         } catch (Exception ex) {
-            throw new NotFoundException("User not found with ID: " + cartId);
+            throw new NotFoundException("User not found with ID: " + cart.getUserId());
         }
 
 

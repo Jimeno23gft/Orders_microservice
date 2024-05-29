@@ -1,44 +1,57 @@
 package com.ordersmicroservice.orders_microservice.controllers;
 
-import com.ordersmicroservice.orders_microservice.dto.Status;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.ordersmicroservice.orders_microservice.dto.*;
+import com.ordersmicroservice.orders_microservice.models.Address;
 import com.ordersmicroservice.orders_microservice.models.Order;
-import com.ordersmicroservice.orders_microservice.models.OrderedProduct;
-import com.ordersmicroservice.orders_microservice.repositories.OrderRepository;
-import com.ordersmicroservice.orders_microservice.services.CartService;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+
+import okhttp3.mockwebserver.MockResponse;
+import okhttp3.mockwebserver.MockWebServer;
+import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.reactive.server.WebTestClient;
 
+import java.io.IOException;
 import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.DEFINED_PORT;
 
-@SpringBootTest(webEnvironment = DEFINED_PORT)
- class OrderControllerIntegrationTest {
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@ActiveProfiles("test")
+class OrderControllerIntegrationTest {
 
 
     @Autowired
     private WebTestClient webTestClient;
 
-    @Autowired
-    private CartService cartService;
-
-    @Autowired
-    private OrderRepository orderRepository;
+    private static MockWebServer mockWebServer;
 
     private Order expectedOrder;
 
+    @BeforeAll
+    static void beforeAll() throws IOException {
+        mockWebServer = new MockWebServer();
+        mockWebServer.start(8081);
+    }
+
+    @AfterAll
+    static void afterAll() throws IOException {
+        mockWebServer.shutdown();
+
+    }
+
     @BeforeEach
-    void setUp(){
+    void setUp() throws IOException {
+
 
         expectedOrder = Order.builder()
                 .id(7L)
@@ -49,34 +62,99 @@ import static org.springframework.boot.test.context.SpringBootTest.WebEnvironmen
                 .dateOrdered(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")))
                 .dateDelivered(null) // Since dateDelivered is null initially
                 .totalPrice(new BigDecimal("323.3"))
-                .orderedProducts(Arrays.asList(
-                        OrderedProduct.builder()
-                                .productId(1L)
-                                .name("Apple MacBook Pro")
-                                .description("Latest model of Apple MacBook Pro 16 inch.")
-                                .price(new BigDecimal("2399.99"))
-                                .quantity(1)
-                                .build(),
-                        OrderedProduct.builder()
-                                .productId(2L)
-                                .name("Logitech Mouse")
-                                .description("Wireless Logitech Mouse M235")
-                                .price(new BigDecimal("29.99"))
-                                .quantity(2)
-                                .build()
-                ))
-                .build();
+                .orderedProducts(new ArrayList<>()).build();
     }
 
-    @Disabled("Test requires cart microservice to be executed")
-    @DisplayName("Integration test that proves the correct creation of an order with cartId an the Products from cart_microservice")
+
+
     @Test
-    void addOrderIntegrationTest() {
+    void addOrderIntegrationTest() throws JsonProcessingException {
+
+
+        List<CartProductDto> cartProductDtoList = new ArrayList<>();
+        CartProductDto cartProductDto1 = CartProductDto.builder()
+                .id(1L)
+                .productName("Apple MacBook Pro")
+                .productDescription("Latest model of Apple MacBook Pro 16 inch.")
+                .quantity(1)
+                .price(new BigDecimal("2399.99"))
+                .build();
+        CartProductDto cartProductDto2 = CartProductDto.builder()
+                .id(2L)
+                .productName("Logitech Mouse")
+                .productDescription("Wireless Logitech Mouse M235")
+                .price(new BigDecimal("29.99"))
+                .quantity(2)
+                .build();
+
+        cartProductDtoList.add(cartProductDto1);
+        cartProductDtoList.add(cartProductDto2);
+
+        CartDto cartDto = CartDto.builder()
+                .id(1L)
+                .userId(101L)
+                .totalPrice(new BigDecimal("323.3"))
+                .cartProducts(cartProductDtoList)
+                .build();
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        String cartJson = objectMapper.writeValueAsString(cartDto);
+
+        mockWebServer.enqueue(new MockResponse()
+                .setBody(cartJson)
+                .addHeader("Content-Type", "application/json"));
+
+        UserDto userDto = new UserDto();
+        userDto.setId(cartDto.getUserId());
+        userDto.setName("John");
+        userDto.setLastName("Doe");
+        userDto.setEmail("john.doe@example.com");
+        userDto.setPhone("1234567890");
+
+        ObjectMapper objectMapper2 = new ObjectMapper();
+        String userJson = objectMapper2.writeValueAsString(userDto);
+
+        mockWebServer.enqueue(new MockResponse()
+                .setBody(userJson)
+                .addHeader("Content-Type", "application/json"));
+
+
+        CountryDto countryDto = new CountryDto();
+
+        ObjectMapper objectMapper3 = new ObjectMapper();
+        String countryJson = objectMapper.writeValueAsString(countryDto);
+
+
+        mockWebServer.enqueue(new MockResponse()
+                .setBody(countryJson)
+                .addHeader("Content-Type", "application/json"));
+
+
+
+        mockWebServer.enqueue(new MockResponse()
+                .setBody(countryJson)
+                .addHeader("Content-Type", "application/json"));
+
+
+
+
+
+
+        mockWebServer.enqueue(new MockResponse()
+                .setStatus("HTTP/1.1 204 No Content")
+                .addHeader("Content-Type", "application/json"));
+
 
         Long cartId = 1L;
+        CreditCardDto creditCardDto = new CreditCardDto(new BigInteger("1111111111"),"09/25", 222);
 
-        webTestClient.post().uri("http://localhost:8080/orders/{id}", cartId )
-                .bodyValue(expectedOrder)
+
+        System.out.println("MockWebServer is running on port: " + mockWebServer.getPort());
+
+
+
+        webTestClient.post().uri("/orders/{id}", cartId )
+                .bodyValue(creditCardDto)
                 .exchange()
                 .expectStatus().isCreated()
                 .expectHeader().contentType(MediaType.APPLICATION_JSON)
@@ -89,12 +167,5 @@ import static org.springframework.boot.test.context.SpringBootTest.WebEnvironmen
                     assertThat(responseOrder.getOrderedProducts().get(0).getName()).isEqualTo("Apple MacBook Pro");
                     assertThat(responseOrder.getOrderedProducts().get(1).getName()).isEqualTo("Logitech Mouse");
                 });
-
-        webTestClient.get().uri("http://localhost:8083/catalog/{id}", cartId)
-                .exchange()
-                .expectStatus().isOk()
-                .expectBody()
-                .jsonPath("$.cartProducts").isEmpty();
-
     }
 }
