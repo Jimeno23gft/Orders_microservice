@@ -53,7 +53,7 @@ class CountryServiceTest {
                 .setBody(countryJson)
                 .addHeader("Content-Type", "application/json"));
 
-        CountryDto retrievedCountryDto = countryServiceImpl.getCountryById(1L);
+        CountryDto retrievedCountryDto = countryServiceImpl.getCountryById(1L).orElseThrow();
 
         assertThat(retrievedCountryDto).isNotNull();
         assertThat(retrievedCountryDto.getId()).isEqualTo(1L);
