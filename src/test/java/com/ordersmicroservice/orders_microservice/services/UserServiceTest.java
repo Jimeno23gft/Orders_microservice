@@ -45,7 +45,8 @@ class UserServiceTest {
                 .setBody(userJson)
                 .addHeader("Content-Type", "application/json"));
 
-        UserDto retrievedUserDto = userServiceImpl.getUserById(100L);
+        UserDto retrievedUserDto = userServiceImpl.getUserById(100L).orElseThrow()
+                ;
 
         assertThat(retrievedUserDto).isNotNull();
         assertThat(retrievedUserDto.getId()).isEqualTo(100L);
