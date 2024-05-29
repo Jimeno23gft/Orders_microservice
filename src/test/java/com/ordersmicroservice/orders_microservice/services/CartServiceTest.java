@@ -35,7 +35,7 @@ class CartServiceTest {
 
     private static MockWebServer mockWebServer;
 
-
+/*
     @BeforeAll
     static void beforeAll() throws IOException {
         mockWebServer = new MockWebServer();
@@ -44,6 +44,18 @@ class CartServiceTest {
 
     @AfterAll
     static void afterAll() throws IOException {
+        mockWebServer.shutdown();
+
+    }*/
+
+    @BeforeEach
+    void beforeEach() throws IOException {
+        mockWebServer = new MockWebServer();
+        mockWebServer.start(8081);
+    }
+
+    @AfterEach
+    void afterEach() throws IOException {
         mockWebServer.shutdown();
 
     }
@@ -131,17 +143,17 @@ class CartServiceTest {
     @DisplayName("When deleting the products in a Cart, the cart must get empty")
     void testEmptyCart() throws InterruptedException {
 
+        CartDto cartDto = buildCart();
 
-
-        Long cartId = 1L;
 
         mockWebServer.enqueue(new MockResponse()
                 .setResponseCode(200));
 
-        cartService.emptyCartProductsById(cartId);
+        cartService.emptyCartProductsById(cartDto.getId());
         var recordedRequest = mockWebServer.takeRequest();
 
         assertThat(recordedRequest.getMethod()).isEqualTo("DELETE");
-        assertThat(recordedRequest.getPath()).isEqualTo("/carts/" + cartId);
+        assertThat(recordedRequest.getPath()).isEqualTo("/carts/" + cartDto.getId());
     }
 }
+

@@ -35,8 +35,9 @@ public class CartServiceImpl implements CartService {
     public void emptyCartProductsById(Long id){
 
         restClient.delete()
-                .uri(cartUri + "/{id}", id)
-                .retrieve();
+                .uri(cartUri + id)
+                .retrieve()
+                .body(Void.class);
     }
 }
 

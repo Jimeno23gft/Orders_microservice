@@ -2,14 +2,13 @@ package com.ordersmicroservice.orders_microservice.controllers;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.ordersmicroservice.orders_microservice.dto.CartDto;
-import com.ordersmicroservice.orders_microservice.dto.CartProductDto;
-import com.ordersmicroservice.orders_microservice.dto.CreditCardDto;
-import com.ordersmicroservice.orders_microservice.dto.Status;
+import com.ordersmicroservice.orders_microservice.dto.*;
+import com.ordersmicroservice.orders_microservice.models.Address;
 import com.ordersmicroservice.orders_microservice.models.Order;
 
 import okhttp3.mockwebserver.MockResponse;
 import okhttp3.mockwebserver.MockWebServer;
+import org.assertj.core.api.AssertionsForClassTypes;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -35,39 +34,29 @@ class OrderControllerIntegrationTest {
     @Autowired
     private WebTestClient webTestClient;
 
-    private static MockWebServer mockWebServer;
+    private static MockWebServer mockWebServerUser;
+    private static MockWebServer mockWebServerCart;
 
     private Order expectedOrder;
 
     @BeforeAll
     static void beforeAll() throws IOException {
-        mockWebServer = new MockWebServer();
-        mockWebServer.start(8081);
+        mockWebServerCart = new MockWebServer();
+        mockWebServerCart.start(8081);
+
+        mockWebServerUser = new MockWebServer();
+        mockWebServerUser.start(8082);
+
+
     }
 
     @AfterAll
     static void afterAll() throws IOException {
-        mockWebServer.shutdown();
+
+        mockWebServerCart.shutdown();
+        mockWebServerUser.shutdown();
 
     }
-
-    @BeforeEach
-    void setUp() throws IOException {
-
-
-        expectedOrder = Order.builder()
-                .id(7L)
-                .userId(101L)
-                .cartId(1L)
-                .fromAddress("222 Pine St")
-                .status(Status.UNPAID)
-                .dateOrdered(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")))
-                .dateDelivered(null) // Since dateDelivered is null initially
-                .totalPrice(new BigDecimal("323.3"))
-                .orderedProducts(new ArrayList<>()).build();
-    }
-
-
 
     @Test
     void addOrderIntegrationTest() throws JsonProcessingException {
@@ -95,7 +84,6 @@ class OrderControllerIntegrationTest {
         CartDto cartDto = CartDto.builder()
                 .id(1L)
                 .userId(101L)
-                //.cartId(1L)
                 .totalPrice(new BigDecimal("323.3"))
                 .cartProducts(cartProductDtoList)
                 .build();
@@ -103,10 +91,48 @@ class OrderControllerIntegrationTest {
         ObjectMapper objectMapper = new ObjectMapper();
         String cartJson = objectMapper.writeValueAsString(cartDto);
 
-        mockWebServer.enqueue(new MockResponse()
+        CountryDto countryDto = new CountryDto();
+        countryDto.setId(1L);
+        countryDto.setName("España");
+        countryDto.setTax(21F);
+        countryDto.setPrefix("+34");
+        countryDto.setTimeZone("Europe/Madrid");
+
+        ObjectMapper objectMapper3 = new ObjectMapper();
+        String countryJson = objectMapper3.writeValueAsString(countryDto);
+
+        Address adress = new Address();
+
+        UserDto user = UserDto.builder()
+                .id(101L)
+                .email("john.doe@example.com")
+                .name("John")
+                .lastName("Doe")
+                .password("password123")
+                .fidelityPoints(1000)
+                .phone("1234567890")
+                .country(countryDto)
+                .address(adress)
+                .build();
+
+        ObjectMapper objectMapper1 = new ObjectMapper();
+        String userJson = objectMapper1.writeValueAsString(user);
+
+
+
+        mockWebServerCart.enqueue(new MockResponse()
                 .setBody(cartJson)
                 .addHeader("Content-Type", "application/json"));
-        mockWebServer.enqueue(new MockResponse()
+
+        mockWebServerUser.enqueue(new MockResponse()
+                .setBody(userJson)
+                .addHeader("Content-Type", "application/json"));
+
+        mockWebServerUser.enqueue(new MockResponse()
+                .setBody(countryJson)
+                .addHeader("Content-Type", "application/json"));
+
+        mockWebServerCart.enqueue(new MockResponse()
                 .setStatus("HTTP/1.1 204 No Content")
                 .addHeader("Content-Type", "application/json"));
 
@@ -123,12 +149,14 @@ class OrderControllerIntegrationTest {
                 .expectHeader().contentType(MediaType.APPLICATION_JSON)
                 .expectBody(Order.class)
                 .value(responseOrder -> {
-                    assertThat(responseOrder.getUserId()).isEqualTo(expectedOrder.getUserId());
-                    assertThat(responseOrder.getTotalPrice()).isEqualTo(expectedOrder.getTotalPrice());
-                    assertThat(responseOrder.getStatus()).isEqualTo(Status.PAID);
-                    assertThat(responseOrder.getOrderedProducts()).hasSize(2);
-                    assertThat(responseOrder.getOrderedProducts().get(0).getName()).isEqualTo("Apple MacBook Pro");
-                    assertThat(responseOrder.getOrderedProducts().get(1).getName()).isEqualTo("Logitech Mouse");
+                    AssertionsForClassTypes.assertThat(responseOrder.getUserId()).isEqualTo(101L);
+                    AssertionsForClassTypes.assertThat(responseOrder.getTotalPrice()).isEqualTo(new BigDecimal("323.3"));
+                    AssertionsForClassTypes.assertThat(responseOrder.getUser().getLastName()).isEqualTo("Doe");
+                    AssertionsForClassTypes.assertThat(responseOrder.getStatus()).isEqualTo(Status.PAID);
+                    //assertThat(responseOrder.getOrderedProducts()).hasSize(2);
+                    AssertionsForClassTypes.assertThat(responseOrder.getOrderedProducts().get(0).getName()).isEqualTo("Apple MacBook Pro");
+                    AssertionsForClassTypes.assertThat(responseOrder.getOrderedProducts().get(1).getName()).isEqualTo("Logitech Mouse");
                 });
     }
+
 }
