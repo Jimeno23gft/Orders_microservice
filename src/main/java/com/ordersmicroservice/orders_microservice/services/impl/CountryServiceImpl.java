@@ -1,8 +1,6 @@
 package com.ordersmicroservice.orders_microservice.services.impl;
-
 import com.ordersmicroservice.orders_microservice.dto.CountryDto;
 import com.ordersmicroservice.orders_microservice.services.CountryService;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClient;
 
@@ -16,7 +14,6 @@ public class CountryServiceImpl implements CountryService {
     public CountryServiceImpl( RestClient restClient) {
         this.restClient = restClient;
     }
-
     public Optional<CountryDto> getCountryById(Long countryId) {
         return Optional.ofNullable(restClient.get()
                 .uri(countrytUri + "/{id}", countryId)
