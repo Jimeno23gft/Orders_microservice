@@ -6,6 +6,7 @@ import com.ordersmicroservice.orders_microservice.dto.CountryDto;
 import com.ordersmicroservice.orders_microservice.dto.UserDto;
 import com.ordersmicroservice.orders_microservice.models.Address;
 import com.ordersmicroservice.orders_microservice.services.impl.UserServiceImpl;
+import okhttp3.mockwebserver.RecordedRequest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -140,15 +141,37 @@ class UserServiceTest {
 
     @Test
     @DisplayName("Successfully patches user fidelity points")
-    void testPatchFidelityPointsSuccess() {
+    void testPatchFidelityPointsSuccess() throws InterruptedException, IOException {
+
+        mockWebServer = new MockWebServer();
+        mockWebServer.start(8082);
+
+
+        RestClient restClient = RestClient.builder()
+                .baseUrl(mockWebServer.url("/fidelitypoints/").toString())
+                .build();
+
+        userServiceImpl = new UserServiceImpl(restClient);
+
+        int points = 500;
 
         mockWebServer.enqueue(new MockResponse()
-                .setResponseCode(200));
+                .setBody("{\"message\":\"success\"}")
+                .setResponseCode(200)
+                .addHeader("Content-Type", "application/json"));
 
-        assertDoesNotThrow(() -> userServiceImpl.patchFidelityPoints(100L, 500));
+
+        assertDoesNotThrow(() -> userServiceImpl.patchFidelityPoints(100L, points));
+
+        RecordedRequest recordedRequest = mockWebServer.takeRequest();
+        assertThat(recordedRequest.getMethod()).isEqualTo("PATCH");
+        assertThat(recordedRequest.getPath()).isEqualTo("/fidelitypoints/100");
+        assertThat(recordedRequest.getBody().readUtf8()).isEqualTo(String.valueOf(points));
+
+
+        assertThat(recordedRequest.getHeader("Content-Type")).isEqualTo("application/json");
+
     }
-
-
 
 
     @AfterEach

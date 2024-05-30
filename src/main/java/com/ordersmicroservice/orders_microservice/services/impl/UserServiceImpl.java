@@ -24,11 +24,13 @@ public class UserServiceImpl implements UserService {
     }
 
     public void patchFidelityPoints(Long userId, int points){
+
         String url = "http://localhost:8082/fidelitypoints/";
 
         restClient.patch()
-                .uri(url + "/{id}", userId)
+                .uri(url + userId)
                 .body(points)
+                .header("Content-Type", "application/json")
                 .retrieve();
     }
 }
