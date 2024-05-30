@@ -190,12 +190,10 @@ public class OrderServiceImpl implements OrderService {
         Map<Status, Consumer<Order>> statusActions = Map.of(
                 Status.DELIVERED, this::handleDeliveredStatus,
                 Status.RETURNED, this::handleReturnedStatus
-                //TODO: Aqui podemos controlar mas status si hiciera falta y hacer un metodo para cada uno
         );
 
         statusActions.getOrDefault(updatedStatus, order -> {
 
-            //TODO: Aqui si en un futuro queremos, podemos hacer que si el status que nos mandan no coincide con ninguno de los del map lance una excepcion
         }).accept(existingOrder);
 
         setCountryAndUserToOrder(existingOrder);
@@ -215,7 +213,7 @@ public class OrderServiceImpl implements OrderService {
                 .toList();
 
         String url = "https://catalog-workshop-yequy5sv5a-uc.a.run.app/catalog/products/newStock/";
-        //String url = "http://localhost:8083/catalog/products/";
+        //String url = "http://localhost:8083/catalog/products/"
 
         updateStockRequests.forEach(request -> restClient.patch()
                 .uri(url + request.getProductId() + "/quantity?quantity=" + request.getQuantity()).retrieve().body(UpdateStockRequest.class));

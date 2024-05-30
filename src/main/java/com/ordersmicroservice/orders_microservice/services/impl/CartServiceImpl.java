@@ -10,7 +10,7 @@ import java.util.Optional;
 public class CartServiceImpl implements CartService {
 
 
-    public String cartUri = "/carts/";
+    public static final String CART_URI = "/carts/";
 
 
     private final RestClient restClient;
@@ -23,7 +23,7 @@ public class CartServiceImpl implements CartService {
     public Optional<CartDto> getCartById(Long id){
 
         return Optional.ofNullable(restClient.get()
-                .uri(cartUri + id)
+                .uri(CART_URI + id)
                 .retrieve()
                 .body(CartDto.class));
     }
@@ -31,7 +31,7 @@ public class CartServiceImpl implements CartService {
     public void emptyCartProductsById(Long id){
 
         restClient.delete()
-                .uri(cartUri + id)
+                .uri(CART_URI + id)
                 .retrieve()
                 .body(Void.class);
     }

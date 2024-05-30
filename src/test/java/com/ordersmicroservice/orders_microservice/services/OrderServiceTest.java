@@ -30,7 +30,6 @@ import static com.ordersmicroservice.orders_microservice.Datos.*;
 import static com.ordersmicroservice.orders_microservice.dto.Status.IN_DELIVERY;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -242,14 +241,12 @@ class OrderServiceTest {
         assertThat(savedOrder.getDateOrdered()).isNotNull();
         assertThat(savedOrder.getDateDelivered()).isNull();
 
-
         List<OrderedProduct> orderedProducts = savedOrder.getOrderedProducts();
         assertThat(orderedProducts).isNotNull().hasSameSizeAs(cartProducts);
 
         for (int i = 0; i < cartProducts.size(); i++) {
             CartProductDto cartProduct = cartProducts.get(i);
             OrderedProduct orderedProduct = orderedProducts.get(i);
-
 
             assertThat(orderedProduct.getProductId()).isEqualTo(cartProduct.getId());
             assertThat(orderedProduct.getName()).isEqualTo(cartProduct.getProductName());
@@ -266,7 +263,8 @@ class OrderServiceTest {
         Long cartId = 1L;
         when(cartService.getCartById(cartId)).thenReturn(Optional.empty());
 
-        assertThatThrownBy(() -> orderService.addOrder(cartId, new CreditCardDto()))
+        CreditCardDto creditCardDto = new CreditCardDto();
+        assertThatThrownBy(() -> orderService.addOrder(cartId, creditCardDto))
                 .isInstanceOf(NotFoundException.class);
 
         verify(cartService, times(1)).getCartById(cartId);
@@ -280,7 +278,8 @@ class OrderServiceTest {
         emptyCart.setCartProducts(Collections.emptyList());
         when(cartService.getCartById(cartId)).thenReturn(Optional.of(emptyCart));
 
-        assertThatThrownBy(() -> orderService.addOrder(cartId, new CreditCardDto()))
+        CreditCardDto creditCardDto = new CreditCardDto();
+        assertThatThrownBy(() -> orderService.addOrder(cartId, creditCardDto))
                 .isInstanceOf(EmptyCartException.class);
 
         verify(cartService, times(1)).getCartById(cartId);
@@ -387,25 +386,28 @@ class OrderServiceTest {
         RestClient.RequestBodyUriSpec requestBodyUriSpec = mock(RestClient.RequestBodyUriSpec.class);
         RestClient.ResponseSpec responseSpec = mock(RestClient.ResponseSpec.class);
 
-        Order initialOrder = new Order();
-        OrderedProduct product1 = new OrderedProduct();
-        OrderedProduct product2 = new OrderedProduct();
-        product1.setProductId(1L);
-        product2.setProductId(2L);
-        product1.setQuantity(5);
-        product2.setQuantity(3);
-        initialOrder.setId(1L);
-        initialOrder.setStatus(IN_DELIVERY);
-        initialOrder.setUserId(1L);
-        initialOrder.setCountryId(1L);
-        initialOrder.setOrderedProducts(Arrays.asList(
-                product1,
-                product2
-        ));
+        Order initialOrder = Order.builder()
+                .id(1L)
+                .status(IN_DELIVERY)
+                .userId(1L)
+                .countryId(1L)
+                .orderedProducts(
+                        Arrays.asList(
+                                OrderedProduct.builder()
+                                        .productId(1L)
+                                        .quantity(5)
+                                        .build(),
+                                OrderedProduct.builder()
+                                        .productId(2L)
+                                        .quantity(3)
+                                        .build())
+                )
+                .build();
 
-        CountryDto country2 = new CountryDto();
-        country.setId(1L);
-        country.setName("Country 1");
+        CountryDto country2 = CountryDto.builder()
+                .id(1L)
+                .name("Country 1")
+                .build();
 
         when(restClient.patch()).thenReturn(requestBodyUriSpec);
         when(requestBodyUriSpec.uri(anyString())).thenReturn(requestBodyUriSpec);

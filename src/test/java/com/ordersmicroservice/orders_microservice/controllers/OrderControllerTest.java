@@ -4,7 +4,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ordersmicroservice.orders_microservice.dto.CreditCardDto;
 import com.ordersmicroservice.orders_microservice.dto.Status;
 import com.ordersmicroservice.orders_microservice.dto.StatusUpdateDto;
-import com.ordersmicroservice.orders_microservice.dto.UserDto;
 import com.ordersmicroservice.orders_microservice.exception.NotFoundException;
 import com.ordersmicroservice.orders_microservice.models.Order;
 import com.ordersmicroservice.orders_microservice.services.OrderService;
