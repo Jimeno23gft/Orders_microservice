@@ -27,7 +27,7 @@ public class UserServiceImpl implements UserService {
         String url = "http://localhost:8082/fidelitypoints/";
 
         restClient.patch()
-                .uri(url + "{id}", userId)
+                .uri(url + "/{id}", userId)
                 .body(points)
                 .retrieve();
     }

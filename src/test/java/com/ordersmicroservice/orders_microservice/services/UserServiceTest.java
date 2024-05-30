@@ -24,6 +24,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class UserServiceTest {
     private MockWebServer mockWebServer;
+
     private UserServiceImpl userServiceImpl;
 
     @BeforeEach
@@ -34,6 +35,7 @@ class UserServiceTest {
                 .baseUrl(mockWebServer.url("/").toString())
                 .build();
         userServiceImpl = new UserServiceImpl(restClient);
+
     }
 
     @Test
@@ -135,6 +137,18 @@ class UserServiceTest {
                 .extracting(ex -> ((RestClientResponseException) ex).getStatusCode())
                 .isEqualTo(HttpStatus.INTERNAL_SERVER_ERROR);
     }
+
+    @Test
+    @DisplayName("Successfully patches user fidelity points")
+    void testPatchFidelityPointsSuccess() {
+
+        mockWebServer.enqueue(new MockResponse()
+                .setResponseCode(200));
+
+        assertDoesNotThrow(() -> userServiceImpl.patchFidelityPoints(100L, 500));
+    }
+
+
 
 
     @AfterEach
