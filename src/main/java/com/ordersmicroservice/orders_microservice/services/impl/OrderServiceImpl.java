@@ -95,7 +95,21 @@ public class OrderServiceImpl implements OrderService {
         configureCountryAndAddress(order, user);
         cartService.emptyCartProductsById(cartId);
 
+        updateStockForOrderedProducts(orderedProducts);
+
         return orderRepository.save(order);
+    }
+
+    private void updateStockForOrderedProducts(List<OrderedProduct> orderedProducts) {
+        List<UpdateStockRequest> updateStockRequests = orderedProducts.stream()
+                .map(product -> new UpdateStockRequest(product.getProductId(), -product.getQuantity()))
+                .toList();
+
+        String url = "https://catalog-workshop-yequy5sv5a-uc.a.run.app/catalog/products/newStock/";
+
+        updateStockRequests.forEach(request -> restClient.patch()
+                .uri(url + request.getProductId() + "/quantity?quantity=" + request.getQuantity())
+                .retrieve().body(Void.class));
     }
 
     private void configureCountryAndAddress(Order order, UserDto user) {
@@ -195,11 +209,11 @@ public class OrderServiceImpl implements OrderService {
                 .map(product -> new UpdateStockRequest(product.getProductId(), product.getQuantity()))
                 .toList();
 
-        //String url = "https://catalog-workshop-yequy5sv5a-uc.a.run.app/catalog/products/"
-        String url = "http://localhost:8083/catalog/products/";
+        String url = "https://catalog-workshop-yequy5sv5a-uc.a.run.app/catalog/products/newStock/";
+        //String url = "http://localhost:8083/catalog/products/";
 
         updateStockRequests.forEach(request -> restClient.patch()
-                .uri(url + request.getProductId() + "/stock?newStock=" + request.getQuantity()).retrieve().body(UpdateStockRequest.class));
+                .uri(url + request.getProductId() + "/quantity?quantity=" + request.getQuantity()).retrieve().body(UpdateStockRequest.class));
 
         int points = order.getOrderedProducts().size();
         userService.patchFidelityPoints(order.getUserId(), -points);
