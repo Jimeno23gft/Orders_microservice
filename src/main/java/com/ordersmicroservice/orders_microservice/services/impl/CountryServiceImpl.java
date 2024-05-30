@@ -9,7 +9,7 @@ import java.util.Optional;
 @Service
 public class CountryServiceImpl implements CountryService {
     private final RestClient restClient;
-    public String countrytUri = "http://localhost:8082/country/";
+    public String countrytUri = "https://user-microservice-ey3npq3qvq-uc.a.run.app/country/";
 
     public CountryServiceImpl( RestClient restClient) {
         this.restClient = restClient;

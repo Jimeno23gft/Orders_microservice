@@ -186,9 +186,21 @@ class OrderServiceTest {
         Long user_id = 1L;
         BigDecimal totalPrice = new BigDecimal("100.00");
         List<CartProductDto> cartProducts = List.of(
-                new CartProductDto(1L, "Product1", "Description1", 2, new BigDecimal("20.00")),
-                new CartProductDto(2L, "Product2", "Description2", 1, new BigDecimal("30.00"))
-        );
+                CartProductDto.builder()
+                        .id(1L)
+                        .productName("Product1")
+                        .productDescription("Description1")
+                        .quantity(2)
+                        .price(new BigDecimal("20.00"))
+                        .build(),
+                CartProductDto.builder()
+                        .id(2L)
+                        .productName("Product2")
+                        .productDescription("Description2")
+                        .quantity(1)
+                        .price(new BigDecimal("30.00"))
+                        .build()
+                );
         CartDto cartDto = CartDto.builder()
                 .userId(user_id)
                 .cartProducts(cartProducts)

@@ -29,7 +29,6 @@ class CartServiceTest {
 
     @Autowired
     private CartService cartService;
-
     private static MockWebServer mockWebServer;
 
     @BeforeEach
@@ -41,7 +40,6 @@ class CartServiceTest {
     @AfterEach
     void afterEach() throws IOException {
         mockWebServer.shutdown();
-
     }
 
     @Test
@@ -52,7 +50,6 @@ class CartServiceTest {
 
         ObjectMapper objectMapper = new ObjectMapper();
         String cartJson = objectMapper.writeValueAsString(cartDto);
-
 
         mockWebServer.enqueue(new MockResponse()
                 .setBody(cartJson)
@@ -69,26 +66,26 @@ class CartServiceTest {
 
     @NotNull
     private static CartDto buildCart() {
-        CartProductDto cartProductDto = new CartProductDto();
-        cartProductDto.setId(1L);
-        cartProductDto.setProductName("Apple MacBook Pro");
-        cartProductDto.setProductDescription("Latest model of Apple MacBook Pro 16 inch.");
-        cartProductDto.setQuantity(1);
-        cartProductDto.setPrice(new BigDecimal("2399.99"));
+        CartProductDto cartProductDto = CartProductDto.builder()
+                .id(1L)
+                .productName("Apple MacBook Pro")
+                .productDescription("Latest model of Apple MacBook Pro 16 inch.")
+                .quantity(1)
+                .price(new BigDecimal("2399.99"))
+                .build();
 
-        CartDto cartDto = new CartDto();
-        cartDto.setId(1L);
-        cartDto.setUserId(1L);
-        cartDto.setCartProducts(List.of(cartProductDto));
-        cartDto.setTotalPrice(new BigDecimal("2399.99"));
-        return cartDto;
+        return CartDto.builder()
+                .id(1L)
+                .userId(1L)
+                .cartProducts(List.of(cartProductDto))
+                .totalPrice(new BigDecimal("2399.99"))
+                .build();
 
     }
 
     @Test
     @DisplayName("When fetching a non-existent cart by ID, then a 404 error is returned")
     void testGetCartByIdNotFound() {
-
 
         mockWebServer.enqueue(new MockResponse()
                 .setResponseCode(404)
@@ -100,16 +97,12 @@ class CartServiceTest {
                 .hasMessageContaining("Cart not found")
                 .extracting(ex -> ((RestClientResponseException) ex).getStatusCode())
                 .isEqualTo(HttpStatus.NOT_FOUND);
-
     }
 
 
     @Test
     @DisplayName("When fetching a Cart by ID and an internal server error occurs, then a 500 error is returned")
     void testGetCartByIdServerError() {
-
-
-
         mockWebServer.enqueue(new MockResponse()
                 .setResponseCode(500)
                 .setBody("Internal Server Error")
@@ -128,7 +121,6 @@ class CartServiceTest {
     void testEmptyCart() throws InterruptedException {
 
         CartDto cartDto = buildCart();
-
 
         mockWebServer.enqueue(new MockResponse()
                 .setResponseCode(200));

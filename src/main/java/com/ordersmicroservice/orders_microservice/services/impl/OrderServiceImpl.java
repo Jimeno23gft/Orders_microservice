@@ -60,7 +60,13 @@ public class OrderServiceImpl implements OrderService {
 
     private void setCountryAndUserToOrder(Order order) {
         UserDto user = userService.getUserById(order.getUserId()).orElseThrow(() -> new NotFoundException("User not found with ID: " + order.getUserId()));
-        UserResponseDto userResponse = UserResponseDto.fromUserDto(user);
+        UserResponseDto userResponse = UserResponseDto.builder()
+                .id(user.getId())
+                .name(user.getName())
+                .lastName(user.getLastName())
+                .email(user.getEmail())
+                .phone(user.getPhone())
+                .build();
         CountryDto countryDto = countryService.getCountryById(order.getCountryId()).orElseThrow();
         order.setCountry(countryDto);
         order.setUser(userResponse);
@@ -68,7 +74,6 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public List<Order> getAllByUserId(Long userId) {
-
         List<Order> ordersList = orderRepository.findAllByUserId(userId);
         ordersList.forEach(this::setCountryAndUserToOrder);
         return ordersList;

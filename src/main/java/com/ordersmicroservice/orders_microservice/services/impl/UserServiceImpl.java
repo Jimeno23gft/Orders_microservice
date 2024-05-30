@@ -11,7 +11,7 @@ import java.util.Optional;
 public class UserServiceImpl implements UserService {
     private final RestClient restClient;
 
-    public String userUri = "http://localhost:8082/users/";
+    public String userUri = "https://user-microservice-ey3npq3qvq-uc.a.run.app/users/";
 
     public UserServiceImpl(RestClient restClient) {
         this.restClient = restClient;
@@ -24,7 +24,7 @@ public class UserServiceImpl implements UserService {
     }
 
     public void patchFidelityPoints(Long userId, int points){
-        String url = "http://localhost:8082/fidelitypoints/";
+        String url = "https://user-microservice-ey3npq3qvq-uc.a.run.app/fidelitypoints/";
 
         restClient.patch()
                 .uri(url + "{id}", userId)
