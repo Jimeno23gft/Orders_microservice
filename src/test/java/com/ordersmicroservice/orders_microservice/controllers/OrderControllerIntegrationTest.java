@@ -39,26 +39,25 @@ class OrderControllerIntegrationTest {
 
     private Order expectedOrder;
 
-    @BeforeAll
-    static void beforeAll() throws IOException {
+
+    @BeforeEach
+    void beforeEach() throws IOException {
         mockWebServerCart = new MockWebServer();
         mockWebServerCart.start(8081);
 
         mockWebServerUser = new MockWebServer();
         mockWebServerUser.start(8082);
-
-
     }
 
-    @AfterAll
-    static void afterAll() throws IOException {
-
+    @AfterEach
+    void afterEach() throws IOException {
         mockWebServerCart.shutdown();
         mockWebServerUser.shutdown();
-
     }
 
+
     @Test
+    @DisplayName("Integration Test for Adding an Order Successfully")
     void addOrderIntegrationTest() throws JsonProcessingException {
 
 
@@ -153,10 +152,30 @@ class OrderControllerIntegrationTest {
                     AssertionsForClassTypes.assertThat(responseOrder.getTotalPrice()).isEqualTo(new BigDecimal("323.3"));
                     AssertionsForClassTypes.assertThat(responseOrder.getUser().getLastName()).isEqualTo("Doe");
                     AssertionsForClassTypes.assertThat(responseOrder.getStatus()).isEqualTo(Status.PAID);
-                    //assertThat(responseOrder.getOrderedProducts()).hasSize(2);
                     AssertionsForClassTypes.assertThat(responseOrder.getOrderedProducts().get(0).getName()).isEqualTo("Apple MacBook Pro");
                     AssertionsForClassTypes.assertThat(responseOrder.getOrderedProducts().get(1).getName()).isEqualTo("Logitech Mouse");
                 });
     }
+
+    @Test
+    @DisplayName("Handling Server Error on Order Creation")
+    void addOrderServerErrorTest() throws JsonProcessingException {
+        Long cartId = 1L;
+        CreditCardDto creditCardDto = new CreditCardDto(new BigInteger("1111111111"), "09/25", 222);
+
+
+        mockWebServerCart.enqueue(new MockResponse()
+                .setResponseCode(500)
+                .setBody("{\"error\":\"Internal Server Error\"}")
+                .addHeader("Content-Type", "application/json"));
+
+        webTestClient.post().uri("/orders/{id}", cartId)
+                .bodyValue(creditCardDto)
+                .exchange()
+                .expectStatus().is5xxServerError()
+                .expectBody()
+                .jsonPath("$.error").isEqualTo("Internal Server Error");
+    }
+
 
 }
