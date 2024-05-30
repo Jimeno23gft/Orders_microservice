@@ -25,5 +25,5 @@ server:
         context-path: /
     port: ${PORT:8080}
 cart:
-    url: http://localhost:8081
+    url: https://cart-workshop-6scgqhxaoa-uc.a.run.app
 
