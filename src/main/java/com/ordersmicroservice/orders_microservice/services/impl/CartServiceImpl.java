@@ -1,13 +1,8 @@
 package com.ordersmicroservice.orders_microservice.services.impl;
-
-
 import com.ordersmicroservice.orders_microservice.dto.CartDto;
 import com.ordersmicroservice.orders_microservice.services.CartService;
-import lombok.Getter;
-import lombok.Setter;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClient;
-
 import java.util.Optional;
 
 
@@ -23,6 +18,7 @@ public class CartServiceImpl implements CartService {
     public CartServiceImpl(RestClient.Builder restClient) {
         this.restClient = restClient.build();
     }
+
 
     public Optional<CartDto> getCartById(Long id){
 

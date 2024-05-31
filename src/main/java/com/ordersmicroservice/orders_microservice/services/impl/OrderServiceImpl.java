@@ -45,8 +45,10 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public List<Order> getAllOrders() {
-        return Optional.of(orderRepository.findAll()).filter(orders -> !orders.isEmpty())
+         List<Order> ordersList = Optional.of(orderRepository.findAll()).filter(orders -> !orders.isEmpty())
                 .orElseThrow(() -> new NotFoundException("No orders were found"));
+        ordersList.forEach(this::setCountryAndUserToOrder);
+        return ordersList;
     }
 
     @Override
@@ -55,9 +57,9 @@ public class OrderServiceImpl implements OrderService {
         setCountryAndUserToOrder(order);
         return order;
     }
-
+    //Change to stream and not void
     private void setCountryAndUserToOrder(Order order) {
-        UserDto user = userService.getUserById(order.getUserId()).orElseThrow();
+        UserDto user = userService.getUserById(order.getUserId()).orElseThrow(() -> new NotFoundException("User not found with ID: " + order.getUserId()));
         UserResponseDto userResponse = UserResponseDto.fromUserDto(user);
         CountryDto countryDto = countryService.getCountryById(order.getCountryId()).orElseThrow();
         order.setCountry(countryDto);
@@ -66,10 +68,13 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public List<Order> getAllByUserId(Long userId) {
-        return orderRepository.findAllByUserId(userId);
+
+        List<Order> ordersList = orderRepository.findAllByUserId(userId);
+        ordersList.forEach(this::setCountryAndUserToOrder);
+        return ordersList;
     }
 
-
+    //CreateOrder change name
     @Override
     public Order addOrder(Long cartId, CreditCardDto creditCard) {
         //log.info("Sending credit card info to payment Server...")
@@ -84,7 +89,7 @@ public class OrderServiceImpl implements OrderService {
         UserDto user = getUserFromCart(cart, cartId);
         UserResponseDto userResponse = createUserResponse(user);
 
-
+        //Change to builder
         order.setCartId(cart.getId());
         order.setUserId(cart.getUserId());
         order.setFromAddress(randomAddress());
@@ -99,7 +104,7 @@ public class OrderServiceImpl implements OrderService {
 
         return orderRepository.save(order);
     }
-
+    //Change to builder
     private void configureCountryAndAddress(Order order, UserDto user) {
 
         CountryDto country = countryService.getCountryById(user.getCountry().getId())
@@ -125,7 +130,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     private UserDto getUserFromCart(CartDto cart, Long cartId) {
-        return userService.getUserById(cart.getUserId()).orElseThrow(() -> new NotFoundException("Cart not found with ID: " + cartId));
+        return userService.getUserById(cart.getUserId()).orElseThrow(() -> new NotFoundException("User not found with ID: " + cartId));
     }
 
     private List<OrderedProduct> getOrderedProductsListFromCart(CartDto cart, Order order) {
