@@ -57,7 +57,7 @@ public class OrderServiceImpl implements OrderService {
         setCountryAndUserToOrder(order);
         return order;
     }
-
+    //Change to stream and not void
     private void setCountryAndUserToOrder(Order order) {
         UserDto user = userService.getUserById(order.getUserId()).orElseThrow(() -> new NotFoundException("User not found with ID: " + order.getUserId()));
         UserResponseDto userResponse = UserResponseDto.fromUserDto(user);
@@ -74,7 +74,7 @@ public class OrderServiceImpl implements OrderService {
         return ordersList;
     }
 
-
+    //CreateOrder change name
     @Override
     public Order addOrder(Long cartId, CreditCardDto creditCard) {
         //log.info("Sending credit card info to payment Server...")
@@ -87,7 +87,7 @@ public class OrderServiceImpl implements OrderService {
         UserDto user = getUserFromCart(cart, cartId);
         UserResponseDto userResponse = createUserResponse(user);
 
-
+        //Change to builder
         order.setCartId(cart.getId());
         order.setUserId(cart.getUserId());
         order.setFromAddress(randomAddress());
@@ -102,7 +102,7 @@ public class OrderServiceImpl implements OrderService {
 
         return orderRepository.save(order);
     }
-
+    //Change to builder
     private void configureCountryAndAddress(Order order, UserDto user) {
 
         CountryDto country = countryService.getCountryById(user.getCountry().getId())
