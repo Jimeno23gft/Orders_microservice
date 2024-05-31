@@ -1,9 +1,9 @@
 
 s
-java:S1128"QRemove this unused import 'com.ordersmicroservice.orders_microservice.dto.Order'.(¿¶Ğ¬øÿÿÿÿ8×øÄ’÷1
+java:S1128"QRemove this unused import 'com.ordersmicroservice.orders_microservice.dto.Order'.(¿¶Ğ¬øÿÿÿÿ8ö†‘ëü1
 ]
-java:S1128"@Remove this unused import 'org.springframework.beans.BeanUtils'.(ŠğÄÜ8ØøÄ’÷1
+java:S1128"@Remove this unused import 'org.springframework.beans.BeanUtils'.(ŠğÄÜ8ø†‘ëü1
 u
-java:S1128	"SRemove this unused import 'org.springframework.beans.factory.annotation.Autowired'.(¡¸Îùÿÿÿÿ8ÙøÄ’÷1
+java:S1128	"SRemove this unused import 'org.springframework.beans.factory.annotation.Autowired'.(¡¸Îùÿÿÿÿ8ø†‘ëü1
 w
-java:S1128"URemove this unused import 'org.springframework.transaction.annotation.Transactional'.(ğùçøùÿÿÿÿ8ÚøÄ’÷1
+java:S1128"URemove this unused import 'org.springframework.transaction.annotation.Transactional'.(ğùçøùÿÿÿÿ8ù†‘ëü1
