@@ -21,7 +21,6 @@ public class CartServiceImpl implements CartService {
 
 
     public Optional<CartDto> getCartById(Long id){
-
         return Optional.ofNullable(restClient.get()
                 .uri(CART_URI + id)
                 .retrieve()
@@ -29,7 +28,6 @@ public class CartServiceImpl implements CartService {
     }
 
     public void emptyCartProductsById(Long id){
-
         restClient.delete()
                 .uri(CART_URI + id)
                 .retrieve()

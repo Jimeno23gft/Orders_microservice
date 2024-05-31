@@ -86,7 +86,6 @@ class CartServiceTest {
     @Test
     @DisplayName("When fetching a non-existent cart by ID, then a 404 error is returned")
     void testGetCartByIdNotFound() {
-
         mockWebServer.enqueue(new MockResponse()
                 .setResponseCode(404)
                 .setBody("Cart not found")
@@ -119,7 +118,6 @@ class CartServiceTest {
     @Test
     @DisplayName("When deleting the products in a Cart, the cart must get empty")
     void testEmptyCart() throws InterruptedException {
-
         CartDto cartDto = buildCart();
 
         mockWebServer.enqueue(new MockResponse()

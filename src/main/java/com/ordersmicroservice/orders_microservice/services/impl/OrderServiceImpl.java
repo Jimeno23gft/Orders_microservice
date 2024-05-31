@@ -23,6 +23,8 @@ import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.function.Consumer;
 
+import static com.ordersmicroservice.orders_microservice.dto.Status.UNPAID;
+
 @Service
 public class OrderServiceImpl implements OrderService {
     OrderRepository orderRepository;
@@ -33,7 +35,6 @@ public class OrderServiceImpl implements OrderService {
     CountryService countryService;
     RestClient restClient;
 
-
     public OrderServiceImpl(OrderRepository orderRepository, CartService cartService, UserService userService, AddressService addressService, CountryService countryService, RestClient restClient) {
         this.orderRepository = orderRepository;
         this.cartService = cartService;
@@ -41,6 +42,16 @@ public class OrderServiceImpl implements OrderService {
         this.addressService = addressService;
         this.countryService = countryService;
         this.restClient = restClient;
+    }
+
+    private static OrderedProduct convertToOrderedProduct(CartProductDto cartProductDto) {
+        return OrderedProduct.builder()
+                .productId(cartProductDto.getId())
+                .name(cartProductDto.getProductName())
+                .description(cartProductDto.getProductDescription())
+                .quantity(cartProductDto.getQuantity())
+                .price(cartProductDto.getPrice())
+                .build();
     }
 
     @Override
@@ -84,23 +95,24 @@ public class OrderServiceImpl implements OrderService {
     public Order addOrder(Long cartId, CreditCardDto creditCard) {
         //log.info("Sending credit card info to payment Server...")
         //log.info("Payment with the credit card " + creditCard.getNumber() + " has been made successfully" )
-        Order order = new Order();
+
 
         CartDto cart = checkCartAndCartProducts(cartId);
-        List<OrderedProduct> orderedProducts = getOrderedProductsListFromCart(cart, order);
+        List<OrderedProduct> orderedProducts = getOrderedProductsListFromCart(cart);
 
         UserDto user = getUserFromCart(cart, cartId);
         UserResponseDto userResponse = createUserResponse(user);
 
-
-        order.setCartId(cart.getId());
-        order.setUserId(cart.getUserId());
-        order.setFromAddress(randomAddress());
-        order.setStatus(Status.PAID);
-        order.setDateOrdered(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")));
-        order.setUser(userResponse);
-        order.setOrderedProducts(orderedProducts);
-        order.setTotalPrice(cart.getTotalPrice());
+        Order order = Order.builder()
+                .cartId(cart.getId())
+                .userId(cart.getUserId())
+                .fromAddress(randomAddress())
+                .status(UNPAID)
+                .dateOrdered(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")))
+                .user(userResponse)
+                .orderedProducts(orderedProducts)
+                .totalPrice(cart.getTotalPrice())
+                .build();
 
         configureCountryAndAddress(order, user);
         cartService.emptyCartProductsById(cartId);
@@ -112,7 +124,7 @@ public class OrderServiceImpl implements OrderService {
 
     private void updateStockForOrderedProducts(List<OrderedProduct> orderedProducts) {
         List<UpdateStockRequest> updateStockRequests = orderedProducts.stream()
-                .map(product -> new UpdateStockRequest(product.getProductId(), -product.getQuantity()))
+                .map(product -> new UpdateStockRequest(product.getProductId(), product.getQuantity() * (-1)))
                 .toList();
 
         String url = "https://catalog-workshop-yequy5sv5a-uc.a.run.app/catalog/products/newStock/";
@@ -137,24 +149,24 @@ public class OrderServiceImpl implements OrderService {
     }
 
     private UserResponseDto createUserResponse(UserDto user) {
-        UserResponseDto userResponse = new UserResponseDto();
-        userResponse.setId(user.getId());
-        userResponse.setName(user.getName());
-        userResponse.setLastName(user.getLastName());
-        userResponse.setEmail(user.getEmail());
-        userResponse.setPhone(user.getPhone());
-        return userResponse;
+        return UserResponseDto.builder()
+                .id(user.getId())
+                .name(user.getName())
+                .lastName(user.getLastName())
+                .email(user.getEmail())
+                .phone(user.getPhone())
+                .build();
     }
 
     private UserDto getUserFromCart(CartDto cart, Long cartId) {
         return userService.getUserById(cart.getUserId()).orElseThrow(() -> new NotFoundException("User not found with ID: " + cartId));
     }
 
-    private List<OrderedProduct> getOrderedProductsListFromCart(CartDto cart, Order order) {
+    private List<OrderedProduct> getOrderedProductsListFromCart(CartDto cart) {
         List<CartProductDto> cartProducts = cart.getCartProducts();
 
         return new ArrayList<>(cartProducts.stream()
-                .map(cartProductDto -> convertToOrderedProduct(cartProductDto, order))
+                .map(OrderServiceImpl::convertToOrderedProduct)
                 .toList());
     }
 
@@ -166,17 +178,6 @@ public class OrderServiceImpl implements OrderService {
             throw new EmptyCartException("Empty cart, order not made");
         }
         return cart;
-    }
-
-    private OrderedProduct convertToOrderedProduct(CartProductDto cartProductDto, Order order) {
-        return OrderedProduct.builder()
-                .order(order)
-                .productId(cartProductDto.getId())
-                .name(cartProductDto.getProductName())
-                .description(cartProductDto.getProductDescription())
-                .price(cartProductDto.getPrice())
-                .quantity(cartProductDto.getQuantity())
-                .build();
     }
 
     private String randomAddress() {
@@ -224,7 +225,7 @@ public class OrderServiceImpl implements OrderService {
                 .uri(url + request.getProductId() + "/quantity?quantity=" + request.getQuantity()).retrieve().body(UpdateStockRequest.class));
 
         int points = order.getOrderedProducts().size();
-        userService.patchFidelityPoints(order.getUserId(), -points);
+        userService.patchFidelityPoints(order.getUserId(), points * (-1));
     }
 
     @Override

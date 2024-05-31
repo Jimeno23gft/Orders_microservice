@@ -235,12 +235,11 @@ class OrderServiceTest {
                 .country(country)
                 .build();
 
-
         when(cartService.getCartById(cartId)).thenReturn(Optional.ofNullable(cartDto));
 
         when(orderRepository.save(any(Order.class))).thenAnswer(invocation -> invocation.getArgument(0));
 
-        when(userService.getUserById(cartDto.getUserId())).thenReturn(Optional.ofNullable(userDto));
+        when(userService.getUserById(1L)).thenReturn(Optional.of(userDto));
 
         when(countryService.getCountryById(address.getCountryId())).thenReturn(Optional.ofNullable(country));
 
@@ -265,7 +264,6 @@ class OrderServiceTest {
             assertThat(orderedProduct.getDescription()).isEqualTo(cartProduct.getProductDescription());
             assertThat(orderedProduct.getPrice()).isEqualTo(cartProduct.getPrice());
             assertThat(orderedProduct.getQuantity()).isEqualTo(cartProduct.getQuantity());
-
         }
     }
 

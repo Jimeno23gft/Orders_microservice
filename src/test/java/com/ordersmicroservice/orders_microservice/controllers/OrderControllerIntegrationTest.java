@@ -8,7 +8,6 @@ import com.ordersmicroservice.orders_microservice.models.Order;
 
 import okhttp3.mockwebserver.MockResponse;
 import okhttp3.mockwebserver.MockWebServer;
-import org.assertj.core.api.AssertionsForClassTypes;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -22,6 +21,8 @@ import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles("test")
 class OrderControllerIntegrationTest {
@@ -32,9 +33,6 @@ class OrderControllerIntegrationTest {
 
     private static MockWebServer mockWebServerUser;
     private static MockWebServer mockWebServerCart;
-
-    private Order expectedOrder;
-
 
     @BeforeEach
     void beforeEach() throws IOException {
@@ -144,12 +142,12 @@ class OrderControllerIntegrationTest {
                 .expectHeader().contentType(MediaType.APPLICATION_JSON)
                 .expectBody(Order.class)
                 .value(responseOrder -> {
-                    AssertionsForClassTypes.assertThat(responseOrder.getUserId()).isEqualTo(101L);
-                    AssertionsForClassTypes.assertThat(responseOrder.getTotalPrice()).isEqualTo(new BigDecimal("323.3"));
-                    AssertionsForClassTypes.assertThat(responseOrder.getUser().getLastName()).isEqualTo("Doe");
-                    AssertionsForClassTypes.assertThat(responseOrder.getStatus()).isEqualTo(Status.PAID);
-                    AssertionsForClassTypes.assertThat(responseOrder.getOrderedProducts().get(0).getName()).isEqualTo("Apple MacBook Pro");
-                    AssertionsForClassTypes.assertThat(responseOrder.getOrderedProducts().get(1).getName()).isEqualTo("Logitech Mouse");
+                    assertThat(responseOrder.getUserId()).isEqualTo(101L);
+                    assertThat(responseOrder.getTotalPrice()).isEqualTo(new BigDecimal("323.3"));
+                    assertThat(responseOrder.getUser().getLastName()).isEqualTo("Doe");
+                    assertThat(responseOrder.getStatus()).isEqualTo(Status.PAID);
+                    assertThat(responseOrder.getOrderedProducts().get(0).getName()).isEqualTo("Apple MacBook Pro");
+                    assertThat(responseOrder.getOrderedProducts().get(1).getName()).isEqualTo("Logitech Mouse");
                 });
     }
 
@@ -158,7 +156,6 @@ class OrderControllerIntegrationTest {
     void addOrderServerErrorTest() throws JsonProcessingException {
         Long cartId = 1L;
         CreditCardDto creditCardDto = new CreditCardDto(new BigInteger("1111111111"), "09/25", 222);
-
 
         mockWebServerCart.enqueue(new MockResponse()
                 .setResponseCode(500)

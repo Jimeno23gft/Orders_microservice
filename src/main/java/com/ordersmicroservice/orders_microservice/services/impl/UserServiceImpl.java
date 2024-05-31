@@ -17,10 +17,13 @@ public class UserServiceImpl implements UserService {
         this.restClient = restClient;
     }
     public Optional<UserDto> getUserById(Long userId) {
-        return Optional.ofNullable(restClient.get()
+        Optional<UserDto> user;
+        user = Optional.ofNullable(restClient.get()
                 .uri(userUri + "/{id}", userId)
                 .retrieve()
                 .body(UserDto.class));
+
+        return user;
     }
 
     public void patchFidelityPoints(Long userId, int points){
