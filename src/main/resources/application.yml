@@ -1,0 +1,20 @@
+server:
+  servlet:
+    context-path: /
+  port: ${PORT:8080}
+
+spring:
+  application:
+    name: orders
+
+  datasource:
+    driverClassName: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://34.175.164.238:3308/OrdersDB
+    username: orders
+    password: orders
+
+  jpa:
+    database-platform: org.hibernate.dialect.MySQLDialect
+    hibernate:
+      ddl-auto: update
+    show-sql: true
