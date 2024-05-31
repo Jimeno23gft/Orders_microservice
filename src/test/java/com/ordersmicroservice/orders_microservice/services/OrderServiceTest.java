@@ -1,4 +1,5 @@
 package com.ordersmicroservice.orders_microservice.services;
+
 import com.ordersmicroservice.orders_microservice.dto.*;
 import com.ordersmicroservice.orders_microservice.dto.CreditCardDto;
 import com.ordersmicroservice.orders_microservice.dto.CartDto;
@@ -16,24 +17,21 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.junit.jupiter.api.function.Executable;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.web.client.RestClient;
+
 import java.math.BigInteger;
 import java.math.BigDecimal;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
+
+import static com.ordersmicroservice.orders_microservice.Datos.*;
 import static com.ordersmicroservice.orders_microservice.dto.Status.IN_DELIVERY;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
-import static com.ordersmicroservice.orders_microservice.Datos.crearOrder001;
-import static com.ordersmicroservice.orders_microservice.Datos.crearOrder002;
 
 @ExtendWith(MockitoExtension.class)
 class OrderServiceTest {
@@ -54,38 +52,18 @@ class OrderServiceTest {
     private Order order1;
     private Order order2;
     private List<Order> orders;
-    UserDto user1;
+    private UserDto user1;
+    private CountryDto country;
 
 
     @BeforeEach
     public void setup() {
-
+        this.user1 = crearUser001();
         this.order1 = crearOrder001().orElseThrow();
         this.order2 = crearOrder002().orElseThrow();
-        /*
-        order1 = Order.builder()
-                .id(1L)
-                .userId(1L)
-                .cartId(1L)
-                .fromAddress("Barcelona")
-                .status(DELIVERED)
-                .dateOrdered("2024-5-9")
-                .dateDelivered("2024-5-10").build();
-        order2 = Order.builder()
-                .id(2L)
-                .userId(2L)
-                .cartId(2L)
-                .fromAddress("Valencia")
-                .status(IN_DELIVERY)
-                .dateOrdered("2024-5-11")
-                .dateDelivered("2024-5-12").build();
-
-         */
-
-
+        this.country = crearCountry001();
         orders = List.of(order1, order2);
     }
-
 
 
     @Test
@@ -104,16 +82,23 @@ class OrderServiceTest {
     @DisplayName("Testing get an order by id from repository")
     void testGetOrderById() {
 
-         this.user1 = UserDto.builder()
+        CountryDto country = CountryDto.builder()
+                .id(1L)
+                .name("Spain")
+                .build();
+
+        this.user1 = UserDto.builder()
                 .id(1L)
                 .name("Lorenzo")
                 .lastName("Perez")
                 .email("perez@gmail.com")
                 .phone("123123123")
+                .country(country)
                 .build();
 
         when(orderRepository.findById(1L)).thenReturn(Optional.of(order1));
-        when(userService.getUserById(1L)).thenReturn(user1);
+        when(userService.getUserById(1L)).thenReturn(Optional.ofNullable(user1));
+        when(countryService.getCountryById(1L)).thenReturn(Optional.of(country));
 
         Order savedOrder = orderService.getOrderById(order1.getId());
         assertThat(savedOrder)
@@ -133,6 +118,7 @@ class OrderServiceTest {
                 .isNotEqualTo(Collections.emptyList())
                 .isEqualTo(orders);
     }
+
     @Test
     @DisplayName("Testing Adding a new order with just an id")
     void testAddOrder() {
@@ -147,8 +133,8 @@ class OrderServiceTest {
         Long user_id = 1L;
         BigDecimal totalPrice = new BigDecimal("100.00");
         List<CartProductDto> cartProducts = List.of(
-                new CartProductDto(1L, "Product1", "Description1", 2,new BigDecimal("20.00")),
-                new CartProductDto(2L, "Product2", "Description2", 1,new BigDecimal("30.00"))
+                new CartProductDto(1L, "Product1", "Description1", 2, new BigDecimal("20.00")),
+                new CartProductDto(2L, "Product2", "Description2", 1, new BigDecimal("30.00"))
         );
         CartDto cartDto = CartDto.builder()
                 .userId(user_id)
@@ -189,11 +175,11 @@ class OrderServiceTest {
 
         when(orderRepository.save(any(Order.class))).thenAnswer(invocation -> invocation.getArgument(0));
 
-        when(userService.getUserById(cartDto.getUserId())).thenReturn(userDto);
+        when(userService.getUserById(cartDto.getUserId())).thenReturn(Optional.ofNullable(userDto));
 
-        when(countryService.getCountryById(address.getCountryId())).thenReturn(country);
+        when(countryService.getCountryById(address.getCountryId())).thenReturn(Optional.ofNullable(country));
 
-        Order savedOrder = orderService.addOrder(cartId,creditCard);
+        Order savedOrder = orderService.addOrder(cartId, creditCard);
 
         assertThat(savedOrder).isNotNull();
         assertThat(savedOrder.getTotalPrice()).isEqualTo(totalPrice);
@@ -253,30 +239,65 @@ class OrderServiceTest {
         existingOrder.setId(order1.getId());
         existingOrder.setStatus(order1.getStatus());
         existingOrder.setDateDelivered(order1.getDateDelivered());
+        existingOrder.setOrderedProducts(new ArrayList<>());
+        existingOrder.setUserId(1L);
+        existingOrder.setCountryId(1L);
 
         StatusUpdateDto statusUpdateDto = new StatusUpdateDto();
         statusUpdateDto.setStatus(Status.CANCELLED);
 
+        UserDto user1 = crearUser001();
+
+        CountryDto country = CountryDto.builder()
+                .id(1L)
+                .name("Colombia")
+                .tax(21F)
+                .prefix("+57")
+                .timeZone("Timezone")
+                .build();
+
+        Address address = Address.builder()
+                .orderId(1L)
+                .cityName("Barranquilla")
+                .zipCode("46134")
+                .street("Calle 69")
+                .number(43)
+                .door("2")
+                .countryId(1L)
+                .build();
+
         when(orderRepository.findById(order1.getId())).thenReturn(Optional.of(existingOrder));
         when(orderRepository.save(existingOrder)).thenReturn(existingOrder);
+        when(userService.getUserById(1L)).thenReturn(Optional.of(user1));
+        when(countryService.getCountryById(address.getCountryId())).thenReturn(Optional.ofNullable(country));
 
-        Order patchedOrder = orderService.patchOrder(order1.getId(), statusUpdateDto.getStatus());
+        Order patchedOrder = orderService. patchOrder(order1.getId(), statusUpdateDto.getStatus());
 
         assertThat(patchedOrder.getStatus()).isEqualTo(Status.CANCELLED);
 
         verify(orderRepository, times(1)).findById(order1.getId());
         verify(orderRepository, times(1)).save(existingOrder);
+        verify(userService, times(1)).getUserById(1L);
     }
 
     @Test
     @DisplayName("Testing patching an order with DELIVERED status")
     void testPatchOrderDelivered() {
-        Order initialOrder = new Order();
-        initialOrder.setId(1L);
+        Order initialOrder = order1;
         initialOrder.setStatus(IN_DELIVERY);
+        initialOrder.setOrderedProducts(new ArrayList<>(List.of(
+                new OrderedProduct(),
+                new OrderedProduct()
+        )));
+
+        CountryDto country2 = new CountryDto();
+        country.setId(1L);
+        country.setName("Country 1");
 
         when(orderRepository.findById(1L)).thenReturn(Optional.of(initialOrder));
         when(orderRepository.save(initialOrder)).thenReturn(initialOrder);
+        when(userService.getUserById(1L)).thenReturn(Optional.of(user1));
+        when(countryService.getCountryById(1L)).thenReturn(Optional.of(country2));
 
         Order patchedOrder = orderService.patchOrder(1L, Status.DELIVERED);
 
@@ -321,10 +342,16 @@ class OrderServiceTest {
         product2.setQuantity(3);
         initialOrder.setId(1L);
         initialOrder.setStatus(IN_DELIVERY);
+        initialOrder.setUserId(1L);
+        initialOrder.setCountryId(1L);
         initialOrder.setOrderedProducts(Arrays.asList(
                 product1,
                 product2
         ));
+
+        CountryDto country2 = new CountryDto();
+        country.setId(1L);
+        country.setName("Country 1");
 
         when(restClient.patch()).thenReturn(requestBodyUriSpec);
         when(requestBodyUriSpec.uri(anyString())).thenReturn(requestBodyUriSpec);
@@ -332,6 +359,8 @@ class OrderServiceTest {
 
         when(orderRepository.findById(1L)).thenReturn(Optional.of(initialOrder));
         when(orderRepository.save(initialOrder)).thenReturn(initialOrder);
+        when(userService.getUserById(1L)).thenReturn(Optional.of(user1));
+        when(countryService.getCountryById(1L)).thenReturn(Optional.of(country2));
 
         Order patchedOrder = orderService.patchOrder(1L, Status.RETURNED);
 

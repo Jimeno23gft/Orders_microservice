@@ -8,6 +8,7 @@ import com.ordersmicroservice.orders_microservice.models.Order;
 
 import okhttp3.mockwebserver.MockResponse;
 import okhttp3.mockwebserver.MockWebServer;
+import org.assertj.core.api.AssertionsForClassTypes;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -33,41 +34,30 @@ class OrderControllerIntegrationTest {
     @Autowired
     private WebTestClient webTestClient;
 
-    private static MockWebServer mockWebServer;
+    private static MockWebServer mockWebServerUser;
+    private static MockWebServer mockWebServerCart;
 
     private Order expectedOrder;
 
-    @BeforeAll
-    static void beforeAll() throws IOException {
-        mockWebServer = new MockWebServer();
-        mockWebServer.start(8081);
-    }
-
-    @AfterAll
-    static void afterAll() throws IOException {
-        mockWebServer.shutdown();
-
-    }
 
     @BeforeEach
-    void setUp() throws IOException {
+    void beforeEach() throws IOException {
+        mockWebServerCart = new MockWebServer();
+        mockWebServerCart.start(8081);
 
-
-        expectedOrder = Order.builder()
-                .id(7L)
-                .userId(101L)
-                .cartId(1L)
-                .fromAddress("222 Pine St")
-                .status(Status.UNPAID)
-                .dateOrdered(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")))
-                .dateDelivered(null) // Since dateDelivered is null initially
-                .totalPrice(new BigDecimal("323.3"))
-                .orderedProducts(new ArrayList<>()).build();
+        mockWebServerUser = new MockWebServer();
+        mockWebServerUser.start(8082);
     }
 
+    @AfterEach
+    void afterEach() throws IOException {
+        mockWebServerCart.shutdown();
+        mockWebServerUser.shutdown();
+    }
 
 
     @Test
+    @DisplayName("Integration Test for Adding an Order Successfully")
     void addOrderIntegrationTest() throws JsonProcessingException {
 
 
@@ -100,56 +90,55 @@ class OrderControllerIntegrationTest {
         ObjectMapper objectMapper = new ObjectMapper();
         String cartJson = objectMapper.writeValueAsString(cartDto);
 
-        mockWebServer.enqueue(new MockResponse()
+        CountryDto countryDto = new CountryDto();
+        countryDto.setId(1L);
+        countryDto.setName("España");
+        countryDto.setTax(21F);
+        countryDto.setPrefix("+34");
+        countryDto.setTimeZone("Europe/Madrid");
+
+        ObjectMapper objectMapper3 = new ObjectMapper();
+        String countryJson = objectMapper3.writeValueAsString(countryDto);
+
+        Address adress = new Address();
+
+        UserDto user = UserDto.builder()
+                .id(101L)
+                .email("john.doe@example.com")
+                .name("John")
+                .lastName("Doe")
+                .password("password123")
+                .fidelityPoints(1000)
+                .phone("1234567890")
+                .country(countryDto)
+                .address(adress)
+                .build();
+
+        ObjectMapper objectMapper1 = new ObjectMapper();
+        String userJson = objectMapper1.writeValueAsString(user);
+
+
+
+        mockWebServerCart.enqueue(new MockResponse()
                 .setBody(cartJson)
                 .addHeader("Content-Type", "application/json"));
 
-        UserDto userDto = new UserDto();
-        userDto.setId(cartDto.getUserId());
-        userDto.setName("John");
-        userDto.setLastName("Doe");
-        userDto.setEmail("john.doe@example.com");
-        userDto.setPhone("1234567890");
-
-        ObjectMapper objectMapper2 = new ObjectMapper();
-        String userJson = objectMapper2.writeValueAsString(userDto);
-
-        mockWebServer.enqueue(new MockResponse()
+        mockWebServerUser.enqueue(new MockResponse()
                 .setBody(userJson)
                 .addHeader("Content-Type", "application/json"));
 
-
-        CountryDto countryDto = new CountryDto();
-
-        ObjectMapper objectMapper3 = new ObjectMapper();
-        String countryJson = objectMapper.writeValueAsString(countryDto);
-
-
-        mockWebServer.enqueue(new MockResponse()
+        mockWebServerUser.enqueue(new MockResponse()
                 .setBody(countryJson)
                 .addHeader("Content-Type", "application/json"));
 
+        mockWebServerCart.enqueue(new MockResponse()
 
-
-        mockWebServer.enqueue(new MockResponse()
-                .setBody(countryJson)
-                .addHeader("Content-Type", "application/json"));
-
-
-
-
-
-
-        mockWebServer.enqueue(new MockResponse()
                 .setStatus("HTTP/1.1 204 No Content")
                 .addHeader("Content-Type", "application/json"));
 
 
         Long cartId = 1L;
         CreditCardDto creditCardDto = new CreditCardDto(new BigInteger("1111111111"),"09/25", 222);
-
-
-        System.out.println("MockWebServer is running on port: " + mockWebServer.getPort());
 
 
 
@@ -160,12 +149,35 @@ class OrderControllerIntegrationTest {
                 .expectHeader().contentType(MediaType.APPLICATION_JSON)
                 .expectBody(Order.class)
                 .value(responseOrder -> {
-                    assertThat(responseOrder.getUserId()).isEqualTo(expectedOrder.getUserId());
-                    assertThat(responseOrder.getTotalPrice()).isEqualTo(expectedOrder.getTotalPrice());
-                    assertThat(responseOrder.getStatus()).isEqualTo(Status.PAID);
-                    assertThat(responseOrder.getOrderedProducts()).hasSize(2);
-                    assertThat(responseOrder.getOrderedProducts().get(0).getName()).isEqualTo("Apple MacBook Pro");
-                    assertThat(responseOrder.getOrderedProducts().get(1).getName()).isEqualTo("Logitech Mouse");
+                    AssertionsForClassTypes.assertThat(responseOrder.getUserId()).isEqualTo(101L);
+                    AssertionsForClassTypes.assertThat(responseOrder.getTotalPrice()).isEqualTo(new BigDecimal("323.3"));
+                    AssertionsForClassTypes.assertThat(responseOrder.getUser().getLastName()).isEqualTo("Doe");
+                    AssertionsForClassTypes.assertThat(responseOrder.getStatus()).isEqualTo(Status.PAID);
+                    AssertionsForClassTypes.assertThat(responseOrder.getOrderedProducts().get(0).getName()).isEqualTo("Apple MacBook Pro");
+                    AssertionsForClassTypes.assertThat(responseOrder.getOrderedProducts().get(1).getName()).isEqualTo("Logitech Mouse");
                 });
     }
+
+    @Test
+    @DisplayName("Handling Server Error on Order Creation")
+    void addOrderServerErrorTest() throws JsonProcessingException {
+        Long cartId = 1L;
+        CreditCardDto creditCardDto = new CreditCardDto(new BigInteger("1111111111"), "09/25", 222);
+
+
+        mockWebServerCart.enqueue(new MockResponse()
+                .setResponseCode(500)
+                .setBody("{\"error\":\"Internal Server Error\"}")
+                .addHeader("Content-Type", "application/json"));
+
+        webTestClient.post().uri("/orders/{id}", cartId)
+                .bodyValue(creditCardDto)
+                .exchange()
+                .expectStatus().is5xxServerError()
+                .expectBody()
+                .jsonPath("$.error").isEqualTo("Internal Server Error");
+    }
+
+
 }
+

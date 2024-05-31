@@ -19,6 +19,8 @@ import java.io.IOException;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class UserServiceTest {
     private MockWebServer mockWebServer;
@@ -45,7 +47,8 @@ class UserServiceTest {
                 .setBody(userJson)
                 .addHeader("Content-Type", "application/json"));
 
-        UserDto retrievedUserDto = userServiceImpl.getUserById(100L);
+        UserDto retrievedUserDto = userServiceImpl.getUserById(100L).orElseThrow()
+                ;
 
         assertThat(retrievedUserDto).isNotNull();
         assertThat(retrievedUserDto.getId()).isEqualTo(100L);
@@ -132,6 +135,7 @@ class UserServiceTest {
                 .extracting(ex -> ((RestClientResponseException) ex).getStatusCode())
                 .isEqualTo(HttpStatus.INTERNAL_SERVER_ERROR);
     }
+
 
     @AfterEach
     void tearDown() throws IOException {

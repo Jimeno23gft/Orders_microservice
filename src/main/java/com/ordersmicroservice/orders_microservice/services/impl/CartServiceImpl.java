@@ -14,14 +14,14 @@ import java.util.Optional;
 @Service
 public class CartServiceImpl implements CartService {
 
-    @Getter
-    @Setter
-    private String cartUri = "http://localhost:8081/carts/";
+
+    public String cartUri = "/carts/";
+
 
     private final RestClient restClient;
 
-    public CartServiceImpl(RestClient restClient) {
-        this.restClient = restClient;
+    public CartServiceImpl(RestClient.Builder restClient) {
+        this.restClient = restClient.build();
     }
 
     public Optional<CartDto> getCartById(Long id){
@@ -35,7 +35,7 @@ public class CartServiceImpl implements CartService {
     public void emptyCartProductsById(Long id){
 
         restClient.delete()
-                .uri(cartUri + "/{id}", id)
+                .uri(cartUri + id)
                 .retrieve()
                 .body(Void.class);
     }

@@ -2,6 +2,8 @@ package com.ordersmicroservice.orders_microservice.services;
 
 import com.ordersmicroservice.orders_microservice.dto.CountryDto;
 
+import java.util.Optional;
+
 public interface CountryService {
-    CountryDto getCountryById(Long countryId);
+    Optional<CountryDto> getCountryById(Long countryId);
 }
