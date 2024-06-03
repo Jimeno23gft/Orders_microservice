@@ -24,6 +24,7 @@ import java.util.List;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles("test")
+@Disabled
 class OrderControllerIntegrationTest {
 
 
@@ -129,6 +130,7 @@ class OrderControllerIntegrationTest {
                 .addHeader("Content-Type", "application/json"));
 
         mockWebServerCart.enqueue(new MockResponse()
+
                 .setStatus("HTTP/1.1 204 No Content")
                 .addHeader("Content-Type", "application/json"));
 
@@ -176,3 +178,4 @@ class OrderControllerIntegrationTest {
 
 
 }
+

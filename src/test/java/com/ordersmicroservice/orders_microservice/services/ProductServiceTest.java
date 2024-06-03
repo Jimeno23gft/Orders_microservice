@@ -29,14 +29,17 @@ class ProductServiceTest {
         RestClient restClient = RestClient.builder()
                 .baseUrl(mockWebServer.url("/").toString())
                 .build();
-        productService = new ProductServiceImpl(restClient);
+
+        productService = new ProductServiceImpl(restClient,
+                mockWebServer.url("/").toString(),
+                "/products",
+                "/products/{id}/{quantity}");
     }
 
     @Test
     @DisplayName("Testing method updates the stock of a given product")
     void testPatchProductStock() throws Exception {
 
-        productService.catalogUri = "/products";
 
         ProductDto productDto = ProductDto.builder()
                 .id(1L)
@@ -69,7 +72,6 @@ class ProductServiceTest {
     @DisplayName("Testing method fails to find the order with id given to be updated")
     void testPatchIdNotFound() {
 
-        productService.catalogUri = "/products";
 
         mockWebServer.enqueue(new MockResponse()
                 .setResponseCode(HttpStatus.NOT_FOUND.value())
@@ -87,7 +89,6 @@ class ProductServiceTest {
     @DisplayName("Testing method gives an Internal Server Error")
     void testPatchServerError() {
 
-        productService.catalogUri = "/products";
 
         mockWebServer.enqueue(new MockResponse()
                 .setResponseCode(HttpStatus.INTERNAL_SERVER_ERROR.value())
@@ -105,7 +106,6 @@ class ProductServiceTest {
     @DisplayName("Testing method retrieves the product with given id")
     void testGetProductById() throws Exception {
 
-        productService.catalogUri = "/products";
 
         ProductDto productDto = ProductDto.builder()
                 .id(1L)
@@ -138,7 +138,6 @@ class ProductServiceTest {
     @DisplayName("Testing method fails to find the product with id given to be retrieved")
     void testGetProductByIdNotFound() {
 
-        productService.catalogUri = "/products";
 
         mockWebServer.enqueue(new MockResponse()
                 .setResponseCode(HttpStatus.NOT_FOUND.value())
@@ -156,7 +155,6 @@ class ProductServiceTest {
     @DisplayName("Testing method gives an error whenever product with id given is called for")
     void testGetProductByIdError() {
 
-        productService.catalogUri = "/products";
 
         mockWebServer.enqueue(new MockResponse()
                 .setResponseCode(HttpStatus.INTERNAL_SERVER_ERROR.value())

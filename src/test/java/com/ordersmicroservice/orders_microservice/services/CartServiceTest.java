@@ -2,6 +2,7 @@ package com.ordersmicroservice.orders_microservice.services;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ordersmicroservice.orders_microservice.dto.CartDto;
 import com.ordersmicroservice.orders_microservice.dto.CartProductDto;
+import com.ordersmicroservice.orders_microservice.services.impl.CartServiceImpl;
 import okhttp3.mockwebserver.MockResponse;
 import okhttp3.mockwebserver.MockWebServer;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +14,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.web.client.RestClient;
 import org.springframework.web.client.RestClientResponseException;
 
 import java.io.IOException;
@@ -28,19 +30,25 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 class CartServiceTest {
 
     @Autowired
-    private CartService cartService;
+    private CartServiceImpl cartServiceImpl;
     private static MockWebServer mockWebServer;
 
     @BeforeEach
     void beforeEach() throws IOException {
         mockWebServer = new MockWebServer();
-        mockWebServer.start(8081);
+        mockWebServer.start();
+        RestClient restClient = RestClient.builder()
+                .baseUrl(mockWebServer.url("/").toString())
+                .build();
+
+        cartServiceImpl = new CartServiceImpl(restClient,
+                mockWebServer.url("/").toString(),
+                "/carts/");
     }
 
     @AfterEach
     void afterEach() throws IOException {
         mockWebServer.shutdown();
-
     }
 
     @Test
@@ -52,12 +60,11 @@ class CartServiceTest {
         ObjectMapper objectMapper = new ObjectMapper();
         String cartJson = objectMapper.writeValueAsString(cartDto);
 
-
         mockWebServer.enqueue(new MockResponse()
                 .setBody(cartJson)
                 .addHeader("Content-Type", "application/json"));
 
-        CartDto retrievedCartDto = cartService.getCartById(1L).orElseThrow();
+        CartDto retrievedCartDto = cartServiceImpl.getCartById(1L).orElseThrow();
 
         assertThat(retrievedCartDto).isNotNull();
         assertThat(retrievedCartDto.getId()).isEqualTo(1L);
@@ -82,40 +89,33 @@ class CartServiceTest {
                 .cartProducts(List.of(cartProductDto))
                 .totalPrice(new BigDecimal("2399.99"))
                 .build();
-
     }
 
     @Test
     @DisplayName("When fetching a non-existent cart by ID, then a 404 error is returned")
     void testGetCartByIdNotFound() {
-
-
         mockWebServer.enqueue(new MockResponse()
                 .setResponseCode(404)
                 .setBody("Cart not found")
                 .addHeader("Content-Type", "text/plain"));
 
-        assertThatThrownBy(() -> cartService.getCartById(1L))
+        assertThatThrownBy(() -> cartServiceImpl.getCartById(1L))
                 .isInstanceOf(RestClientResponseException.class)
                 .hasMessageContaining("Cart not found")
                 .extracting(ex -> ((RestClientResponseException) ex).getStatusCode())
                 .isEqualTo(HttpStatus.NOT_FOUND);
-
     }
 
 
     @Test
     @DisplayName("When fetching a Cart by ID and an internal server error occurs, then a 500 error is returned")
     void testGetCartByIdServerError() {
-
-
-
         mockWebServer.enqueue(new MockResponse()
                 .setResponseCode(500)
                 .setBody("Internal Server Error")
                 .addHeader("Content-Type", "text/plain"));
 
-        assertThatThrownBy(() -> cartService.getCartById(1L))
+        assertThatThrownBy(() -> cartServiceImpl.getCartById(1L))
                 .isInstanceOf(RestClientResponseException.class)
                 .hasMessageContaining("Internal Server Error")
                 .extracting(ex -> ((RestClientResponseException) ex).getStatusCode())
@@ -126,14 +126,12 @@ class CartServiceTest {
     @Test
     @DisplayName("When deleting the products in a Cart, the cart must get empty")
     void testEmptyCart() throws InterruptedException {
-
         CartDto cartDto = buildCart();
-
 
         mockWebServer.enqueue(new MockResponse()
                 .setResponseCode(200));
 
-        cartService.emptyCartProductsById(cartDto.getId());
+        cartServiceImpl.emptyCartProductsById(cartDto.getId());
         var recordedRequest = mockWebServer.takeRequest();
 
         assertThat(recordedRequest.getMethod()).isEqualTo("DELETE");

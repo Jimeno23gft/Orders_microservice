@@ -2,6 +2,7 @@ package com.ordersmicroservice.orders_microservice.services.impl;
 
 import com.ordersmicroservice.orders_microservice.dto.UserDto;
 import com.ordersmicroservice.orders_microservice.services.UserService;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClient;
 
@@ -9,26 +10,32 @@ import java.util.Optional;
 
 @Service
 public class UserServiceImpl implements UserService {
+
+    public String baseUrl;
+    public String usersUri;
+    public String fidelityUri;
     private final RestClient restClient;
 
-    public String userUri = "http://localhost:8082/users/";
-
-    public UserServiceImpl(RestClient restClient) {
+    public UserServiceImpl(RestClient restClient,
+                           @Value("${users.api.base-url}")String baseUrl,
+                           @Value("${users.api.users-uri}")String usersUri,
+                           @Value("${users.api.fidelity-uri}")String fidelityUri) {
+        this.baseUrl = baseUrl;
+        this.usersUri = usersUri;
+        this.fidelityUri = fidelityUri;
         this.restClient = restClient;
     }
+
     public Optional<UserDto> getUserById(Long userId) {
         return Optional.ofNullable(restClient.get()
-                .uri(userUri + "/{id}", userId)
+                .uri(baseUrl + usersUri, userId)
                 .retrieve()
                 .body(UserDto.class));
     }
 
     public void patchFidelityPoints(Long userId, int points){
-
-        String url = "http://localhost:8082/fidelitypoints/";
-
         restClient.patch()
-                .uri(url + userId)
+                .uri(baseUrl + fidelityUri, userId)
                 .body(points)
                 .header("Content-Type", "application/json")
                 .retrieve();
