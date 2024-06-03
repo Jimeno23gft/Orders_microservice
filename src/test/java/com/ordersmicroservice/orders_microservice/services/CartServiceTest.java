@@ -3,6 +3,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ordersmicroservice.orders_microservice.dto.CartDto;
 import com.ordersmicroservice.orders_microservice.dto.CartProductDto;
 import com.ordersmicroservice.orders_microservice.services.impl.CartServiceImpl;
+import com.ordersmicroservice.orders_microservice.services.impl.ProductServiceImpl;
 import okhttp3.mockwebserver.MockResponse;
 import okhttp3.mockwebserver.MockWebServer;
 import org.junit.jupiter.api.*;
@@ -31,27 +32,22 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 class CartServiceTest {
 
     @Autowired
-    private CartService cartService;
+    private CartServiceImpl cartServiceImpl;
 
     private static MockWebServer mockWebServer;
-
-/*
-    @BeforeAll
-    static void beforeAll() throws IOException {
-        mockWebServer = new MockWebServer();
-        mockWebServer.start(8081);
-    }
-
-    @AfterAll
-    static void afterAll() throws IOException {
-        mockWebServer.shutdown();
-
-    }*/
 
     @BeforeEach
     void beforeEach() throws IOException {
         mockWebServer = new MockWebServer();
-        mockWebServer.start(8081);
+        mockWebServer.start();
+        RestClient restClient = RestClient.builder()
+                .baseUrl(mockWebServer.url("/").toString())
+                .build();
+
+        cartServiceImpl = new CartServiceImpl(restClient,
+                mockWebServer.url("/").toString(),
+                "/carts/");
+
     }
 
     @AfterEach
@@ -74,7 +70,7 @@ class CartServiceTest {
                 .setBody(cartJson)
                 .addHeader("Content-Type", "application/json"));
 
-        CartDto retrievedCartDto = cartService.getCartById(1L).orElseThrow();
+        CartDto retrievedCartDto = cartServiceImpl.getCartById(1L).orElseThrow();
 
         assertThat(retrievedCartDto).isNotNull();
         assertThat(retrievedCartDto.getId()).isEqualTo(1L);
@@ -111,7 +107,7 @@ class CartServiceTest {
                 .setBody("Cart not found")
                 .addHeader("Content-Type", "text/plain"));
 
-        assertThatThrownBy(() -> cartService.getCartById(1L))
+        assertThatThrownBy(() -> cartServiceImpl.getCartById(1L))
                 .isInstanceOf(RestClientResponseException.class)
                 .hasMessageContaining("Cart not found")
                 .extracting(ex -> ((RestClientResponseException) ex).getStatusCode())
@@ -131,7 +127,7 @@ class CartServiceTest {
                 .setBody("Internal Server Error")
                 .addHeader("Content-Type", "text/plain"));
 
-        assertThatThrownBy(() -> cartService.getCartById(1L))
+        assertThatThrownBy(() -> cartServiceImpl.getCartById(1L))
                 .isInstanceOf(RestClientResponseException.class)
                 .hasMessageContaining("Internal Server Error")
                 .extracting(ex -> ((RestClientResponseException) ex).getStatusCode())
@@ -149,7 +145,7 @@ class CartServiceTest {
         mockWebServer.enqueue(new MockResponse()
                 .setResponseCode(200));
 
-        cartService.emptyCartProductsById(cartDto.getId());
+        cartServiceImpl.emptyCartProductsById(cartDto.getId());
         var recordedRequest = mockWebServer.takeRequest();
 
         assertThat(recordedRequest.getMethod()).isEqualTo("DELETE");

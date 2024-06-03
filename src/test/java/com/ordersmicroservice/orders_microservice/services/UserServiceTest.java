@@ -33,14 +33,17 @@ class UserServiceTest {
         RestClient restClient = RestClient.builder()
                 .baseUrl(mockWebServer.url("/").toString())
                 .build();
-        userServiceImpl = new UserServiceImpl(restClient);
+
+        userServiceImpl = new UserServiceImpl(restClient,
+                mockWebServer.url("/").toString(),
+                "/users/{userId}",
+        "/fidelitypoints/{id}");
     }
 
     @Test
     @DisplayName("When fetching a user by ID, then the correct user details are returned")
     void testGetUserById() throws Exception {
 
-        userServiceImpl.userUri = "/users";
 
         String userJson = buildUser();
         mockWebServer.enqueue(new MockResponse()
@@ -103,7 +106,6 @@ class UserServiceTest {
     @DisplayName("When fetching a non-existent user by ID, then a 404 error is returned")
     void testGetUserByIdNotFound() {
 
-        userServiceImpl.userUri = "/users";
 
 
         mockWebServer.enqueue(new MockResponse()
@@ -122,7 +124,6 @@ class UserServiceTest {
     @DisplayName("When fetching a User by ID and an internal server error occurs, then a 500 error is returned")
     void testGetProductByIdServerError() {
 
-        userServiceImpl.userUri = "/users";
 
         mockWebServer.enqueue(new MockResponse()
                 .setResponseCode(500)
