@@ -1,11 +1,12 @@
 package com.ordersmicroservice.orders_microservice.services.impl;
 import com.ordersmicroservice.orders_microservice.dto.CartDto;
 import com.ordersmicroservice.orders_microservice.services.CartService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClient;
 import java.util.Optional;
 
-
+@Slf4j
 @Service
 public class CartServiceImpl implements CartService {
 
@@ -21,7 +22,7 @@ public class CartServiceImpl implements CartService {
 
 
     public Optional<CartDto> getCartById(Long id){
-
+        log.info("CartServiceImpl: getCartById ( id = " + id + " )");
         return Optional.ofNullable(restClient.get()
                 .uri(cartUri + id)
                 .retrieve()
@@ -29,7 +30,7 @@ public class CartServiceImpl implements CartService {
     }
 
     public void emptyCartProductsById(Long id){
-
+        log.info("CartServiceImpl: emptyCartProductsById ( id = " + id + " )");
         restClient.delete()
                 .uri(cartUri + id)
                 .retrieve()

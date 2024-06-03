@@ -47,6 +47,7 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public List<Order> getAllOrders() {
+        log.info("Getting All Orders by ID in service");
          List<Order> ordersList = Optional.of(orderRepository.findAll()).filter(orders -> !orders.isEmpty())
                 .orElseThrow(() -> new NotFoundException("No orders were found"));
         ordersList.forEach(this::setCountryAndUserToOrder);
@@ -55,13 +56,14 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public Order getOrderById(Long orderId) {
-        log.info("Getting Order by ID in service");
+        log.info("Getting Order by ID: {}",orderId);
         Order order = orderRepository.findById(orderId).orElseThrow(() -> new NotFoundException("Order not found with ID: " + orderId));
         setCountryAndUserToOrder(order);
         return order;
     }
 
     private void setCountryAndUserToOrder(Order order) {
+        log.info("Setting Country and User to Order: {}",order.getId());
         UserDto user = userService.getUserById(order.getUserId()).orElseThrow(() -> new NotFoundException("User not found with ID: " + order.getUserId()));
         UserResponseDto userResponse = UserResponseDto.fromUserDto(user);
         CountryDto countryDto = countryService.getCountryById(order.getCountryId()).orElseThrow();
@@ -71,7 +73,7 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public List<Order> getAllByUserId(Long userId) {
-
+        log.info("Getting All Orders by UserID: {}",userId);
         List<Order> ordersList = orderRepository.findAllByUserId(userId);
         ordersList.forEach(this::setCountryAndUserToOrder);
         return ordersList;
@@ -81,7 +83,7 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public Order addOrder(Long cartId, CreditCardDto creditCard) {
         log.info("Sending credit card info to payment Server...");
-        //log.info("Payment with the credit card " + creditCard.getNumber() + " has been made successfully" )
+        log.info("Payment with the credit card " + creditCard.getCardNumber() + " has been made successfully" );
         Order order = new Order();
 
         CartDto cart = checkCartAndCartProducts(cartId);
@@ -107,7 +109,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     private void configureCountryAndAddress(Order order, UserDto user) {
-
+        log.info("Configure Country and Address of the userID: {}", user.getId());
         CountryDto country = countryService.getCountryById(user.getCountry().getId())
                 .orElseThrow(() -> new NotFoundException("Country not found with ID: " + user.getCountry().getId()));
 
@@ -172,6 +174,8 @@ public class OrderServiceImpl implements OrderService {
     @Override
     @Transactional
     public Order patchOrder(Long id, @RequestBody Status updatedStatus) {
+        log.info("Update Order Status UserID: {}",id);
+        log.info("User Notification : Change Status to {}", updatedStatus);
         Order existingOrder = orderRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Order not found with ID: " + id));
         existingOrder.setStatus(updatedStatus);
@@ -199,6 +203,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     private void handleReturnedStatus(Order order) {
+        log.info("User Notification : Making the refund of the payment of {} ...", order.getTotalPrice());
         List<UpdateStockRequest> updateStockRequests = order.getOrderedProducts().stream()
                 .map(product -> new UpdateStockRequest(product.getProductId(), product.getQuantity()))
                 .toList();
@@ -215,6 +220,7 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public void deleteById(Long id) {
+        log.info("Deleting order by ID: {}",id);
         orderRepository.findById(id)
                 .ifPresentOrElse(
                         order -> orderRepository.deleteById(id),
