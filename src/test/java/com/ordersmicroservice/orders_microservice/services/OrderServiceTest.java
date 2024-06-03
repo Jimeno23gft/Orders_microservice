@@ -20,14 +20,26 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.StreamingHttpOutputMessage;
+import org.springframework.http.client.ClientHttpRequest;
 import org.springframework.web.client.RestClient;
+import org.springframework.web.util.UriBuilder;
 
 import java.math.BigInteger;
 import java.math.BigDecimal;
+import java.net.URI;
+import java.nio.charset.Charset;
+import java.time.ZonedDateTime;
 import java.util.*;
+import java.util.function.Consumer;
+import java.util.function.Function;
 
 import static com.ordersmicroservice.orders_microservice.Datos.*;
 import static com.ordersmicroservice.orders_microservice.dto.Status.IN_DELIVERY;
+import static com.ordersmicroservice.orders_microservice.dto.Status.PAID;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.*;
@@ -69,7 +81,30 @@ class OrderServiceTest {
     @Test
     @DisplayName("Testing get all Orders from Repository Method")
     void testGetAllOrders() {
+
+        UserDto user1 = crearUser001();
+
+        CountryDto country = CountryDto.builder()
+                .id(1L)
+                .name("Colombia")
+                .tax(21F)
+                .prefix("+57")
+                .timeZone("Timezone")
+                .build();
+
+        Address address = Address.builder()
+                .orderId(1L)
+                .cityName("Barranquilla")
+                .zipCode("46134")
+                .street("Calle 69")
+                .number(43)
+                .door("2")
+                .countryId(1L)
+                .build();
+
         when(orderRepository.findAll()).thenReturn(orders);
+        when(userService.getUserById(anyLong())).thenReturn(Optional.of(user1));
+        when(countryService.getCountryById(address.getCountryId())).thenReturn(Optional.ofNullable(country));
 
         List<Order> savedOrders = orderService.getAllOrders();
         assertThat(savedOrders)
@@ -110,6 +145,37 @@ class OrderServiceTest {
     @DisplayName("Testing get all Orders from Repository Method")
     void testGetAllByUserId() {
         Long userId = 1L;
+
+        Address address = Address.builder()
+                .orderId(1L)
+                .cityName("Barranquilla")
+                .zipCode("46134")
+                .street("Calle 69")
+                .number(43)
+                .door("2")
+                .countryId(1L)
+                .build();
+
+        CountryDto country = CountryDto.builder()
+                .id(1L)
+                .name("Colombia")
+                .tax(21F)
+                .prefix("+57")
+                .timeZone("Timezone")
+                .build();
+
+        UserDto userDto = UserDto.builder()
+                .id(1L)
+                .name("Lorenzo")
+                .lastName("Perez")
+                .email("perez@gmail.com")
+                .phone("123123123")
+                .address(address)
+                .country(country)
+                .build();
+
+        when(userService.getUserById(anyLong())).thenReturn(Optional.ofNullable(userDto));
+        when(countryService.getCountryById(address.getCountryId())).thenReturn(Optional.ofNullable(country));
         when(orderRepository.findAllByUserId(userId)).thenReturn(orders);
 
         List<Order> savedOrders = orderService.getAllByUserId(userId);
@@ -136,6 +202,7 @@ class OrderServiceTest {
                 new CartProductDto(1L, "Product1", "Description1", 2, new BigDecimal("20.00")),
                 new CartProductDto(2L, "Product2", "Description2", 1, new BigDecimal("30.00"))
         );
+
         CartDto cartDto = CartDto.builder()
                 .userId(user_id)
                 .cartProducts(cartProducts)
@@ -170,24 +237,49 @@ class OrderServiceTest {
                 .country(country)
                 .build();
 
-
         when(cartService.getCartById(cartId)).thenReturn(Optional.ofNullable(cartDto));
-
         when(orderRepository.save(any(Order.class))).thenAnswer(invocation -> invocation.getArgument(0));
-
         when(userService.getUserById(cartDto.getUserId())).thenReturn(Optional.ofNullable(userDto));
-
         when(countryService.getCountryById(address.getCountryId())).thenReturn(Optional.ofNullable(country));
+
+        // You may need to adjust this mock to match the actual usage in your code.
+        RestClient.RequestBodyUriSpec requestBodyUriSpecMock = mock(RestClient.RequestBodyUriSpec.class);
+        when(restClient.patch()).thenReturn(requestBodyUriSpecMock);
+
+        Order expectedOrder = Order.builder()
+                .totalPrice(new BigDecimal("100.00"))
+                .address(address)
+                .status(PAID)
+                .dateOrdered("2024-02-10")
+                .orderedProducts(Arrays.asList(
+                        OrderedProduct.builder()
+                                .productId(cartProducts.get(0).getId())
+                                .name(cartProducts.get(0).getProductName())
+                                .description(cartProducts.get(0).getProductDescription())
+                                .price(cartProducts.get(0).getPrice())
+                                .quantity(cartProducts.get(0).getQuantity())
+                                .build(),
+                        OrderedProduct.builder()
+                                .productId(cartProducts.get(1).getId())
+                                .name(cartProducts.get(1).getProductName())
+                                .description(cartProducts.get(1).getProductDescription())
+                                .price(cartProducts.get(1).getPrice())
+                                .quantity(cartProducts.get(1).getQuantity())
+                                .build()
+                ))
+                .build();
+
+        // This stubbing might be unnecessary, hence it is commented out
+        // when(orderService.addOrder(cartId, creditCard)).thenReturn(expectedOrder);
 
         Order savedOrder = orderService.addOrder(cartId, creditCard);
 
         assertThat(savedOrder).isNotNull();
         assertThat(savedOrder.getTotalPrice()).isEqualTo(totalPrice);
-        assertThat(Arrays.asList(addresses)).contains(savedOrder.getFromAddress());
-        assertThat(savedOrder.getStatus()).isEqualTo(Status.PAID);
+        assertThat(savedOrder.getAddress()).isEqualTo(address);
+        assertThat(savedOrder.getStatus()).isEqualTo(PAID);
         assertThat(savedOrder.getDateOrdered()).isNotNull();
         assertThat(savedOrder.getDateDelivered()).isNull();
-
 
         List<OrderedProduct> orderedProducts = savedOrder.getOrderedProducts();
         assertThat(orderedProducts).isNotNull().hasSameSizeAs(cartProducts);
@@ -196,13 +288,11 @@ class OrderServiceTest {
             CartProductDto cartProduct = cartProducts.get(i);
             OrderedProduct orderedProduct = orderedProducts.get(i);
 
-
             assertThat(orderedProduct.getProductId()).isEqualTo(cartProduct.getId());
             assertThat(orderedProduct.getName()).isEqualTo(cartProduct.getProductName());
             assertThat(orderedProduct.getDescription()).isEqualTo(cartProduct.getProductDescription());
             assertThat(orderedProduct.getPrice()).isEqualTo(cartProduct.getPrice());
             assertThat(orderedProduct.getQuantity()).isEqualTo(cartProduct.getQuantity());
-
         }
     }
 

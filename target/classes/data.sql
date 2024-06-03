@@ -57,7 +57,10 @@ CREATE TABLE IF NOT EXISTS addresses (
 INSERT INTO addresses (order_id, street, number, door, city_name, zip_code, country_id) VALUES
 (1, 'Main Street', 123, 'A', 'Springfield', '12345', 1),
 (2, 'Elm Street', 456, 'B', 'Shelbyville', '67890', 2),
-(3, 'Oak Street', 789, 'C', 'Capital City', '10112', 3);
+(3, 'Oak Street', 789, 'C', 'Capital City', '10112', 3),
+(4, 'Oak Street', 789, 'C', 'Capital City', '10112', 3),
+(5, 'Oak Street', 789, 'C', 'Capital City', '10112', 3),
+(6, 'Oak Street', 789, 'C', 'Capital City', '10112', 3);
 
 
 INSERT INTO ordered_products (order_id, product_id, name, category, description, price, quantity)
