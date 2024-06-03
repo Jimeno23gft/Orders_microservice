@@ -61,7 +61,7 @@ public class OrderServiceImpl implements OrderService {
         setCountryAndUserToOrder(order);
         return order;
     }
-
+    //Change to stream and not void
     private void setCountryAndUserToOrder(Order order) {
         log.info("Setting Country and User to Order: {}",order.getId());
         UserDto user = userService.getUserById(order.getUserId()).orElseThrow(() -> new NotFoundException("User not found with ID: " + order.getUserId()));
@@ -79,20 +79,21 @@ public class OrderServiceImpl implements OrderService {
         return ordersList;
     }
 
-
     @Override
-    public Order addOrder(Long cartId, CreditCardDto creditCard) {
+    public Order createOrder(Long cartId, CreditCardDto creditCard) {
         log.info("Sending credit card info to payment Server...");
         log.info("Payment with the credit card " + creditCard.getCardNumber() + " has been made successfully" );
         Order order = new Order();
 
+
         CartDto cart = checkCartAndCartProducts(cartId);
         List<OrderedProduct> orderedProducts = getOrderedProductsListFromCart(cart, order);
+
 
         UserDto user = getUserFromCart(cart, cartId);
         UserResponseDto userResponse = createUserResponse(user);
 
-
+        //Change to builder
         order.setCartId(cart.getId());
         order.setUserId(cart.getUserId());
         order.setFromAddress(randomAddress());
@@ -105,7 +106,25 @@ public class OrderServiceImpl implements OrderService {
         configureCountryAndAddress(order, user);
         cartService.emptyCartProductsById(cartId);
 
+        updateStockForOrderedProducts(orderedProducts);
+
         return orderRepository.save(order);
+    }
+    //Change to builder
+
+    private void updateStockForOrderedProducts(List<OrderedProduct> orderedProducts) {
+        List<UpdateStockRequest> updateStockRequests = orderedProducts.stream()
+                .map(product -> new UpdateStockRequest(product.getProductId(), product.getQuantity() * (-1)))
+                .toList();
+
+        String url = "https://catalog-workshop-yequy5sv5a-uc.a.run.app/catalog/products/newStock/";
+
+        patchOrders(updateStockRequests, url);
+    }
+
+    private void patchOrders(List<UpdateStockRequest> updateStockRequests, String url) {
+        updateStockRequests.forEach(request -> restClient.patch()
+                .uri(url + request.getProductId() + "/quantity?quantity=" + request.getQuantity()));
     }
 
     private void configureCountryAndAddress(Order order, UserDto user) {
@@ -208,11 +227,11 @@ public class OrderServiceImpl implements OrderService {
                 .map(product -> new UpdateStockRequest(product.getProductId(), product.getQuantity()))
                 .toList();
 
-        //String url = "https://catalog-workshop-yequy5sv5a-uc.a.run.app/catalog/products/"
-        String url = "http://localhost:8083/catalog/products/";
+        String url = "https://catalog-workshop-yequy5sv5a-uc.a.run.app/catalog/products/";
+        //String url = "http://localhost:8083/catalog/products/";
 
         updateStockRequests.forEach(request -> restClient.patch()
-                .uri(url + request.getProductId() + "/stock?newStock=" + request.getQuantity()).retrieve().body(UpdateStockRequest.class));
+                .uri(url + "/newStock/"+request.getProductId() + "/quantity?quantity=" + request.getQuantity()).retrieve().body(UpdateStockRequest.class));
 
         int points = order.getOrderedProducts().size();
         userService.patchFidelityPoints(order.getUserId(), -points);

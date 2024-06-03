@@ -1,29 +1,41 @@
-spring:
-    application:
-        name: orders_microservice
-    datasource:
-        driverClassName: org.h2.Driver
-        password: ''
-        url: jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
-        username: sa
-    h2:
-        console:
-            enabled: true
-            settings:
-                web-allow-others: true
-    jpa:
-        database-platform: org.hibernate.dialect.H2Dialect
-        defer-datasource-initialization: true
-        hibernate:
-            ddl-auto: none
-        show-sql: true
-    sql:
-        init:
-            mode: always
 server:
     servlet:
         context-path: /
     port: ${PORT:8080}
+
+spring:
+    application:
+        name: orders
+
+    datasource:
+        driverClassName: com.mysql.cj.jdbc.Driver
+        url: jdbc:mysql://34.175.164.238:3308/OrdersDB
+        username: orders
+        password: orders
+
+    jpa:
+        database-platform: org.hibernate.dialect.MySQLDialect
+        hibernate:
+            ddl-auto: update
+        show-sql: true
+
 cart:
-    url: http://localhost:8081
+    api:
+        url-local: http://localhost:8081
+        base-url: https://cart-workshop-6scgqhxaoa-uc.a.run.app
+        cart-uri: /carts/
+
+catalog:
+    api:
+        base-url: https://catalog-workshop-yequy5sv5a-uc.a.run.app
+        product-uri: /catalog/products/{id}
+        stock-uri: /catalog/products/newStock/{quantity}/quantity?quantity={id}
+        stock2-uri: /products/{id}/{quantity}
+
+users:
+    api:
+        base-url: https://user-microservice-ey3npq3qvq-uc.a.run.app
+        users-uri: /users/{id}
+        country-uri: /country/{id}
+        fidelity-uri: /fidelitypoints/{id}
 

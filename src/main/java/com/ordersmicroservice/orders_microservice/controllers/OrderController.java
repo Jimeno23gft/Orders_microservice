@@ -69,7 +69,7 @@ public class OrderController {
     })
     public ResponseEntity<Order> postOrder(@PathVariable @Positive Long id, @RequestBody CreditCardDto creditCart){
         log.info("POST: postOrder( id = " + id + " " + creditCart.getCardNumber() + " )");
-        Order order = orderService.addOrder(id,creditCart);
+        Order order = orderService.createOrder(id,creditCart);
         return ResponseEntity.status(HttpStatus.CREATED).body(order);
     }
 
