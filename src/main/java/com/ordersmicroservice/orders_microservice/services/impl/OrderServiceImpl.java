@@ -100,7 +100,24 @@ public class OrderServiceImpl implements OrderService {
         configureCountryAndAddress(order, user);
         cartService.emptyCartProductsById(cartId);
 
+        updateStockForOrderedProducts(orderedProducts);
+
         return orderRepository.save(order);
+    }
+
+    private void updateStockForOrderedProducts(List<OrderedProduct> orderedProducts) {
+        List<UpdateStockRequest> updateStockRequests = orderedProducts.stream()
+                .map(product -> new UpdateStockRequest(product.getProductId(), product.getQuantity() * (-1)))
+                .toList();
+
+        String url = "https://catalog-workshop-yequy5sv5a-uc.a.run.app/catalog/products/newStock/";
+
+        patchOrders(updateStockRequests, url);
+    }
+
+    private void patchOrders(List<UpdateStockRequest> updateStockRequests, String url) {
+        updateStockRequests.forEach(request -> restClient.patch()
+                .uri(url + request.getProductId() + "/quantity?quantity=" + request.getQuantity()));
     }
 
     private void configureCountryAndAddress(Order order, UserDto user) {
