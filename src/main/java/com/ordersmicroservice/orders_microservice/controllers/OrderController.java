@@ -9,6 +9,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.constraints.Positive;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -19,6 +20,7 @@ import java.util.List;
 
 import static org.springframework.http.HttpStatus.*;
 
+@Slf4j
 @RestController
 @RequestMapping("/orders")
 public class OrderController {
@@ -32,6 +34,7 @@ public class OrderController {
     @ResponseStatus(OK)
     @Operation(summary = "List all Orders", description = "This endpoint retrieves example data from the server.")
     public ResponseEntity<List<Order>> getAllOrders() {
+            log.info("GET: getAllOrders");
             List<Order> orders = orderService.getAllOrders();
             return ResponseEntity.ok(orders);
     }
@@ -43,6 +46,7 @@ public class OrderController {
             @ApiResponse(responseCode = "404", description = "Order not found", content = @Content(mediaType = "application/json"))
     })
     public ResponseEntity<Order> getOrderById(@PathVariable @Positive Long id) {
+            log.info("GET: getOrderById ( id = " + id + " )");
             Order order = orderService.getOrderById(id);
             return ResponseEntity.ok(order);
     }
@@ -51,6 +55,7 @@ public class OrderController {
     @ResponseStatus(OK)
     @Operation(summary = "List all Orders pertaining to a user", description = "This endpoint retrieves example data by User ID.")
     public ResponseEntity<List<Order>> getAllByUserId(@PathVariable Long userId) {
+        log.info("GET: getAllByUserId ( id = " + userId + " )");
         List<Order> orders = orderService.getAllByUserId(userId);
         return ResponseEntity.ok(orders);
     }
@@ -63,6 +68,7 @@ public class OrderController {
             @ApiResponse(responseCode = "500", description = "Internal server error", content = @Content(mediaType = "application/json"))
     })
     public ResponseEntity<Order> postOrder(@PathVariable @Positive Long id, @RequestBody CreditCardDto creditCart){
+        log.info("POST: postOrder( id = " + id + " " + creditCart.getCardNumber() + " )");
         Order order = orderService.addOrder(id,creditCart);
         return ResponseEntity.status(HttpStatus.CREATED).body(order);
     }
@@ -70,6 +76,7 @@ public class OrderController {
     @DeleteMapping("/{id}")
     @Operation(summary = "Cancel an order", description = "This endpoint retrieves example data from the server.")
     public ResponseEntity<String> deleteById(@PathVariable @Positive Long id) {
+        log.info("DELETE: deleteById ( " + id + " )");
         orderService.deleteById(id);
         return ResponseEntity.status(OK).body("Order with id " + id + " has been deleted successfully");
     }
@@ -77,6 +84,7 @@ public class OrderController {
     @PatchMapping("/{id}")
     @Operation(summary = "Update an order", description = "This endpoint updates the status of an order based on the provided ID.")
     public ResponseEntity<Order> patchOrder(@PathVariable @Positive Long id, @RequestBody StatusUpdateDto patchData) {
+        log.info("PATCH: patchOrder ( " + id + " )");
         Order updatedOrder = orderService.patchOrder(id, patchData.getStatus());
         return ResponseEntity.ok(updatedOrder);
     }

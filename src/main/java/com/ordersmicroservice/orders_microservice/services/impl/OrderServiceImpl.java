@@ -14,6 +14,7 @@ import com.ordersmicroservice.orders_microservice.models.OrderedProduct;
 import com.ordersmicroservice.orders_microservice.repositories.OrderRepository;
 import com.ordersmicroservice.orders_microservice.services.*;
 import jakarta.transaction.Transactional;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.client.RestClient;
@@ -24,6 +25,7 @@ import java.util.*;
 import java.util.function.Consumer;
 
 @Service
+@Slf4j
 public class OrderServiceImpl implements OrderService {
     OrderRepository orderRepository;
     Random random;
@@ -53,6 +55,7 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public Order getOrderById(Long orderId) {
+        log.info("Getting Order by ID in service");
         Order order = orderRepository.findById(orderId).orElseThrow(() -> new NotFoundException("Order not found with ID: " + orderId));
         setCountryAndUserToOrder(order);
         return order;
@@ -77,7 +80,7 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public Order addOrder(Long cartId, CreditCardDto creditCard) {
-        //log.info("Sending credit card info to payment Server...")
+        log.info("Sending credit card info to payment Server...");
         //log.info("Payment with the credit card " + creditCard.getNumber() + " has been made successfully" )
         Order order = new Order();
 
