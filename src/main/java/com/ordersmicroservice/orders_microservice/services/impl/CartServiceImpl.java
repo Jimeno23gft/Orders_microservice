@@ -1,6 +1,7 @@
 package com.ordersmicroservice.orders_microservice.services.impl;
 import com.ordersmicroservice.orders_microservice.dto.CartDto;
 import com.ordersmicroservice.orders_microservice.services.CartService;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClient;
 import java.util.Optional;
@@ -8,22 +9,22 @@ import java.util.Optional;
 
 @Service
 public class CartServiceImpl implements CartService {
-
-
-    public String cartUri = "/carts/";
-
-
+    public String baseUrl;
+    public String cartUri;
     private final RestClient restClient;
 
-    public CartServiceImpl(RestClient.Builder restClient) {
-        this.restClient = restClient.build();
+    public CartServiceImpl(RestClient restClient,
+                           @Value("${cart.api.base-url}") String baseUrl,
+                           @Value("${cart.api.cart-uri}")String cartUri) {
+        this.baseUrl = baseUrl;
+        this.cartUri = cartUri;
+        this.restClient = restClient;
     }
-
 
     public Optional<CartDto> getCartById(Long id){
 
         return Optional.ofNullable(restClient.get()
-                .uri(cartUri + id)
+                .uri(baseUrl + cartUri + id)
                 .retrieve()
                 .body(CartDto.class));
     }
@@ -31,7 +32,7 @@ public class CartServiceImpl implements CartService {
     public void emptyCartProductsById(Long id){
 
         restClient.delete()
-                .uri(cartUri + id)
+                .uri(baseUrl + cartUri + id)
                 .retrieve()
                 .body(Void.class);
     }

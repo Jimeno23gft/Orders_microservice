@@ -6,6 +6,7 @@ import com.ordersmicroservice.orders_microservice.dto.CountryDto;
 import com.ordersmicroservice.orders_microservice.dto.UserDto;
 import com.ordersmicroservice.orders_microservice.models.Address;
 import com.ordersmicroservice.orders_microservice.services.impl.UserServiceImpl;
+import okhttp3.mockwebserver.RecordedRequest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -20,10 +21,10 @@ import java.io.IOException;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class UserServiceTest {
     private MockWebServer mockWebServer;
+
     private UserServiceImpl userServiceImpl;
 
     @BeforeEach
@@ -33,14 +34,18 @@ class UserServiceTest {
         RestClient restClient = RestClient.builder()
                 .baseUrl(mockWebServer.url("/").toString())
                 .build();
-        userServiceImpl = new UserServiceImpl(restClient);
+
+        userServiceImpl = new UserServiceImpl(restClient,
+                mockWebServer.url("/").toString(),
+                "/users/{userId}",
+        "/fidelitypoints/{id}");
+
     }
 
     @Test
     @DisplayName("When fetching a user by ID, then the correct user details are returned")
     void testGetUserById() throws Exception {
 
-        userServiceImpl.userUri = "/users";
 
         String userJson = buildUser();
         mockWebServer.enqueue(new MockResponse()
@@ -103,7 +108,6 @@ class UserServiceTest {
     @DisplayName("When fetching a non-existent user by ID, then a 404 error is returned")
     void testGetUserByIdNotFound() {
 
-        userServiceImpl.userUri = "/users";
 
 
         mockWebServer.enqueue(new MockResponse()
@@ -122,7 +126,6 @@ class UserServiceTest {
     @DisplayName("When fetching a User by ID and an internal server error occurs, then a 500 error is returned")
     void testGetProductByIdServerError() {
 
-        userServiceImpl.userUri = "/users";
 
         mockWebServer.enqueue(new MockResponse()
                 .setResponseCode(500)
@@ -134,6 +137,30 @@ class UserServiceTest {
                 .hasMessageContaining("Internal Server Error")
                 .extracting(ex -> ((RestClientResponseException) ex).getStatusCode())
                 .isEqualTo(HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    @Test
+    @DisplayName("Successfully patches user fidelity points")
+    void testPatchFidelityPointsSuccess() throws InterruptedException, IOException {
+
+        int points = 500;
+
+        mockWebServer.enqueue(new MockResponse()
+                .setBody("{\"message\":\"success\"}")
+                .setResponseCode(200)
+                .addHeader("Content-Type", "application/json"));
+
+
+        assertDoesNotThrow(() -> userServiceImpl.patchFidelityPoints(100L, points));
+
+        RecordedRequest recordedRequest = mockWebServer.takeRequest();
+        assertThat(recordedRequest.getMethod()).isEqualTo("PATCH");
+        assertThat(recordedRequest.getPath()).isEqualTo("/fidelitypoints/100");
+        assertThat(recordedRequest.getBody().readUtf8()).isEqualTo(String.valueOf(points));
+
+
+        assertThat(recordedRequest.getHeader("Content-Type")).isEqualTo("application/json");
+
     }
 
 
