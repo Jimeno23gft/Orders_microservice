@@ -81,8 +81,10 @@ public class OrderServiceImpl implements OrderService {
         //log.info("Payment with the credit card " + creditCard.getNumber() + " has been made successfully" )
         Order order = new Order();
 
+
         CartDto cart = checkCartAndCartProducts(cartId);
         List<OrderedProduct> orderedProducts = getOrderedProductsListFromCart(cart, order);
+
 
         UserDto user = getUserFromCart(cart, cartId);
         UserResponseDto userResponse = createUserResponse(user);

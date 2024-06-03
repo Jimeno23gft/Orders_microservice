@@ -6,9 +6,10 @@ import lombok.NoArgsConstructor;
 
 import java.math.BigInteger;
 
+
+@Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Data
 public class CreditCardDto {
     private BigInteger cardNumber;
     private String expirationDate;
