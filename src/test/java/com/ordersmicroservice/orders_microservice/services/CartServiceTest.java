@@ -3,10 +3,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ordersmicroservice.orders_microservice.dto.CartDto;
 import com.ordersmicroservice.orders_microservice.dto.CartProductDto;
 import com.ordersmicroservice.orders_microservice.services.impl.CartServiceImpl;
-import com.ordersmicroservice.orders_microservice.services.impl.ProductServiceImpl;
 import okhttp3.mockwebserver.MockResponse;
 import okhttp3.mockwebserver.MockWebServer;
-import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.jetbrains.annotations.NotNull;
@@ -33,7 +31,6 @@ class CartServiceTest {
 
     @Autowired
     private CartServiceImpl cartServiceImpl;
-
     private static MockWebServer mockWebServer;
 
     @BeforeEach
@@ -47,13 +44,11 @@ class CartServiceTest {
         cartServiceImpl = new CartServiceImpl(restClient,
                 mockWebServer.url("/").toString(),
                 "/carts/");
-
     }
 
     @AfterEach
     void afterEach() throws IOException {
         mockWebServer.shutdown();
-
     }
 
     @Test
@@ -64,7 +59,6 @@ class CartServiceTest {
 
         ObjectMapper objectMapper = new ObjectMapper();
         String cartJson = objectMapper.writeValueAsString(cartDto);
-
 
         mockWebServer.enqueue(new MockResponse()
                 .setBody(cartJson)
@@ -81,27 +75,25 @@ class CartServiceTest {
 
     @NotNull
     private static CartDto buildCart() {
-        CartProductDto cartProductDto = new CartProductDto();
-        cartProductDto.setId(1L);
-        cartProductDto.setProductName("Apple MacBook Pro");
-        cartProductDto.setProductDescription("Latest model of Apple MacBook Pro 16 inch.");
-        cartProductDto.setQuantity(1);
-        cartProductDto.setPrice(new BigDecimal("2399.99"));
+        CartProductDto cartProductDto = CartProductDto.builder()
+                .id(1L)
+                .productName("Apple MacBook Pro")
+                .productDescription("Latest model of Apple MacBook Pro 16 inch.")
+                .quantity(1)
+                .price(new BigDecimal("2399.99"))
+                .build();
 
-        CartDto cartDto = new CartDto();
-        cartDto.setId(1L);
-        cartDto.setUserId(1L);
-        cartDto.setCartProducts(List.of(cartProductDto));
-        cartDto.setTotalPrice(new BigDecimal("2399.99"));
-        return cartDto;
-
+        return CartDto.builder()
+                .id(1L)
+                .userId(1L)
+                .cartProducts(List.of(cartProductDto))
+                .totalPrice(new BigDecimal("2399.99"))
+                .build();
     }
 
     @Test
     @DisplayName("When fetching a non-existent cart by ID, then a 404 error is returned")
     void testGetCartByIdNotFound() {
-
-
         mockWebServer.enqueue(new MockResponse()
                 .setResponseCode(404)
                 .setBody("Cart not found")
@@ -112,16 +104,12 @@ class CartServiceTest {
                 .hasMessageContaining("Cart not found")
                 .extracting(ex -> ((RestClientResponseException) ex).getStatusCode())
                 .isEqualTo(HttpStatus.NOT_FOUND);
-
     }
 
 
     @Test
     @DisplayName("When fetching a Cart by ID and an internal server error occurs, then a 500 error is returned")
     void testGetCartByIdServerError() {
-
-
-
         mockWebServer.enqueue(new MockResponse()
                 .setResponseCode(500)
                 .setBody("Internal Server Error")
@@ -138,9 +126,7 @@ class CartServiceTest {
     @Test
     @DisplayName("When deleting the products in a Cart, the cart must get empty")
     void testEmptyCart() throws InterruptedException {
-
         CartDto cartDto = buildCart();
-
 
         mockWebServer.enqueue(new MockResponse()
                 .setResponseCode(200));
