@@ -21,7 +21,6 @@ import java.io.IOException;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class UserServiceTest {
     private MockWebServer mockWebServer;
@@ -35,7 +34,11 @@ class UserServiceTest {
         RestClient restClient = RestClient.builder()
                 .baseUrl(mockWebServer.url("/").toString())
                 .build();
-        userServiceImpl = new UserServiceImpl(restClient);
+
+        userServiceImpl = new UserServiceImpl(restClient,
+                mockWebServer.url("/").toString(),
+                "/users/{userId}",
+        "/fidelitypoints/{id}");
 
     }
 
@@ -43,7 +46,6 @@ class UserServiceTest {
     @DisplayName("When fetching a user by ID, then the correct user details are returned")
     void testGetUserById() throws Exception {
 
-        userServiceImpl.userUri = "/users";
 
         String userJson = buildUser();
         mockWebServer.enqueue(new MockResponse()
@@ -106,7 +108,6 @@ class UserServiceTest {
     @DisplayName("When fetching a non-existent user by ID, then a 404 error is returned")
     void testGetUserByIdNotFound() {
 
-        userServiceImpl.userUri = "/users";
 
 
         mockWebServer.enqueue(new MockResponse()
@@ -125,7 +126,6 @@ class UserServiceTest {
     @DisplayName("When fetching a User by ID and an internal server error occurs, then a 500 error is returned")
     void testGetProductByIdServerError() {
 
-        userServiceImpl.userUri = "/users";
 
         mockWebServer.enqueue(new MockResponse()
                 .setResponseCode(500)
@@ -142,16 +142,6 @@ class UserServiceTest {
     @Test
     @DisplayName("Successfully patches user fidelity points")
     void testPatchFidelityPointsSuccess() throws InterruptedException, IOException {
-
-        mockWebServer = new MockWebServer();
-        mockWebServer.start(8082);
-
-
-        RestClient restClient = RestClient.builder()
-                .baseUrl(mockWebServer.url("/fidelitypoints/").toString())
-                .build();
-
-        userServiceImpl = new UserServiceImpl(restClient);
 
         int points = 500;
 
