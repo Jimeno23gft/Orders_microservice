@@ -43,12 +43,13 @@ class CountryServiceTest {
     void testGetCountryById() throws Exception {
 
 
-        CountryDto countryDto = new CountryDto();
-        countryDto.setId(1L);
-        countryDto.setName("España");
-        countryDto.setTax(21F);
-        countryDto.setPrefix("+34");
-        countryDto.setTimeZone("Europe/Madrid");
+        CountryDto countryDto = CountryDto.builder()
+                .id(1L)
+                .name("España")
+                .tax(21F)
+                .prefix("+34")
+                .timeZone("Europe/Madrid")
+                .build();
 
         ObjectMapper objectMapper = new ObjectMapper();
         String countryJson = objectMapper.writeValueAsString(countryDto);

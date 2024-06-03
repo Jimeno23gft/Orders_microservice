@@ -11,23 +11,23 @@ import org.springframework.web.client.RestClient;
 public class ProductServiceImpl {
     public String baseUrl;
     public String productUri;
-    public String stock2Uri;
+    public String stockUri;
     private final RestClient restClient;
 
     public ProductServiceImpl(RestClient restClient,
                               @Value("${catalog.api.base-url}") String baseUrl,
                               @Value("${catalog.api.product-uri}") String productUri,
-                              @Value("${catalog.api.stock2-uri}") String stock2Uri) {
+                              @Value("${catalog.api.stock-uri}") String stock2Uri) {
         this.baseUrl = baseUrl;
         this.productUri = productUri;
-        this.stock2Uri = stock2Uri;
+        this.stockUri = stock2Uri;
         this.restClient = restClient;
     }
 
     public ProductDto patchProductStock(Long productId, int quantity) {
         log.info("patchProductStock( productId:  {}, quantity: {} )",productId,quantity);
         return restClient.patch()
-                .uri(baseUrl + stock2Uri, quantity,productId)
+                .uri(baseUrl + stockUri,productId,quantity)
                 .retrieve()
                 .body(ProductDto.class);
     }
