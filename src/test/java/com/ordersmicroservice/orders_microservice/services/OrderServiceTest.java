@@ -20,6 +20,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestClient;
 
 import java.math.BigInteger;
@@ -31,6 +33,7 @@ import static com.ordersmicroservice.orders_microservice.dto.Status.IN_DELIVERY;
 import static com.ordersmicroservice.orders_microservice.dto.Status.PAID;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.mockito.AdditionalAnswers.returnsFirstArg;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -483,4 +486,17 @@ class OrderServiceTest {
         verify(orderRepository).findById(orderId);
         verify(orderRepository, never()).deleteById(orderId);
     }
+
+    @Test
+    @DisplayName("Testing getAllOrders when no orders exist")
+    void testGetAllOrdersNoOrdersFound() {
+        when(orderRepository.findAll()).thenReturn(Collections.emptyList());
+
+        assertThatThrownBy(() -> orderService.getAllOrders())
+                .isInstanceOf(NotFoundException.class)
+                .hasMessageContaining("No orders were found");
+
+        verify(orderRepository).findAll();
+    }
+
 }
