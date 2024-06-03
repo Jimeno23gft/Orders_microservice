@@ -3,7 +3,6 @@ package com.ordersmicroservice.orders_microservice.services.impl;
 import com.ordersmicroservice.orders_microservice.dto.*;
 import com.ordersmicroservice.orders_microservice.dto.CreditCardDto;
 import com.ordersmicroservice.orders_microservice.dto.CartDto;
-import com.ordersmicroservice.orders_microservice.dto.CartProductDto;
 import com.ordersmicroservice.orders_microservice.dto.Status;
 import com.ordersmicroservice.orders_microservice.dto.UpdateStockRequest;
 import com.ordersmicroservice.orders_microservice.exception.EmptyCartException;
@@ -22,6 +21,8 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.function.Consumer;
+
+import static com.ordersmicroservice.orders_microservice.dto.Status.PAID;
 
 @Service
 public class OrderServiceImpl implements OrderService {
@@ -60,7 +61,13 @@ public class OrderServiceImpl implements OrderService {
     //Change to stream and not void
     private void setCountryAndUserToOrder(Order order) {
         UserDto user = userService.getUserById(order.getUserId()).orElseThrow(() -> new NotFoundException("User not found with ID: " + order.getUserId()));
-        UserResponseDto userResponse = UserResponseDto.fromUserDto(user);
+        UserResponseDto userResponse = UserResponseDto.builder()
+                .id(user.getId())
+                .name(user.getName())
+                .lastName(user.getLastName())
+                .email(user.getEmail())
+                .phone(user.getPhone())
+                .build();
         CountryDto countryDto = countryService.getCountryById(order.getCountryId()).orElseThrow();
         order.setCountry(countryDto);
         order.setUser(userResponse);
@@ -79,25 +86,40 @@ public class OrderServiceImpl implements OrderService {
     public Order addOrder(Long cartId, CreditCardDto creditCard) {
         //log.info("Sending credit card info to payment Server...")
         //log.info("Payment with the credit card " + creditCard.getNumber() + " has been made successfully" )
-        Order order = new Order();
+
 
 
         CartDto cart = checkCartAndCartProducts(cartId);
-        List<OrderedProduct> orderedProducts = getOrderedProductsListFromCart(cart, order);
+        List<OrderedProduct> orderedProducts =cart.getCartProducts().stream().map(cartProductDto -> OrderedProduct.builder()
+                        .productId(cartProductDto.getId())
+                        .name(cartProductDto.getProductName())
+                        .description(cartProductDto.getProductDescription())
+                        .price(cartProductDto.getPrice())
+                        .quantity(cartProductDto.getQuantity())
+                        .build())
+                .toList();
 
 
         UserDto user = getUserFromCart(cart, cartId);
-        UserResponseDto userResponse = createUserResponse(user);
+        UserResponseDto userResponse = UserResponseDto.builder()
+                .id(user.getId())
+                .name(user.getName())
+                .lastName(user.getLastName())
+                .email(user.getEmail())
+                .phone(user.getPhone())
+                .build();
 
-        //Change to builder
-        order.setCartId(cart.getId());
-        order.setUserId(cart.getUserId());
-        order.setFromAddress(randomAddress());
-        order.setStatus(Status.PAID);
-        order.setDateOrdered(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")));
-        order.setUser(userResponse);
-        order.setOrderedProducts(orderedProducts);
-        order.setTotalPrice(cart.getTotalPrice());
+        Order order = Order.builder()
+                .cartId(cart.getId())
+                .userId(cart.getUserId())
+                .fromAddress(randomAddress())
+                .status(PAID)
+                .dateOrdered(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")))
+                .user(userResponse)
+                .orderedProducts(orderedProducts)
+                .totalPrice(cart.getTotalPrice())
+                .build();
+
 
         configureCountryAndAddress(order, user);
         cartService.emptyCartProductsById(cartId);
@@ -137,26 +159,8 @@ public class OrderServiceImpl implements OrderService {
         addressService.saveAddress(address);
     }
 
-    private UserResponseDto createUserResponse(UserDto user) {
-        UserResponseDto userResponse = new UserResponseDto();
-        userResponse.setId(user.getId());
-        userResponse.setName(user.getName());
-        userResponse.setLastName(user.getLastName());
-        userResponse.setEmail(user.getEmail());
-        userResponse.setPhone(user.getPhone());
-        return userResponse;
-    }
-
     private UserDto getUserFromCart(CartDto cart, Long cartId) {
         return userService.getUserById(cart.getUserId()).orElseThrow(() -> new NotFoundException("User not found with ID: " + cartId));
-    }
-
-    private List<OrderedProduct> getOrderedProductsListFromCart(CartDto cart, Order order) {
-        List<CartProductDto> cartProducts = cart.getCartProducts();
-
-        return new ArrayList<>(cartProducts.stream()
-                .map(cartProductDto -> convertToOrderedProduct(cartProductDto, order))
-                .toList());
     }
 
     private CartDto checkCartAndCartProducts(Long cartId) {
@@ -167,17 +171,6 @@ public class OrderServiceImpl implements OrderService {
             throw new EmptyCartException("Empty cart, order not made");
         }
         return cart;
-    }
-
-    private OrderedProduct convertToOrderedProduct(CartProductDto cartProductDto, Order order) {
-        return OrderedProduct.builder()
-                .order(order)
-                .productId(cartProductDto.getId())
-                .name(cartProductDto.getProductName())
-                .description(cartProductDto.getProductDescription())
-                .price(cartProductDto.getPrice())
-                .quantity(cartProductDto.getQuantity())
-                .build();
     }
 
     private String randomAddress() {
@@ -196,12 +189,10 @@ public class OrderServiceImpl implements OrderService {
         Map<Status, Consumer<Order>> statusActions = Map.of(
                 Status.DELIVERED, this::handleDeliveredStatus,
                 Status.RETURNED, this::handleReturnedStatus
-                //TODO: Aqui podemos controlar mas status si hiciera falta y hacer un metodo para cada uno
         );
 
         statusActions.getOrDefault(updatedStatus, order -> {
 
-            //TODO: Aqui si en un futuro queremos, podemos hacer que si el status que nos mandan no coincide con ninguno de los del map lance una excepcion
         }).accept(existingOrder);
 
         setCountryAndUserToOrder(existingOrder);
@@ -221,7 +212,6 @@ public class OrderServiceImpl implements OrderService {
                 .toList();
 
         String url = "https://catalog-workshop-yequy5sv5a-uc.a.run.app/catalog/products/";
-        //String url = "http://localhost:8083/catalog/products/";
 
         updateStockRequests.forEach(request -> restClient.patch()
                 .uri(url + "/newStock/"+request.getProductId() + "/quantity?quantity=" + request.getQuantity()).retrieve().body(UpdateStockRequest.class));

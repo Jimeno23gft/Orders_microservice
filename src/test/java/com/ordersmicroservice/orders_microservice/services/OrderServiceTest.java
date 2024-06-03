@@ -20,29 +20,17 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.core.ParameterizedTypeReference;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
-import org.springframework.http.StreamingHttpOutputMessage;
-import org.springframework.http.client.ClientHttpRequest;
 import org.springframework.web.client.RestClient;
-import org.springframework.web.util.UriBuilder;
 
 import java.math.BigInteger;
 import java.math.BigDecimal;
-import java.net.URI;
-import java.nio.charset.Charset;
-import java.time.ZonedDateTime;
 import java.util.*;
-import java.util.function.Consumer;
-import java.util.function.Function;
 
 import static com.ordersmicroservice.orders_microservice.Datos.*;
 import static com.ordersmicroservice.orders_microservice.dto.Status.IN_DELIVERY;
 import static com.ordersmicroservice.orders_microservice.dto.Status.PAID;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -190,10 +178,11 @@ class OrderServiceTest {
     void testAddOrder() {
         String[] addresses = {"123 Main St", "456 Elm St", "789 Oak St", "101 Maple Ave", "222 Pine St", "333 Cedar Rd"};
 
-        CreditCardDto creditCard = new CreditCardDto();
-        creditCard.setCardNumber(new BigInteger("1234567812345678"));
-        creditCard.setExpirationDate("12/25");
-        creditCard.setCvcCode(123);
+        CreditCardDto creditCard = CreditCardDto.builder()
+                .cardNumber(new BigInteger("1234567812345678"))
+                .expirationDate("12/25")
+                .cvcCode(123)
+                .build();
 
         Long cartId = 1L;
         Long user_id = 1L;
@@ -302,7 +291,8 @@ class OrderServiceTest {
         Long cartId = 1L;
         when(cartService.getCartById(cartId)).thenReturn(Optional.empty());
 
-        assertThatThrownBy(() -> orderService.addOrder(cartId, new CreditCardDto()))
+        CreditCardDto creditCardDto = new CreditCardDto();
+        assertThatThrownBy(() -> orderService.addOrder(cartId, creditCardDto))
                 .isInstanceOf(NotFoundException.class);
 
         verify(cartService, times(1)).getCartById(cartId);
@@ -316,7 +306,8 @@ class OrderServiceTest {
         emptyCart.setCartProducts(Collections.emptyList());
         when(cartService.getCartById(cartId)).thenReturn(Optional.of(emptyCart));
 
-        assertThatThrownBy(() -> orderService.addOrder(cartId, new CreditCardDto()))
+        CreditCardDto creditCardDto = new CreditCardDto();
+        assertThatThrownBy(() -> orderService.addOrder(cartId, creditCardDto))
                 .isInstanceOf(EmptyCartException.class);
 
         verify(cartService, times(1)).getCartById(cartId);
@@ -325,13 +316,14 @@ class OrderServiceTest {
     @Test
     @DisplayName("Testing the update of an order")
     void testPatchOrderIfFound() {
-        Order existingOrder = new Order();
-        existingOrder.setId(order1.getId());
-        existingOrder.setStatus(order1.getStatus());
-        existingOrder.setDateDelivered(order1.getDateDelivered());
-        existingOrder.setOrderedProducts(new ArrayList<>());
-        existingOrder.setUserId(1L);
-        existingOrder.setCountryId(1L);
+        Order existingOrder = Order.builder()
+                .id(order1.getId())
+                .status(order1.getStatus())
+                .dateDelivered(order1.getDateDelivered())
+                .orderedProducts(new ArrayList<>())
+                .userId(1L)
+                .countryId(1L)
+                .build();
 
         StatusUpdateDto statusUpdateDto = new StatusUpdateDto();
         statusUpdateDto.setStatus(Status.CANCELLED);
@@ -380,9 +372,10 @@ class OrderServiceTest {
                 new OrderedProduct()
         )));
 
-        CountryDto country2 = new CountryDto();
-        country.setId(1L);
-        country.setName("Country 1");
+        CountryDto country2 =  CountryDto.builder()
+                .id(1L)
+                .name("Country 1")
+                .build();
 
         when(orderRepository.findById(1L)).thenReturn(Optional.of(initialOrder));
         when(orderRepository.save(initialOrder)).thenReturn(initialOrder);
@@ -423,25 +416,28 @@ class OrderServiceTest {
         RestClient.RequestBodyUriSpec requestBodyUriSpec = mock(RestClient.RequestBodyUriSpec.class);
         RestClient.ResponseSpec responseSpec = mock(RestClient.ResponseSpec.class);
 
-        Order initialOrder = new Order();
-        OrderedProduct product1 = new OrderedProduct();
-        OrderedProduct product2 = new OrderedProduct();
-        product1.setProductId(1L);
-        product2.setProductId(2L);
-        product1.setQuantity(5);
-        product2.setQuantity(3);
-        initialOrder.setId(1L);
-        initialOrder.setStatus(IN_DELIVERY);
-        initialOrder.setUserId(1L);
-        initialOrder.setCountryId(1L);
-        initialOrder.setOrderedProducts(Arrays.asList(
-                product1,
-                product2
-        ));
+        OrderedProduct product1 = OrderedProduct.builder()
+                .productId(1L)
+                .quantity(5)
+                .build();
 
-        CountryDto country2 = new CountryDto();
-        country.setId(1L);
-        country.setName("Country 1");
+        OrderedProduct product2 = OrderedProduct.builder()
+                .productId(2L)
+                .quantity(3)
+                .build();
+
+        Order initialOrder = Order.builder()
+                .id(1L)
+                .status(IN_DELIVERY)
+                .userId(1L)
+                .countryId(1L)
+                .orderedProducts(Arrays.asList(product1, product2))
+                .build();
+
+        CountryDto country2 = CountryDto.builder()
+                .id(1L)
+                .name("Country 1")
+                .build();
 
         when(restClient.patch()).thenReturn(requestBodyUriSpec);
         when(requestBodyUriSpec.uri(anyString())).thenReturn(requestBodyUriSpec);
