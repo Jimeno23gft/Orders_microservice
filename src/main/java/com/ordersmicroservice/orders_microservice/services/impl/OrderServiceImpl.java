@@ -45,8 +45,10 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public List<Order> getAllOrders() {
-        return Optional.of(orderRepository.findAll()).filter(orders -> !orders.isEmpty())
+         List<Order> ordersList = Optional.of(orderRepository.findAll()).filter(orders -> !orders.isEmpty())
                 .orElseThrow(() -> new NotFoundException("No orders were found"));
+        ordersList.forEach(this::setCountryAndUserToOrder);
+        return ordersList;
     }
 
     @Override
@@ -57,7 +59,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     private void setCountryAndUserToOrder(Order order) {
-        UserDto user = userService.getUserById(order.getUserId()).orElseThrow();
+        UserDto user = userService.getUserById(order.getUserId()).orElseThrow(() -> new NotFoundException("User not found with ID: " + order.getUserId()));
         UserResponseDto userResponse = UserResponseDto.fromUserDto(user);
         CountryDto countryDto = countryService.getCountryById(order.getCountryId()).orElseThrow();
         order.setCountry(countryDto);
@@ -66,7 +68,10 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public List<Order> getAllByUserId(Long userId) {
-        return orderRepository.findAllByUserId(userId);
+
+        List<Order> ordersList = orderRepository.findAllByUserId(userId);
+        ordersList.forEach(this::setCountryAndUserToOrder);
+        return ordersList;
     }
 
 
@@ -95,7 +100,24 @@ public class OrderServiceImpl implements OrderService {
         configureCountryAndAddress(order, user);
         cartService.emptyCartProductsById(cartId);
 
+        updateStockForOrderedProducts(orderedProducts);
+
         return orderRepository.save(order);
+    }
+
+    private void updateStockForOrderedProducts(List<OrderedProduct> orderedProducts) {
+        List<UpdateStockRequest> updateStockRequests = orderedProducts.stream()
+                .map(product -> new UpdateStockRequest(product.getProductId(), product.getQuantity() * (-1)))
+                .toList();
+
+        String url = "https://catalog-workshop-yequy5sv5a-uc.a.run.app/catalog/products/newStock/";
+
+        patchOrders(updateStockRequests, url);
+    }
+
+    private void patchOrders(List<UpdateStockRequest> updateStockRequests, String url) {
+        updateStockRequests.forEach(request -> restClient.patch()
+                .uri(url + request.getProductId() + "/quantity?quantity=" + request.getQuantity()));
     }
 
     private void configureCountryAndAddress(Order order, UserDto user) {
@@ -123,7 +145,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     private UserDto getUserFromCart(CartDto cart, Long cartId) {
-        return userService.getUserById(cart.getUserId()).orElseThrow(() -> new NotFoundException("Cart not found with ID: " + cartId));
+        return userService.getUserById(cart.getUserId()).orElseThrow(() -> new NotFoundException("User not found with ID: " + cartId));
     }
 
     private List<OrderedProduct> getOrderedProductsListFromCart(CartDto cart, Order order) {
