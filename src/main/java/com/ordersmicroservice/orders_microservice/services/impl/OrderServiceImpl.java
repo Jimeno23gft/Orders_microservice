@@ -109,7 +109,6 @@ public class OrderServiceImpl implements OrderService {
                 .phone(user.getPhone())
                 .build();
 
-<<<<<<< HEAD
         Order order = Order.builder()
                 .cartId(cart.getId())
                 .userId(cart.getUserId())
@@ -120,17 +119,7 @@ public class OrderServiceImpl implements OrderService {
                 .orderedProducts(orderedProducts)
                 .totalPrice(cart.getTotalPrice())
                 .build();
-=======
-        //Change to builder
-        order.setCartId(cart.getId());
-        order.setUserId(cart.getUserId());
-        order.setFromAddress(randomAddress());
-        order.setStatus(Status.PAID);
-        order.setDateOrdered(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")));
-        order.setUser(userResponse);
-        order.setOrderedProducts(orderedProducts);
-        order.setTotalPrice(cart.getTotalPrice());
->>>>>>> develop
+
 
         configureCountryAndAddress(order, user);
         cartService.emptyCartProductsById(cartId);
@@ -223,7 +212,6 @@ public class OrderServiceImpl implements OrderService {
                 .toList();
 
         String url = "https://catalog-workshop-yequy5sv5a-uc.a.run.app/catalog/products/";
-        //String url = "http://localhost:8083/catalog/products/";
 
         updateStockRequests.forEach(request -> restClient.patch()
                 .uri(url + "/newStock/"+request.getProductId() + "/quantity?quantity=" + request.getQuantity()).retrieve().body(UpdateStockRequest.class));
