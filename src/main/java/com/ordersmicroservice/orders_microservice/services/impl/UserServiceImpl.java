@@ -34,10 +34,10 @@ public class UserServiceImpl implements UserService {
     }
 
     public void patchFidelityPoints(Long userId, int points){
-
         restClient.patch()
                 .uri(baseUrl + fidelityUri, userId)
                 .body(points)
+                .header("Content-Type", "application/json")
                 .retrieve();
     }
 }

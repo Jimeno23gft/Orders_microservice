@@ -6,6 +6,7 @@ import com.ordersmicroservice.orders_microservice.dto.CountryDto;
 import com.ordersmicroservice.orders_microservice.dto.UserDto;
 import com.ordersmicroservice.orders_microservice.models.Address;
 import com.ordersmicroservice.orders_microservice.services.impl.UserServiceImpl;
+import okhttp3.mockwebserver.RecordedRequest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -20,10 +21,10 @@ import java.io.IOException;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class UserServiceTest {
     private MockWebServer mockWebServer;
+
     private UserServiceImpl userServiceImpl;
 
     @BeforeEach
@@ -38,6 +39,7 @@ class UserServiceTest {
                 mockWebServer.url("/").toString(),
                 "/users/{userId}",
         "/fidelitypoints/{id}");
+
     }
 
     @Test
@@ -135,6 +137,30 @@ class UserServiceTest {
                 .hasMessageContaining("Internal Server Error")
                 .extracting(ex -> ((RestClientResponseException) ex).getStatusCode())
                 .isEqualTo(HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    @Test
+    @DisplayName("Successfully patches user fidelity points")
+    void testPatchFidelityPointsSuccess() throws InterruptedException, IOException {
+
+        int points = 500;
+
+        mockWebServer.enqueue(new MockResponse()
+                .setBody("{\"message\":\"success\"}")
+                .setResponseCode(200)
+                .addHeader("Content-Type", "application/json"));
+
+
+        assertDoesNotThrow(() -> userServiceImpl.patchFidelityPoints(100L, points));
+
+        RecordedRequest recordedRequest = mockWebServer.takeRequest();
+        assertThat(recordedRequest.getMethod()).isEqualTo("PATCH");
+        assertThat(recordedRequest.getPath()).isEqualTo("/fidelitypoints/100");
+        assertThat(recordedRequest.getBody().readUtf8()).isEqualTo(String.valueOf(points));
+
+
+        assertThat(recordedRequest.getHeader("Content-Type")).isEqualTo("application/json");
+
     }
 
 
