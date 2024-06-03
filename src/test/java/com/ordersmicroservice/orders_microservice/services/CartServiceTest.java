@@ -2,10 +2,8 @@ package com.ordersmicroservice.orders_microservice.services;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ordersmicroservice.orders_microservice.dto.CartDto;
 import com.ordersmicroservice.orders_microservice.dto.CartProductDto;
-import com.ordersmicroservice.orders_microservice.services.impl.CartServiceImpl;
 import okhttp3.mockwebserver.MockResponse;
 import okhttp3.mockwebserver.MockWebServer;
-import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.jetbrains.annotations.NotNull;
@@ -15,7 +13,6 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.web.client.RestClient;
 import org.springframework.web.client.RestClientResponseException;
 
 import java.io.IOException;
@@ -32,21 +29,7 @@ class CartServiceTest {
 
     @Autowired
     private CartService cartService;
-
     private static MockWebServer mockWebServer;
-
-/*
-    @BeforeAll
-    static void beforeAll() throws IOException {
-        mockWebServer = new MockWebServer();
-        mockWebServer.start(8081);
-    }
-
-    @AfterAll
-    static void afterAll() throws IOException {
-        mockWebServer.shutdown();
-
-    }*/
 
     @BeforeEach
     void beforeEach() throws IOException {
@@ -85,19 +68,20 @@ class CartServiceTest {
 
     @NotNull
     private static CartDto buildCart() {
-        CartProductDto cartProductDto = new CartProductDto();
-        cartProductDto.setId(1L);
-        cartProductDto.setProductName("Apple MacBook Pro");
-        cartProductDto.setProductDescription("Latest model of Apple MacBook Pro 16 inch.");
-        cartProductDto.setQuantity(1);
-        cartProductDto.setPrice(new BigDecimal("2399.99"));
+        CartProductDto cartProductDto = CartProductDto.builder()
+                .id(1L)
+                .productName("Apple MacBook Pro")
+                .productDescription("Latest model of Apple MacBook Pro 16 inch.")
+                .quantity(1)
+                .price(new BigDecimal("2399.99"))
+                .build();
 
-        CartDto cartDto = new CartDto();
-        cartDto.setId(1L);
-        cartDto.setUserId(1L);
-        cartDto.setCartProducts(List.of(cartProductDto));
-        cartDto.setTotalPrice(new BigDecimal("2399.99"));
-        return cartDto;
+        return CartDto.builder()
+                .id(1L)
+                .userId(1L)
+                .cartProducts(List.of(cartProductDto))
+                .totalPrice(new BigDecimal("2399.99"))
+                .build();
 
     }
 

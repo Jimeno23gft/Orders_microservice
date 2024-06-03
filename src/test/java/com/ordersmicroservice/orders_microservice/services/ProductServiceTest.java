@@ -17,7 +17,6 @@ import java.io.IOException;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.junit.jupiter.api.Assertions.*;
 
 class ProductServiceTest {
     private MockWebServer mockWebServer;
@@ -39,15 +38,16 @@ class ProductServiceTest {
 
         productService.catalogUri = "/products";
 
-        ProductDto productDto = new ProductDto();
-        productDto.setId(1L);
-        productDto.setName("Ball");
-        productDto.setDescription("Red Ball");
-        productDto.setPrice(15D);
-        productDto.setCategoryId(0L);
-        productDto.setWeight(0D);
-        productDto.setCurrentStock(15);
-        productDto.setMinStock(0);
+        ProductDto productDto = ProductDto.builder()
+                .id(1L)
+                .name("Ball")
+                .description("Red Ball")
+                .price(15D)
+                .categoryId(0L)
+                .weight(0D)
+                .currentStock(15)
+                .minStock(0)
+                .build();
 
         ObjectMapper objectMapper = new ObjectMapper();
         String productJson = objectMapper.writeValueAsString(productDto);
@@ -107,15 +107,16 @@ class ProductServiceTest {
 
         productService.catalogUri = "/products";
 
-        ProductDto productDto = new ProductDto();
-        productDto.setId(1L);
-        productDto.setName("Ball");
-        productDto.setDescription("Red Ball");
-        productDto.setPrice(15D);
-        productDto.setCategoryId(0L);
-        productDto.setWeight(0D);
-        productDto.setCurrentStock(15);
-        productDto.setMinStock(0);
+        ProductDto productDto = ProductDto.builder()
+                .id(1L)
+                .name("Ball")
+                .description("Red Ball")
+                .price(15D)
+                .categoryId(0L)
+                .weight(0D)
+                .currentStock(15)
+                .minStock(0)
+                .build();
 
         ObjectMapper objectMapper = new ObjectMapper();
         String productJson = objectMapper.writeValueAsString(productDto);

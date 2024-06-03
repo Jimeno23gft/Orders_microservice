@@ -21,7 +21,6 @@ import java.io.IOException;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class UserServiceTest {
     private MockWebServer mockWebServer;
@@ -73,30 +72,33 @@ class UserServiceTest {
     }
 
     private static String buildUser() throws JsonProcessingException {
-        Address address = new Address();
-        address.setCityName("Madrid");
-        address.setZipCode("47562");
-        address.setStreet("C/ La Coma");
-        address.setNumber(32);
-        address.setDoor("1A");
+        Address address = Address.builder()
+                .cityName("Madrid")
+                .zipCode("47562")
+                .street("C/ La Coma")
+                .number(32)
+                .door("1A")
+                .build();
 
-        CountryDto countryDto = new CountryDto();
-        countryDto.setId(1L);
-        countryDto.setName("España");
-        countryDto.setTax(21F);
-        countryDto.setPrefix("+34");
-        countryDto.setTimeZone("Europe/Madrid");
+        CountryDto countryDto = CountryDto.builder()
+                .id(1L)
+                .name("España")
+                .tax(21F)
+                .prefix("+34")
+                .timeZone("Europe/Madrid")
+                .build();
 
-        UserDto userDto = new UserDto();
-        userDto.setId(100L);
-        userDto.setName("John");
-        userDto.setLastName("Doe");
-        userDto.setEmail("john.doe@example.com");
-        userDto.setPassword("password123");
-        userDto.setFidelityPoints(1000);
-        userDto.setPhone("1234567890");
-        userDto.setAddress(address);
-        userDto.setCountry(countryDto);
+        UserDto userDto = UserDto.builder()
+                .id(100L)
+                .name("John")
+                .lastName("Doe")
+                .email("john.doe@example.com")
+                .password("password123")
+                .fidelityPoints(1000)
+                .phone("1234567890")
+                .address(address)
+                .country(countryDto)
+                .build();
 
         ObjectMapper objectMapper = new ObjectMapper();
         return objectMapper.writeValueAsString(userDto);
