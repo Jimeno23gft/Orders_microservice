@@ -7,7 +7,6 @@ import lombok.Data;
 @Data
 @Builder
 public class ProductDto {
-
     private Long id;
     private String name;
     private String description;
@@ -17,7 +16,6 @@ public class ProductDto {
     private Double weight;
     @JsonProperty("current_stock")
     private int currentStock;
-
     @JsonProperty("min_stock")
     private int minStock;
 

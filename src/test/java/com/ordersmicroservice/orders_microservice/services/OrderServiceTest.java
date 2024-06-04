@@ -20,8 +20,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.http.HttpStatus;
-import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestClient;
 
 import java.math.BigInteger;
@@ -33,7 +31,6 @@ import static com.ordersmicroservice.orders_microservice.dto.Status.IN_DELIVERY;
 import static com.ordersmicroservice.orders_microservice.dto.Status.PAID;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.mockito.AdditionalAnswers.returnsFirstArg;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -236,7 +233,6 @@ class OrderServiceTest {
         when(userService.getUserById(cartDto.getUserId())).thenReturn(Optional.ofNullable(userDto));
         when(countryService.getCountryById(address.getCountryId())).thenReturn(Optional.ofNullable(country));
 
-        // You may need to adjust this mock to match the actual usage in your code.
         RestClient.RequestBodyUriSpec requestBodyUriSpecMock = mock(RestClient.RequestBodyUriSpec.class);
  //     when(restClient.patch()).thenReturn(requestBodyUriSpecMock);
 
