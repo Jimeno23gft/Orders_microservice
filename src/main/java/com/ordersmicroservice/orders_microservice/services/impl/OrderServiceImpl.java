@@ -97,6 +97,20 @@ public class OrderServiceImpl implements OrderService {
 
         CartDto cart = checkCartAndCartProducts(cartId);
 
+
+        /*
+        List<OrderedProduct> orderedProducts =cart.getCartProducts().stream().map(cartProductDto -> OrderedProduct.builder()
+                        .order(finalOrder)
+                        .productId(cartProductDto.getId())
+                        .name(cartProductDto.getProductName())
+                        .description(cartProductDto.getProductDescription())
+                        .price(cartProductDto.getPrice())
+                        .quantity(cartProductDto.getQuantity())
+                        .build())
+                .toList();
+*/
+
+
         UserDto user = getUserFromCart(cart, cartId);
         UserResponseDto userResponse = UserResponseDto.builder()
                 .id(user.getId())
