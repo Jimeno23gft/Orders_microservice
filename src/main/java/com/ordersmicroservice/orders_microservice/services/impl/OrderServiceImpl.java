@@ -4,7 +4,6 @@ import com.ordersmicroservice.orders_microservice.dto.*;
 import com.ordersmicroservice.orders_microservice.dto.CreditCardDto;
 import com.ordersmicroservice.orders_microservice.dto.CartDto;
 import com.ordersmicroservice.orders_microservice.dto.Status;
-import com.ordersmicroservice.orders_microservice.dto.UpdateStockRequest;
 import com.ordersmicroservice.orders_microservice.exception.EmptyCartException;
 import com.ordersmicroservice.orders_microservice.exception.NotFoundException;
 import com.ordersmicroservice.orders_microservice.models.Address;
@@ -13,18 +12,23 @@ import com.ordersmicroservice.orders_microservice.models.OrderedProduct;
 import com.ordersmicroservice.orders_microservice.repositories.OrderRepository;
 import com.ordersmicroservice.orders_microservice.services.*;
 import jakarta.transaction.Transactional;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.client.RestClient;
 
+
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.function.Consumer;
+import java.util.stream.Stream;
 
 import static com.ordersmicroservice.orders_microservice.dto.Status.PAID;
 
 @Service
+@Slf4j
 public class OrderServiceImpl implements OrderService {
     OrderRepository orderRepository;
     Random random;
@@ -34,18 +38,21 @@ public class OrderServiceImpl implements OrderService {
     CountryService countryService;
     RestClient restClient;
 
+    ProductServiceImpl productService;
 
-    public OrderServiceImpl(OrderRepository orderRepository, CartService cartService, UserService userService, AddressService addressService, CountryService countryService, RestClient restClient) {
+    public OrderServiceImpl(OrderRepository orderRepository, CartService cartService, UserService userService, AddressService addressService, CountryService countryService, RestClient restClient, ProductServiceImpl productService) {
         this.orderRepository = orderRepository;
         this.cartService = cartService;
         this.userService = userService;
         this.addressService = addressService;
         this.countryService = countryService;
         this.restClient = restClient;
+        this.productService = productService;
     }
 
     @Override
     public List<Order> getAllOrders() {
+        log.info("Getting All Orders by ID in service");
          List<Order> ordersList = Optional.of(orderRepository.findAll()).filter(orders -> !orders.isEmpty())
                 .orElseThrow(() -> new NotFoundException("No orders were found"));
         ordersList.forEach(this::setCountryAndUserToOrder);
@@ -54,12 +61,14 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public Order getOrderById(Long orderId) {
+        log.info("Getting Order by ID: {}",orderId);
         Order order = orderRepository.findById(orderId).orElseThrow(() -> new NotFoundException("Order not found with ID: " + orderId));
         setCountryAndUserToOrder(order);
         return order;
     }
     //Change to stream and not void
     private void setCountryAndUserToOrder(Order order) {
+        log.info("Setting Country and User to Order: {}",order.getId());
         UserDto user = userService.getUserById(order.getUserId()).orElseThrow(() -> new NotFoundException("User not found with ID: " + order.getUserId()));
         UserResponseDto userResponse = UserResponseDto.builder()
                 .id(user.getId())
@@ -75,30 +84,18 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public List<Order> getAllByUserId(Long userId) {
-
+        log.info("Getting All Orders by UserID: {}",userId);
         List<Order> ordersList = orderRepository.findAllByUserId(userId);
         ordersList.forEach(this::setCountryAndUserToOrder);
         return ordersList;
     }
 
-    //CreateOrder change name
     @Override
-    public Order addOrder(Long cartId, CreditCardDto creditCard) {
-        //log.info("Sending credit card info to payment Server...")
-        //log.info("Payment with the credit card " + creditCard.getNumber() + " has been made successfully" )
-
-
+    public Order createOrder(Long cartId, CreditCardDto creditCard) {
+        log.info("Sending credit card info to payment Server...");
+        log.info("Payment with the credit card " + creditCard.getCardNumber() + " has been made successfully" );
 
         CartDto cart = checkCartAndCartProducts(cartId);
-        List<OrderedProduct> orderedProducts =cart.getCartProducts().stream().map(cartProductDto -> OrderedProduct.builder()
-                        .productId(cartProductDto.getId())
-                        .name(cartProductDto.getProductName())
-                        .description(cartProductDto.getProductDescription())
-                        .price(cartProductDto.getPrice())
-                        .quantity(cartProductDto.getQuantity())
-                        .build())
-                .toList();
-
 
         UserDto user = getUserFromCart(cart, cartId);
         UserResponseDto userResponse = UserResponseDto.builder()
@@ -116,37 +113,51 @@ public class OrderServiceImpl implements OrderService {
                 .status(PAID)
                 .dateOrdered(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")))
                 .user(userResponse)
-                .orderedProducts(orderedProducts)
                 .totalPrice(cart.getTotalPrice())
                 .build();
 
 
+       order = orderRepository.save(order);
+
+        List<OrderedProduct> orderedProducts = getOrderedProductsListFromCart(cart, order);
+
+        order.setOrderedProducts(orderedProducts);
+
         configureCountryAndAddress(order, user);
-        cartService.emptyCartProductsById(cartId);
+        // cartService.emptyCartProductsById(cartId);
 
         updateStockForOrderedProducts(orderedProducts);
 
-        return orderRepository.save(order);
+        userService.patchFidelityPoints(order.getUserId(), fidelityPoints(order.getTotalPrice()));
+
+        return order;
     }
-    //Change to builder
+
+    private List<OrderedProduct> getOrderedProductsListFromCart(CartDto cart, Order order) {
+        List<CartProductDto> cartProducts = cart.getCartProducts();
+
+        return new ArrayList<>(cartProducts.stream()
+                .map(cartProductDto -> convertToOrderedProduct(cartProductDto, order))
+                .toList());
+    }
+
+    private OrderedProduct convertToOrderedProduct(CartProductDto cartProductDto, Order order) {
+        return OrderedProduct.builder()
+                .order(order)
+                .productId(cartProductDto.getId())
+                .name(cartProductDto.getProductName())
+                .description(cartProductDto.getProductDescription())
+                .price(cartProductDto.getPrice())
+                .quantity(cartProductDto.getQuantity())
+                .build();
+    }
 
     private void updateStockForOrderedProducts(List<OrderedProduct> orderedProducts) {
-        List<UpdateStockRequest> updateStockRequests = orderedProducts.stream()
-                .map(product -> new UpdateStockRequest(product.getProductId(), product.getQuantity() * (-1)))
-                .toList();
-
-        String url = "https://catalog-workshop-yequy5sv5a-uc.a.run.app/catalog/products/newStock/";
-
-        patchOrders(updateStockRequests, url);
-    }
-
-    private void patchOrders(List<UpdateStockRequest> updateStockRequests, String url) {
-        updateStockRequests.forEach(request -> restClient.patch()
-                .uri(url + request.getProductId() + "/quantity?quantity=" + request.getQuantity()));
+        orderedProducts.forEach(orderedProduct -> productService.patchProductStock(orderedProduct.getProductId(), orderedProduct.getQuantity() * (-1)));
     }
 
     private void configureCountryAndAddress(Order order, UserDto user) {
-
+        log.info("Configure Country and Address of the userID: {}", user.getId());
         CountryDto country = countryService.getCountryById(user.getCountry().getId())
                 .orElseThrow(() -> new NotFoundException("Country not found with ID: " + user.getCountry().getId()));
 
@@ -182,13 +193,16 @@ public class OrderServiceImpl implements OrderService {
     @Override
     @Transactional
     public Order patchOrder(Long id, @RequestBody Status updatedStatus) {
+        log.info("Update Order Status UserID: {}",id);
+        log.info("User Notification : Change Status to {}", updatedStatus);
         Order existingOrder = orderRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Order not found with ID: " + id));
         existingOrder.setStatus(updatedStatus);
 
         Map<Status, Consumer<Order>> statusActions = Map.of(
                 Status.DELIVERED, this::handleDeliveredStatus,
-                Status.RETURNED, this::handleReturnedStatus
+                Status.RETURNED, this::handleReturnedStatus,
+                Status.CANCELLED, this::handleReturnedStatus
         );
 
         statusActions.getOrDefault(updatedStatus, order -> {
@@ -201,27 +215,36 @@ public class OrderServiceImpl implements OrderService {
 
     private void handleDeliveredStatus(Order order) {
         order.setDateDelivered(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
-
-        int points = order.getOrderedProducts().size();
-        userService.patchFidelityPoints(order.getUserId(), points);
     }
 
     private void handleReturnedStatus(Order order) {
-        List<UpdateStockRequest> updateStockRequests = order.getOrderedProducts().stream()
-                .map(product -> new UpdateStockRequest(product.getProductId(), product.getQuantity()))
-                .toList();
+        log.info("User Notification : Making the refund of the payment of {} ...", order.getTotalPrice());
 
-        String url = "https://catalog-workshop-yequy5sv5a-uc.a.run.app/catalog/products/";
+        for (OrderedProduct orderedProduct : order.getOrderedProducts()) {
+            productService.patchProductStock(orderedProduct.getProductId(),orderedProduct.getQuantity());
+        }
+        userService.patchFidelityPoints(order.getUserId(), fidelityPoints(order.getTotalPrice()) *(-1));
+    }
 
-        updateStockRequests.forEach(request -> restClient.patch()
-                .uri(url + "/newStock/"+request.getProductId() + "/quantity?quantity=" + request.getQuantity()).retrieve().body(UpdateStockRequest.class));
-
-        int points = order.getOrderedProducts().size();
-        userService.patchFidelityPoints(order.getUserId(), -points);
+    private Integer fidelityPoints(BigDecimal totalPrice) {
+        if (totalPrice == null) {
+            return 0;
+        }
+        return Stream.of(
+                        totalPrice.floatValue() <= 20 ? 0 : null,
+                        totalPrice.floatValue() > 20 && totalPrice.floatValue() <= 30 ? 1 : null,
+                        totalPrice.floatValue() > 30 && totalPrice.floatValue() <= 50 ? 3 : null,
+                        totalPrice.floatValue() > 50 && totalPrice.floatValue() <= 100 ? 5 : null,
+                        totalPrice.floatValue() > 100 ? 10 : null
+                )
+                .filter(Objects::nonNull)
+                .findFirst()
+                .orElse(0);
     }
 
     @Override
     public void deleteById(Long id) {
+        log.info("Deleting order by ID: {}",id);
         orderRepository.findById(id)
                 .ifPresentOrElse(
                         order -> orderRepository.deleteById(id),

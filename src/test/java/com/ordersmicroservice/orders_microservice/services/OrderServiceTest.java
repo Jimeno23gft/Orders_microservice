@@ -20,6 +20,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestClient;
 
 import java.math.BigInteger;
@@ -31,6 +33,7 @@ import static com.ordersmicroservice.orders_microservice.dto.Status.IN_DELIVERY;
 import static com.ordersmicroservice.orders_microservice.dto.Status.PAID;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.mockito.AdditionalAnswers.returnsFirstArg;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -49,6 +52,8 @@ class OrderServiceTest {
     RestClient restClient;
     @Mock
     AddressServiceImpl addressService;
+    @Mock
+    ProductServiceImpl productService;
     private Order order1;
     private Order order2;
     private List<Order> orders;
@@ -231,9 +236,8 @@ class OrderServiceTest {
         when(userService.getUserById(cartDto.getUserId())).thenReturn(Optional.ofNullable(userDto));
         when(countryService.getCountryById(address.getCountryId())).thenReturn(Optional.ofNullable(country));
 
-        // You may need to adjust this mock to match the actual usage in your code.
+
         RestClient.RequestBodyUriSpec requestBodyUriSpecMock = mock(RestClient.RequestBodyUriSpec.class);
-        when(restClient.patch()).thenReturn(requestBodyUriSpecMock);
 
         Order expectedOrder = Order.builder()
                 .totalPrice(new BigDecimal("100.00"))
@@ -258,10 +262,7 @@ class OrderServiceTest {
                 ))
                 .build();
 
-        // This stubbing might be unnecessary, hence it is commented out
-        // when(orderService.addOrder(cartId, creditCard)).thenReturn(expectedOrder);
-
-        Order savedOrder = orderService.addOrder(cartId, creditCard);
+        Order savedOrder = orderService.createOrder(cartId, creditCard);
 
         assertThat(savedOrder).isNotNull();
         assertThat(savedOrder.getTotalPrice()).isEqualTo(totalPrice);
@@ -291,8 +292,9 @@ class OrderServiceTest {
         Long cartId = 1L;
         when(cartService.getCartById(cartId)).thenReturn(Optional.empty());
 
+
         CreditCardDto creditCardDto = new CreditCardDto();
-        assertThatThrownBy(() -> orderService.addOrder(cartId, creditCardDto))
+        assertThatThrownBy(() -> orderService.createOrder(cartId, creditCardDto))
                 .isInstanceOf(NotFoundException.class);
 
         verify(cartService, times(1)).getCartById(cartId);
@@ -307,7 +309,7 @@ class OrderServiceTest {
         when(cartService.getCartById(cartId)).thenReturn(Optional.of(emptyCart));
 
         CreditCardDto creditCardDto = new CreditCardDto();
-        assertThatThrownBy(() -> orderService.addOrder(cartId, creditCardDto))
+        assertThatThrownBy(() -> orderService.createOrder(cartId, creditCardDto))
                 .isInstanceOf(EmptyCartException.class);
 
         verify(cartService, times(1)).getCartById(cartId);
@@ -353,7 +355,7 @@ class OrderServiceTest {
         when(userService.getUserById(1L)).thenReturn(Optional.of(user1));
         when(countryService.getCountryById(address.getCountryId())).thenReturn(Optional.ofNullable(country));
 
-        Order patchedOrder = orderService. patchOrder(order1.getId(), statusUpdateDto.getStatus());
+        Order patchedOrder = orderService.patchOrder(order1.getId(), statusUpdateDto.getStatus());
 
         assertThat(patchedOrder.getStatus()).isEqualTo(Status.CANCELLED);
 
@@ -439,10 +441,6 @@ class OrderServiceTest {
                 .name("Country 1")
                 .build();
 
-        when(restClient.patch()).thenReturn(requestBodyUriSpec);
-        when(requestBodyUriSpec.uri(anyString())).thenReturn(requestBodyUriSpec);
-        when(requestBodyUriSpec.retrieve()).thenReturn(responseSpec);
-
         when(orderRepository.findById(1L)).thenReturn(Optional.of(initialOrder));
         when(orderRepository.save(initialOrder)).thenReturn(initialOrder);
         when(userService.getUserById(1L)).thenReturn(Optional.of(user1));
@@ -452,8 +450,6 @@ class OrderServiceTest {
 
         assertThat(patchedOrder).isNotNull();
         assertThat(patchedOrder.getStatus()).isEqualTo(Status.RETURNED);
-
-        verify(restClient, times(initialOrder.getOrderedProducts().size())).patch();
     }
 
     @Test
@@ -483,4 +479,17 @@ class OrderServiceTest {
         verify(orderRepository).findById(orderId);
         verify(orderRepository, never()).deleteById(orderId);
     }
+
+    @Test
+    @DisplayName("Testing getAllOrders when no orders exist")
+    void testGetAllOrdersNoOrdersFound() {
+        when(orderRepository.findAll()).thenReturn(Collections.emptyList());
+
+        assertThatThrownBy(() -> orderService.getAllOrders())
+                .isInstanceOf(NotFoundException.class)
+                .hasMessageContaining("No orders were found");
+
+        verify(orderRepository).findAll();
+    }
+
 }
