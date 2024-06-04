@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.client.RestClient;
 
+
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -36,6 +37,7 @@ public class OrderServiceImpl implements OrderService {
     AddressService addressService;
     CountryService countryService;
     RestClient restClient;
+
     ProductServiceImpl productService;
 
     public OrderServiceImpl(OrderRepository orderRepository, CartService cartService, UserService userService, AddressService addressService, CountryService countryService, RestClient restClient, ProductServiceImpl productService) {
@@ -264,6 +266,12 @@ public class OrderServiceImpl implements OrderService {
     }
 
     private Integer fidelityPoints(BigDecimal totalPrice){
+
+        //TO DO : REVISAR
+        if (totalPrice == null) {
+            return 0;
+        }
+
         if (totalPrice.floatValue()>20 && totalPrice.floatValue()<=30){
             return 1;
         }
