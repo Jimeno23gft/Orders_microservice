@@ -236,9 +236,8 @@ class OrderServiceTest {
         when(userService.getUserById(cartDto.getUserId())).thenReturn(Optional.ofNullable(userDto));
         when(countryService.getCountryById(address.getCountryId())).thenReturn(Optional.ofNullable(country));
 
-        // You may need to adjust this mock to match the actual usage in your code.
+
         RestClient.RequestBodyUriSpec requestBodyUriSpecMock = mock(RestClient.RequestBodyUriSpec.class);
- //     when(restClient.patch()).thenReturn(requestBodyUriSpecMock);
 
         Order expectedOrder = Order.builder()
                 .totalPrice(new BigDecimal("100.00"))
@@ -262,9 +261,6 @@ class OrderServiceTest {
                                 .build()
                 ))
                 .build();
-
-        // This stubbing might be unnecessary, hence it is commented out
-        // when(orderService.addOrder(cartId, creditCard)).thenReturn(expectedOrder);
 
         Order savedOrder = orderService.createOrder(cartId, creditCard);
 
