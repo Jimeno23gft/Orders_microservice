@@ -4,7 +4,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ordersmicroservice.orders_microservice.dto.CreditCardDto;
 import com.ordersmicroservice.orders_microservice.dto.Status;
 import com.ordersmicroservice.orders_microservice.dto.StatusUpdateDto;
-import com.ordersmicroservice.orders_microservice.dto.UserDto;
 import com.ordersmicroservice.orders_microservice.exception.NotFoundException;
 import com.ordersmicroservice.orders_microservice.models.Order;
 import com.ordersmicroservice.orders_microservice.services.OrderService;
@@ -113,7 +112,7 @@ class OrderControllerTest {
         creditCardDto.setCvcCode(123);
         String creditCardJson = objectMapper.writeValueAsString(creditCardDto);
 
-        when(orderService.addOrder(cartId,creditCardDto)).thenAnswer(invocation -> Order
+        when(orderService.createOrder(cartId,creditCardDto)).thenAnswer(invocation -> Order
                 .builder()
                 .cartId(cartId)
                 .fromAddress("Madrid")
@@ -131,7 +130,7 @@ class OrderControllerTest {
                 .andExpect(jsonPath("$.fromAddress", is("Madrid")))
                 .andExpect(jsonPath("$.dateOrdered", is("2001-01-21")));
 
-        verify(orderService).addOrder(cartId,creditCardDto);
+        verify(orderService).createOrder(cartId,creditCardDto);
     }
 
     @Test

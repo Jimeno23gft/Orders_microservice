@@ -29,8 +29,7 @@ catalog:
     api:
         base-url: https://catalog-workshop-yequy5sv5a-uc.a.run.app
         product-uri: /catalog/products/{id}
-        stock-uri: /catalog/products/newStock/{quantity}/quantity?quantity={id}
-        stock2-uri: /products/{id}/{quantity}
+        stock-uri: /catalog/products/newStock/{id}/quantity?quantity={quantity}
 
 users:
     api:
