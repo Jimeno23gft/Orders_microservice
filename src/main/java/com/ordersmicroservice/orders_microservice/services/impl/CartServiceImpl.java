@@ -10,8 +10,8 @@ import java.util.Optional;
 @Slf4j
 @Service
 public class CartServiceImpl implements CartService {
-    public String baseUrl;
-    public String cartUri;
+    private final String baseUrl;
+    private final String cartUri;
     private final RestClient restClient;
 
     public CartServiceImpl(RestClient restClient,

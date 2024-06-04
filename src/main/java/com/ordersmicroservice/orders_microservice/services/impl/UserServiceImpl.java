@@ -12,10 +12,9 @@ import java.util.Optional;
 @Slf4j
 @Service
 public class UserServiceImpl implements UserService {
-
-    public String baseUrl;
-    public String usersUri;
-    public String fidelityUri;
+    private final String baseUrl;
+    private final String usersUri;
+    private final String fidelityUri;
     private final RestClient restClient;
 
     public UserServiceImpl(RestClient restClient,

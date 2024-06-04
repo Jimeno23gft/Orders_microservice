@@ -20,20 +20,18 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.http.HttpStatus;
-import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestClient;
 
 import java.math.BigInteger;
 import java.math.BigDecimal;
 import java.util.*;
+import java.util.stream.IntStream;
 
 import static com.ordersmicroservice.orders_microservice.Datos.*;
 import static com.ordersmicroservice.orders_microservice.dto.Status.IN_DELIVERY;
 import static com.ordersmicroservice.orders_microservice.dto.Status.PAID;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.mockito.AdditionalAnswers.returnsFirstArg;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -55,18 +53,15 @@ class OrderServiceTest {
     @Mock
     ProductServiceImpl productService;
     private Order order1;
-    private Order order2;
     private List<Order> orders;
     private UserDto user1;
-    private CountryDto country;
 
 
     @BeforeEach
     public void setup() {
         this.user1 = crearUser001();
         this.order1 = crearOrder001().orElseThrow();
-        this.order2 = crearOrder002().orElseThrow();
-        this.country = crearCountry001();
+        Order order2 = crearOrder002().orElseThrow();
         orders = List.of(order1, order2);
     }
 
@@ -181,7 +176,6 @@ class OrderServiceTest {
     @Test
     @DisplayName("Testing Adding a new order with just an id")
     void testAddOrder() {
-        String[] addresses = {"123 Main St", "456 Elm St", "789 Oak St", "101 Maple Ave", "222 Pine St", "333 Cedar Rd"};
 
         CreditCardDto creditCard = CreditCardDto.builder()
                 .cardNumber(new BigInteger("1234567812345678"))
@@ -233,38 +227,10 @@ class OrderServiceTest {
 
         when(cartService.getCartById(cartId)).thenReturn(Optional.ofNullable(cartDto));
         when(orderRepository.save(any(Order.class))).thenAnswer(invocation -> invocation.getArgument(0));
-        when(userService.getUserById(cartDto.getUserId())).thenReturn(Optional.ofNullable(userDto));
+        if (cartDto != null) {
+            when(userService.getUserById(cartDto.getUserId())).thenReturn(Optional.ofNullable(userDto));
+        }
         when(countryService.getCountryById(address.getCountryId())).thenReturn(Optional.ofNullable(country));
-
-        // You may need to adjust this mock to match the actual usage in your code.
-        RestClient.RequestBodyUriSpec requestBodyUriSpecMock = mock(RestClient.RequestBodyUriSpec.class);
- //     when(restClient.patch()).thenReturn(requestBodyUriSpecMock);
-
-        Order expectedOrder = Order.builder()
-                .totalPrice(new BigDecimal("100.00"))
-                .address(address)
-                .status(PAID)
-                .dateOrdered("2024-02-10")
-                .orderedProducts(Arrays.asList(
-                        OrderedProduct.builder()
-                                .productId(cartProducts.get(0).getId())
-                                .name(cartProducts.get(0).getProductName())
-                                .description(cartProducts.get(0).getProductDescription())
-                                .price(cartProducts.get(0).getPrice())
-                                .quantity(cartProducts.get(0).getQuantity())
-                                .build(),
-                        OrderedProduct.builder()
-                                .productId(cartProducts.get(1).getId())
-                                .name(cartProducts.get(1).getProductName())
-                                .description(cartProducts.get(1).getProductDescription())
-                                .price(cartProducts.get(1).getPrice())
-                                .quantity(cartProducts.get(1).getQuantity())
-                                .build()
-                ))
-                .build();
-
-        // This stubbing might be unnecessary, hence it is commented out
-        // when(orderService.addOrder(cartId, creditCard)).thenReturn(expectedOrder);
 
         Order savedOrder = orderService.createOrder(cartId, creditCard);
 
@@ -278,7 +244,7 @@ class OrderServiceTest {
         List<OrderedProduct> orderedProducts = savedOrder.getOrderedProducts();
         assertThat(orderedProducts).isNotNull().hasSameSizeAs(cartProducts);
 
-        for (int i = 0; i < cartProducts.size(); i++) {
+        IntStream.range(0, cartProducts.size()).forEach(i -> {
             CartProductDto cartProduct = cartProducts.get(i);
             OrderedProduct orderedProduct = orderedProducts.get(i);
 
@@ -287,7 +253,7 @@ class OrderServiceTest {
             assertThat(orderedProduct.getDescription()).isEqualTo(cartProduct.getProductDescription());
             assertThat(orderedProduct.getPrice()).isEqualTo(cartProduct.getPrice());
             assertThat(orderedProduct.getQuantity()).isEqualTo(cartProduct.getQuantity());
-        }
+        });
     }
 
     @Test
@@ -419,8 +385,6 @@ class OrderServiceTest {
     @Test
     @DisplayName("Testing patching an order with RETURNED status")
     void testPatchOrderReturned() {
-        RestClient.RequestBodyUriSpec requestBodyUriSpec = mock(RestClient.RequestBodyUriSpec.class);
-        RestClient.ResponseSpec responseSpec = mock(RestClient.ResponseSpec.class);
 
         OrderedProduct product1 = OrderedProduct.builder()
                 .productId(1L)

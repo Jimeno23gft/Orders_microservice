@@ -11,8 +11,8 @@ import java.util.Optional;
 @Slf4j
 @Service
 public class CountryServiceImpl implements CountryService {
-    public String baseUrl;
-    public String countryUri;
+    private final String baseUrl;
+    private final String countryUri;
     private final RestClient restClient;
 
     public CountryServiceImpl(RestClient restClient,

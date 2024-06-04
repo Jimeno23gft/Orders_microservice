@@ -9,9 +9,9 @@ import org.springframework.web.client.RestClient;
 @Slf4j
 @Service
 public class ProductServiceImpl {
-    public String baseUrl;
-    public String productUri;
-    public String stockUri;
+    private final String baseUrl;
+    private final String productUri;
+    private final String stockUri;
     private final RestClient restClient;
 
     public ProductServiceImpl(RestClient restClient,
