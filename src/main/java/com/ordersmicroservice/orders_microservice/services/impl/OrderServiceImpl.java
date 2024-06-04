@@ -98,12 +98,6 @@ public class OrderServiceImpl implements OrderService {
 
         CartDto cart = checkCartAndCartProducts(cartId);
 
-
-
-
-
-
-
         /*
         List<OrderedProduct> orderedProducts =cart.getCartProducts().stream().map(cartProductDto -> OrderedProduct.builder()
                         .order(finalOrder)
@@ -135,9 +129,6 @@ public class OrderServiceImpl implements OrderService {
                 .totalPrice(cart.getTotalPrice())
                 .build();
 
-
-
-
        order = orderRepository.save(order);
 
         List<OrderedProduct> orderedProducts = getOrderedProductsListFromCart(cart, order);
@@ -147,7 +138,7 @@ public class OrderServiceImpl implements OrderService {
         configureCountryAndAddress(order, user);
         // cartService.emptyCartProductsById(cartId);
 
-        //updateStockForOrderedProducts(orderedProducts);
+        updateStockForOrderedProducts(orderedProducts);
 
         userService.patchFidelityPoints(order.getUserId(), fidelityPoints(order.getTotalPrice()));
 

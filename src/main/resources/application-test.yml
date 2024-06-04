@@ -1,3 +1,5 @@
+server:
+  port: 8089
 
 cart:
   api:
@@ -8,7 +10,7 @@ catalog:
   api:
     base-url: ${CATALOG_API_BASE_URL:http://localhost:8082}
     product-uri: /catalog/products/{id}
-    stock-uri: /catalog/products/newStock/{quantity}/quantity?quantity={id}
+    stock-uri: /catalog/products/{id}/newStock?quantity={quantity}
     stock2-uri: /products/{id}/{quantity}
 
 users:

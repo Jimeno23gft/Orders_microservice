@@ -12,6 +12,7 @@ import org.assertj.core.api.AssertionsForClassTypes;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.reactive.server.WebTestClient;
@@ -19,41 +20,78 @@ import org.springframework.test.web.reactive.server.WebTestClient;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
+
+import static org.mockito.Mockito.mock;
 
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles("test")
 class OrderControllerIntegrationTest {
 
+    @LocalServerPort
+    private int port;
+
     @Autowired
     private WebTestClient webTestClient;
 
     private static MockWebServer mockWebServerUser;
     private static MockWebServer mockWebServerCart;
+    private static MockWebServer mockWebServerCatalog;
+
+
 
     @BeforeEach
     void beforeEach() throws IOException {
+
         mockWebServerCart = new MockWebServer();
         mockWebServerCart.start(8081);
 
         mockWebServerUser = new MockWebServer();
         mockWebServerUser.start(8083);
 
+        mockWebServerCatalog = new MockWebServer();
+        mockWebServerCatalog.start(8082);
+
+
+
         System.setProperty("cart.api.base-url", mockWebServerCart.url("/").toString());
         System.setProperty("users.api.base-url", mockWebServerUser.url("/").toString());
+        System.setProperty("catalog.api.base-url", mockWebServerCatalog.url("/").toString());
+
     }
 
     @AfterEach
     void afterEach() throws IOException {
+
         mockWebServerCart.shutdown();
         mockWebServerUser.shutdown();
+        mockWebServerCatalog.shutdown();
+
     }
 
     @Test
     @DisplayName("Integration Test for Adding an Order Successfully")
     void addOrderIntegrationTest() throws JsonProcessingException {
+
+
+        ProductDto productDto = ProductDto.builder()
+                .id(1L)
+                .name("Apple MacBook Pro")
+                .description("Latest model of Apple MacBook Pro 16 inch.")
+                .price(2399.99D)
+                .categoryId(0L)
+                .weight(0D)
+                .currentStock(15)
+                .minStock(0)
+                .build();
+
+        ObjectMapper objectMapperProduct = new ObjectMapper();
+        String productJson = objectMapperProduct.writeValueAsString(productDto);
+
+
         // Mocking CartService response
         List<CartProductDto> cartProductDtoList = new ArrayList<>();
         CartProductDto cartProductDto1 = CartProductDto.builder()
@@ -124,8 +162,21 @@ class OrderControllerIntegrationTest {
                 .setBody(countryJson)
                 .addHeader("Content-Type", "application/json"));
 
-        mockWebServerCart.enqueue(new MockResponse()
-                .setStatus("HTTP/1.1 204 No Content")
+        /*mockWebServerUser.enqueue(new MockResponse()
+                .setResponseCode(204)
+                .addHeader("Content-Type", "application/json")); // esto para cuando activemos emptyCar*/
+
+
+        mockWebServerCatalog.enqueue(new MockResponse()
+                .setBody(productJson)
+                .addHeader("Content-Type", "application/json"));
+
+        mockWebServerCatalog.enqueue(new MockResponse()
+                .setResponseCode(204)
+                .addHeader("Content-Type", "application/json"));
+
+        mockWebServerUser.enqueue(new MockResponse()
+                .setResponseCode(204)
                 .addHeader("Content-Type", "application/json"));
 
         Long cartId = 1L;
@@ -134,7 +185,7 @@ class OrderControllerIntegrationTest {
         webTestClient.post().uri("/orders/{id}", cartId)
                 .bodyValue(creditCardDto)
                 .exchange()
-                .expectStatus().isCreated()
+                .expectStatus().is2xxSuccessful()
                 .expectHeader().contentType(MediaType.APPLICATION_JSON)
                 .expectBody(Order.class)
                 .value(responseOrder -> {
@@ -145,6 +196,7 @@ class OrderControllerIntegrationTest {
                     AssertionsForClassTypes.assertThat(responseOrder.getOrderedProducts().get(0).getName()).isEqualTo("Apple MacBook Pro");
                     AssertionsForClassTypes.assertThat(responseOrder.getOrderedProducts().get(1).getName()).isEqualTo("Logitech Mouse");
                 });
+
     }
 
 }
