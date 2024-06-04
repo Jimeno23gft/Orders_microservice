@@ -49,6 +49,9 @@ class OrderServiceTest {
     RestClient restClient;
     @Mock
     AddressServiceImpl addressService;
+
+    @Mock
+    ProductServiceImpl productService;
     private Order order1;
     private Order order2;
     private List<Order> orders;
@@ -440,10 +443,6 @@ class OrderServiceTest {
                 .name("Country 1")
                 .build();
 
-        when(restClient.patch()).thenReturn(requestBodyUriSpec);
-        when(requestBodyUriSpec.uri(anyString())).thenReturn(requestBodyUriSpec);
-        when(requestBodyUriSpec.retrieve()).thenReturn(responseSpec);
-
         when(orderRepository.findById(1L)).thenReturn(Optional.of(initialOrder));
         when(orderRepository.save(initialOrder)).thenReturn(initialOrder);
         when(userService.getUserById(1L)).thenReturn(Optional.of(user1));
@@ -453,8 +452,6 @@ class OrderServiceTest {
 
         assertThat(patchedOrder).isNotNull();
         assertThat(patchedOrder.getStatus()).isEqualTo(Status.RETURNED);
-
-        verify(restClient, times(initialOrder.getOrderedProducts().size())).patch();
     }
 
     @Test
