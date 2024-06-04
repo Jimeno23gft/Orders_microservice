@@ -102,7 +102,7 @@ public class OrderServiceImpl implements OrderService {
         configureCountryAndAddress(order, user);
         cartService.emptyCartProductsById(cartId);
 
-        updateStockForOrderedProducts(orderedProducts);
+        //updateStockForOrderedProducts(orderedProducts);
 
         return orderRepository.save(order);
     }

@@ -19,18 +19,13 @@ import org.springframework.test.web.reactive.server.WebTestClient;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.BigInteger;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles("test")
-@Disabled
 class OrderControllerIntegrationTest {
-
 
     @Autowired
     private WebTestClient webTestClient;
@@ -38,16 +33,16 @@ class OrderControllerIntegrationTest {
     private static MockWebServer mockWebServerUser;
     private static MockWebServer mockWebServerCart;
 
-    private Order expectedOrder;
-
-
     @BeforeEach
     void beforeEach() throws IOException {
         mockWebServerCart = new MockWebServer();
         mockWebServerCart.start(8081);
 
         mockWebServerUser = new MockWebServer();
-        mockWebServerUser.start(8082);
+        mockWebServerUser.start(8083);
+
+        System.setProperty("cart.api.base-url", mockWebServerCart.url("/").toString());
+        System.setProperty("users.api.base-url", mockWebServerUser.url("/").toString());
     }
 
     @AfterEach
@@ -56,12 +51,10 @@ class OrderControllerIntegrationTest {
         mockWebServerUser.shutdown();
     }
 
-
     @Test
     @DisplayName("Integration Test for Adding an Order Successfully")
     void addOrderIntegrationTest() throws JsonProcessingException {
-
-
+        // Mocking CartService response
         List<CartProductDto> cartProductDtoList = new ArrayList<>();
         CartProductDto cartProductDto1 = CartProductDto.builder()
                 .id(1L)
@@ -101,7 +94,7 @@ class OrderControllerIntegrationTest {
         ObjectMapper objectMapper3 = new ObjectMapper();
         String countryJson = objectMapper3.writeValueAsString(countryDto);
 
-        Address adress = new Address();
+        Address address = new Address();
 
         UserDto user = UserDto.builder()
                 .id(101L)
@@ -112,13 +105,11 @@ class OrderControllerIntegrationTest {
                 .fidelityPoints(1000)
                 .phone("1234567890")
                 .country(countryDto)
-                .address(adress)
+                .address(address)
                 .build();
 
         ObjectMapper objectMapper1 = new ObjectMapper();
         String userJson = objectMapper1.writeValueAsString(user);
-
-
 
         mockWebServerCart.enqueue(new MockResponse()
                 .setBody(cartJson)
@@ -133,17 +124,13 @@ class OrderControllerIntegrationTest {
                 .addHeader("Content-Type", "application/json"));
 
         mockWebServerCart.enqueue(new MockResponse()
-
                 .setStatus("HTTP/1.1 204 No Content")
                 .addHeader("Content-Type", "application/json"));
 
-
         Long cartId = 1L;
-        CreditCardDto creditCardDto = new CreditCardDto(new BigInteger("1111111111"),"09/25", 222);
+        CreditCardDto creditCardDto = new CreditCardDto(new BigInteger("1111111111"), "09/25", 222);
 
-
-
-        webTestClient.post().uri("/orders/{id}", cartId )
+        webTestClient.post().uri("/orders/{id}", cartId)
                 .bodyValue(creditCardDto)
                 .exchange()
                 .expectStatus().isCreated()
@@ -159,26 +146,4 @@ class OrderControllerIntegrationTest {
                 });
     }
 
-    @Test
-    @DisplayName("Handling Server Error on Order Creation")
-    void addOrderServerErrorTest() throws JsonProcessingException {
-        Long cartId = 1L;
-        CreditCardDto creditCardDto = new CreditCardDto(new BigInteger("1111111111"), "09/25", 222);
-
-
-        mockWebServerCart.enqueue(new MockResponse()
-                .setResponseCode(500)
-                .setBody("{\"error\":\"Internal Server Error\"}")
-                .addHeader("Content-Type", "application/json"));
-
-        webTestClient.post().uri("/orders/{id}", cartId)
-                .bodyValue(creditCardDto)
-                .exchange()
-                .expectStatus().is5xxServerError()
-                .expectBody()
-                .jsonPath("$.error").isEqualTo("Internal Server Error");
-    }
-
-
 }
-

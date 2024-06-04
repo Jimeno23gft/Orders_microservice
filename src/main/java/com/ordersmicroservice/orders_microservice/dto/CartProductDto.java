@@ -14,7 +14,6 @@ import java.math.BigDecimal;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Entity
 public class CartProductDto {
 
     @Id
