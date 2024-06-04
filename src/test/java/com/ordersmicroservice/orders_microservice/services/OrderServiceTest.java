@@ -49,7 +49,6 @@ class OrderServiceTest {
     RestClient restClient;
     @Mock
     AddressServiceImpl addressService;
-
     @Mock
     ProductServiceImpl productService;
     private Order order1;
@@ -236,7 +235,7 @@ class OrderServiceTest {
 
         // You may need to adjust this mock to match the actual usage in your code.
         RestClient.RequestBodyUriSpec requestBodyUriSpecMock = mock(RestClient.RequestBodyUriSpec.class);
-        when(restClient.patch()).thenReturn(requestBodyUriSpecMock);
+ //     when(restClient.patch()).thenReturn(requestBodyUriSpecMock);
 
         Order expectedOrder = Order.builder()
                 .totalPrice(new BigDecimal("100.00"))
