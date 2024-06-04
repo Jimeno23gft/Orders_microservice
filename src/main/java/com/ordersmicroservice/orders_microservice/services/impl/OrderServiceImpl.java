@@ -4,7 +4,6 @@ import com.ordersmicroservice.orders_microservice.dto.*;
 import com.ordersmicroservice.orders_microservice.dto.CreditCardDto;
 import com.ordersmicroservice.orders_microservice.dto.CartDto;
 import com.ordersmicroservice.orders_microservice.dto.Status;
-import com.ordersmicroservice.orders_microservice.dto.UpdateStockRequest;
 import com.ordersmicroservice.orders_microservice.exception.EmptyCartException;
 import com.ordersmicroservice.orders_microservice.exception.NotFoundException;
 import com.ordersmicroservice.orders_microservice.models.Address;
@@ -98,24 +97,6 @@ public class OrderServiceImpl implements OrderService {
 
         CartDto cart = checkCartAndCartProducts(cartId);
 
-
-
-
-
-
-
-        /*
-        List<OrderedProduct> orderedProducts =cart.getCartProducts().stream().map(cartProductDto -> OrderedProduct.builder()
-                        .order(finalOrder)
-                        .productId(cartProductDto.getId())
-                        .name(cartProductDto.getProductName())
-                        .description(cartProductDto.getProductDescription())
-                        .price(cartProductDto.getPrice())
-                        .quantity(cartProductDto.getQuantity())
-                        .build())
-                .toList();
-*/
-
         UserDto user = getUserFromCart(cart, cartId);
         UserResponseDto userResponse = UserResponseDto.builder()
                 .id(user.getId())
@@ -134,8 +115,6 @@ public class OrderServiceImpl implements OrderService {
                 .user(userResponse)
                 .totalPrice(cart.getTotalPrice())
                 .build();
-
-
 
 
        order = orderRepository.save(order);
@@ -236,9 +215,6 @@ public class OrderServiceImpl implements OrderService {
 
     private void handleDeliveredStatus(Order order) {
         order.setDateDelivered(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
-
-
-
     }
 
     private void handleReturnedStatus(Order order) {
