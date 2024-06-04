@@ -2,12 +2,14 @@ package com.ordersmicroservice.orders_microservice.services.impl;
 
 import com.ordersmicroservice.orders_microservice.dto.UserDto;
 import com.ordersmicroservice.orders_microservice.services.UserService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClient;
 
 import java.util.Optional;
 
+@Slf4j
 @Service
 public class UserServiceImpl implements UserService {
 
@@ -27,6 +29,7 @@ public class UserServiceImpl implements UserService {
     }
 
     public Optional<UserDto> getUserById(Long userId) {
+        log.info("getUserById( userId:  {} )",userId);
         return Optional.ofNullable(restClient.get()
                 .uri(baseUrl + usersUri, userId)
                 .retrieve()

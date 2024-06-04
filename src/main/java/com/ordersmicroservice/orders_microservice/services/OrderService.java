@@ -10,7 +10,7 @@ public interface OrderService {
     List<Order> getAllOrders();
     Order getOrderById(Long orderId);
     List<Order> getAllByUserId(Long userId);
-    Order addOrder(Long id, CreditCardDto creditCard);
+    Order createOrder(Long id, CreditCardDto creditCard);
     void deleteById(Long id);
     Order patchOrder(Long id, Status status);
 
