@@ -174,18 +174,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     private void updateStockForOrderedProducts(List<OrderedProduct> orderedProducts) {
-
-       for (OrderedProduct orderedProduct : orderedProducts) {
-            productService.patchProductStock(orderedProduct.getProductId(),orderedProduct.getQuantity() * (-1));
-        }
-
-/*
-        orderedProducts.stream()
-                .forEach(orderedProduct -> productService.patchProductStock(
-                        orderedProduct.getProductId(),
-                        orderedProduct.getQuantity() * (-1)
-                ));
-*/
+        orderedProducts.forEach(orderedProduct -> productService.patchProductStock(orderedProduct.getProductId(), orderedProduct.getQuantity() * (-1)));
     }
 
     private void configureCountryAndAddress(Order order, UserDto user) {
