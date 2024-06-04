@@ -25,6 +25,7 @@ import org.springframework.web.client.RestClient;
 import java.math.BigInteger;
 import java.math.BigDecimal;
 import java.util.*;
+import java.util.stream.IntStream;
 
 import static com.ordersmicroservice.orders_microservice.Datos.*;
 import static com.ordersmicroservice.orders_microservice.dto.Status.IN_DELIVERY;
@@ -274,7 +275,7 @@ class OrderServiceTest {
         List<OrderedProduct> orderedProducts = savedOrder.getOrderedProducts();
         assertThat(orderedProducts).isNotNull().hasSameSizeAs(cartProducts);
 
-        for (int i = 0; i < cartProducts.size(); i++) {
+        IntStream.range(0, cartProducts.size()).forEach(i -> {
             CartProductDto cartProduct = cartProducts.get(i);
             OrderedProduct orderedProduct = orderedProducts.get(i);
 
@@ -283,7 +284,7 @@ class OrderServiceTest {
             assertThat(orderedProduct.getDescription()).isEqualTo(cartProduct.getProductDescription());
             assertThat(orderedProduct.getPrice()).isEqualTo(cartProduct.getPrice());
             assertThat(orderedProduct.getQuantity()).isEqualTo(cartProduct.getQuantity());
-        }
+        });
     }
 
     @Test
