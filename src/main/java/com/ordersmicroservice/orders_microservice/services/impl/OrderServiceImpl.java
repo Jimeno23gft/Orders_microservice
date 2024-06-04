@@ -24,6 +24,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.function.Consumer;
+import java.util.stream.Stream;
 
 import static com.ordersmicroservice.orders_microservice.dto.Status.PAID;
 
@@ -187,11 +188,6 @@ public class OrderServiceImpl implements OrderService {
 */
     }
 
-    private void patchOrders(List<UpdateStockRequest> updateStockRequests, String url) {
-        updateStockRequests.forEach(request -> restClient.patch()
-                .uri(url + request.getProductId() + "/quantity?quantity=" + request.getQuantity()));
-    }
-
     private void configureCountryAndAddress(Order order, UserDto user) {
         log.info("Configure Country and Address of the userID: {}", user.getId());
         CountryDto country = countryService.getCountryById(user.getCountry().getId())
@@ -265,26 +261,20 @@ public class OrderServiceImpl implements OrderService {
         userService.patchFidelityPoints(order.getUserId(), fidelityPoints(order.getTotalPrice()) *(-1));
     }
 
-    private Integer fidelityPoints(BigDecimal totalPrice){
-
-        //TO DO : REVISAR
+    private Integer fidelityPoints(BigDecimal totalPrice) {
         if (totalPrice == null) {
             return 0;
         }
-
-        if (totalPrice.floatValue()>20 && totalPrice.floatValue()<=30){
-            return 1;
-        }
-        if (totalPrice.floatValue()>30 && totalPrice.floatValue()<=50){
-            return 3;
-        }
-        if (totalPrice.floatValue()>50 && totalPrice.floatValue()<=100){
-            return 5;
-        }
-        if (totalPrice.floatValue()>100){
-            return 10;
-        }
-        return 0;
+        return Stream.of(
+                        totalPrice.floatValue() <= 20 ? 0 : null,
+                        totalPrice.floatValue() > 20 && totalPrice.floatValue() <= 30 ? 1 : null,
+                        totalPrice.floatValue() > 30 && totalPrice.floatValue() <= 50 ? 3 : null,
+                        totalPrice.floatValue() > 50 && totalPrice.floatValue() <= 100 ? 5 : null,
+                        totalPrice.floatValue() > 100 ? 10 : null
+                )
+                .filter(Objects::nonNull)
+                .findFirst()
+                .orElse(0);
     }
 
     @Override
