@@ -73,7 +73,7 @@ class OrderControllerIntegrationTest {
     }
 
     @Test
-    @Disabled
+//    @Disabled
     @DisplayName("Integration Test for Adding an Order Successfully")
     void addOrderIntegrationTest() throws JsonProcessingException {
 
@@ -163,8 +163,8 @@ class OrderControllerIntegrationTest {
                 .setBody(countryJson)
                 .addHeader("Content-Type", "application/json"));
 
-        mockWebServerUser.enqueue(new MockResponse()
-                .setResponseCode(200)
+        mockWebServerCart.enqueue(new MockResponse()
+                .setStatus("HTTP/1.1 204 No Content")
                 .addHeader("Content-Type", "application/json"));
 
 
