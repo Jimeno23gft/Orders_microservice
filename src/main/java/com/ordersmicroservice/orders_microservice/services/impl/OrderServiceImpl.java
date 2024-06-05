@@ -124,11 +124,12 @@ public class OrderServiceImpl implements OrderService {
         order.setOrderedProducts(orderedProducts);
 
         configureCountryAndAddress(order, user);
-        cartService.emptyCartProductsById(cartId);
-
+        
         updateStockForOrderedProducts(orderedProducts);
 
         userService.patchFidelityPoints(order.getUserId(), fidelityPoints(order.getTotalPrice()));
+
+        cartService.emptyCartProductsById(cartId);
 
         return order;
     }
