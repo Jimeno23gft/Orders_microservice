@@ -1,6 +1,7 @@
 package com.ordersmicroservice.orders_microservice.dto;
 
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.Id;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -16,6 +17,7 @@ import java.math.BigDecimal;
 public class CartProductDto {
 
     @Id
+    @JsonProperty("productId")
     private Long id;
     private String productName;
     private String productDescription;

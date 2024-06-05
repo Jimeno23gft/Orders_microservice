@@ -66,7 +66,7 @@ public class OrderServiceImpl implements OrderService {
         setCountryAndUserToOrder(order);
         return order;
     }
-    //Change to stream and not void
+
     private void setCountryAndUserToOrder(Order order) {
         log.info("Setting Country and User to Order: {}",order.getId());
         UserDto user = userService.getUserById(order.getUserId()).orElseThrow(() -> new NotFoundException("User not found with ID: " + order.getUserId()));
