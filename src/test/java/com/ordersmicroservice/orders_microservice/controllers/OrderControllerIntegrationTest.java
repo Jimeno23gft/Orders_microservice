@@ -73,7 +73,6 @@ class OrderControllerIntegrationTest {
     }
 
     @Test
-    @Disabled
     @DisplayName("Integration Test for Adding an Order Successfully")
     void addOrderIntegrationTest() throws JsonProcessingException {
 
@@ -163,10 +162,6 @@ class OrderControllerIntegrationTest {
                 .setBody(countryJson)
                 .addHeader("Content-Type", "application/json"));
 
-        mockWebServerUser.enqueue(new MockResponse()
-                .setResponseCode(200)
-                .addHeader("Content-Type", "application/json"));
-
 
         mockWebServerCatalog.enqueue(new MockResponse()
                 .setBody(productJson)
@@ -180,6 +175,9 @@ class OrderControllerIntegrationTest {
                 .setResponseCode(204)
                 .addHeader("Content-Type", "application/json"));
 
+        mockWebServerCart.enqueue(new MockResponse()
+                .setStatus("HTTP/1.1 204 No Content")
+                .addHeader("Content-Type", "application/json"));
         Long cartId = 1L;
         CreditCardDto creditCardDto = new CreditCardDto(new BigInteger("1111111111"), "09/25", 222);
 
