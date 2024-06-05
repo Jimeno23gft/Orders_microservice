@@ -66,7 +66,7 @@ public class OrderServiceImpl implements OrderService {
         setCountryAndUserToOrder(order);
         return order;
     }
-    //Change to stream and not void
+
     private void setCountryAndUserToOrder(Order order) {
         log.info("Setting Country and User to Order: {}",order.getId());
         UserDto user = userService.getUserById(order.getUserId()).orElseThrow(() -> new NotFoundException("User not found with ID: " + order.getUserId()));
@@ -97,20 +97,6 @@ public class OrderServiceImpl implements OrderService {
 
         CartDto cart = checkCartAndCartProducts(cartId);
 
-
-        /*
-        List<OrderedProduct> orderedProducts =cart.getCartProducts().stream().map(cartProductDto -> OrderedProduct.builder()
-                        .order(finalOrder)
-                        .productId(cartProductDto.getId())
-                        .name(cartProductDto.getProductName())
-                        .description(cartProductDto.getProductDescription())
-                        .price(cartProductDto.getPrice())
-                        .quantity(cartProductDto.getQuantity())
-                        .build())
-                .toList();
-*/
-
-
         UserDto user = getUserFromCart(cart, cartId);
         UserResponseDto userResponse = UserResponseDto.builder()
                 .id(user.getId())
@@ -138,7 +124,7 @@ public class OrderServiceImpl implements OrderService {
         order.setOrderedProducts(orderedProducts);
 
         configureCountryAndAddress(order, user);
-        // cartService.emptyCartProductsById(cartId);
+        cartService.emptyCartProductsById(cartId);
 
         updateStockForOrderedProducts(orderedProducts);
 

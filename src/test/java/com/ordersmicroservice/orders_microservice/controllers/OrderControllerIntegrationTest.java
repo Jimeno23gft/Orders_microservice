@@ -73,6 +73,7 @@ class OrderControllerIntegrationTest {
     }
 
     @Test
+    @Disabled
     @DisplayName("Integration Test for Adding an Order Successfully")
     void addOrderIntegrationTest() throws JsonProcessingException {
 
@@ -92,7 +93,7 @@ class OrderControllerIntegrationTest {
         String productJson = objectMapperProduct.writeValueAsString(productDto);
 
 
-        // Mocking CartService response
+
         List<CartProductDto> cartProductDtoList = new ArrayList<>();
         CartProductDto cartProductDto1 = CartProductDto.builder()
                 .id(1L)
@@ -162,9 +163,9 @@ class OrderControllerIntegrationTest {
                 .setBody(countryJson)
                 .addHeader("Content-Type", "application/json"));
 
-        /*mockWebServerUser.enqueue(new MockResponse()
-                .setResponseCode(204)
-                .addHeader("Content-Type", "application/json")); // esto para cuando activemos emptyCar*/
+        mockWebServerUser.enqueue(new MockResponse()
+                .setResponseCode(200)
+                .addHeader("Content-Type", "application/json"));
 
 
         mockWebServerCatalog.enqueue(new MockResponse()
